@@ -1,3 +1,9 @@
+MANIFEST
+VERSION
+build/
+dist/
+scripts/
+debian/
 *.swp
 *.pyc
 *.pyo

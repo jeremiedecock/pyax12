@@ -26,8 +26,6 @@ class Connection():
     baudrate = None
     timeout = None
 
-    buffer = ''
-
     def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=1):
         "Create a serial connection with dynamixel actuators."
         self.port = port
@@ -42,18 +40,15 @@ class Connection():
 
     def send(self, packet):
         "Send a packet."
-        self.serial_connection.write(packet.to_raw_string())
+        # Send the packet.
+        raw_instruction = packet.to_raw_string()
+        self.serial_connection.write(raw_instruction)
+        print '> ', ' '.join(["%02x" % ord(char) for char in raw_instruction])
 
-    def receive(self):
-        """Receive a packet.
-        
-        Return a tuple of status_packets."""
-        # TODO
-        self.buffer += self.serial_connection.read(self.baudrate * self.timeout)
-        print self.buffer
-        #packets_string = buffer.split('ffff')[1:]
-        #print [StatusPacket(packet) for packet in packets_string]
-        #return [StatusPacket(packet) for packet in packets_string]
+        # Receive the reply (status packet)
+        #reply = self.serial_connection.read(int(self.baudrate / 8 * self.timeout))
+        reply = self.serial_connection.read(120)
+        print '< ', ' '.join(["%02x" % ord(char) for char in reply])
 
     def close(self):
         "Close the serial connection."
