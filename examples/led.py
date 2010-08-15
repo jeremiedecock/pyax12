@@ -1,6 +1,6 @@
-import packet as pk
-import connection
-import instruction_packet as ip
+import pydynamixel.packet as pk
+import pydynamixel.connection
+import pydynamixel.instruction_packet as ip
 import time
 
 c = connection.Connection()

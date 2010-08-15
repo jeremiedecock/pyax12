@@ -17,7 +17,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import serial
-from status_packet import StatusPacket
+from pydynamixel.status_packet import StatusPacket
 
 class Connection():
     
