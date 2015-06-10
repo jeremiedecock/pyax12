@@ -8,10 +8,13 @@ PyAX-12 is a Python library to control Dynamixel AX-12+ servos.
 
 ## Dependencies
 
-Python >= 3.0
-Python-serial
+* Python >= 3.0
+* Python-serial
 
 ## Install
+
+Pyarm can be installed with Python Distutils by entering the following command
+in a terminal:
 
 ```
 python setup.py install
