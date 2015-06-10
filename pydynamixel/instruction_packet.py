@@ -31,42 +31,58 @@ SYNC_WRITE = 0x83
 INSTRUCTIONS = (PING, READ_DATA, WRITE_DATA, REG_WRITE, ACTION, RESET,
                 SYNC_WRITE)
 
+MAX_NUM_PARAMS = 255 - 6 # TODO: what is the actual max value ?
+
 NUMBER_OF_PARAMETERS = {
-                        PING:{'min':0, 'max':0},
-                        READ_DATA:{'min':2, 'max':2},
-                        WRITE_DATA:{'min':2, 'max':sys.maxint},
-                        REG_WRITE:{'min':2, 'max':sys.maxint},
-                        ACTION:{'min':0, 'max':0},
-                        RESET:{'min':0, 'max':0},
-                        SYNC_WRITE:{'min':4, 'max':sys.maxint}
+                        PING:{'min': 0, 'max': 0},
+                        READ_DATA:{'min': 2, 'max': 2},
+                        WRITE_DATA:{'min': 2, 'max': MAX_NUM_PARAMS},
+                        REG_WRITE:{'min': 2, 'max': MAX_NUM_PARAMS},
+                        ACTION:{'min': 0, 'max': 0},
+                        RESET:{'min': 0, 'max': 0},
+                        SYNC_WRITE:{'min': 4, 'max': MAX_NUM_PARAMS}
                        }
 
 class InstructionPacket(Packet):
+    """The Instruction Packet is the packet sent by the main controller to the
+    Dynamixel units to send commands.
 
-    id = 0x00
-    instruction = 0x00
-    parameters = ()
+    The structure of the Instruction Packet is as the following:
 
-    def __init__(self, id=None, instruction=None, parameters=None):
-        # Assert id
-        if 0x00 <= id <= 0xfe:
-            self.id = id
+    +----+----+--+------+-----------+----------+---+-----------+---------+
+    |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
+    +----+----+--+------+-----------+----------+---+-----------+---------+
+
+    Instance variable:
+    dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
+                    0xFE is a broadcasting ID;
+    instruction -- the instruction for the Dynamixel actuator to perform;
+    parameters -- a tuple of bytes used if there is additional information
+                  needed to be sent other than the instruction itself.
+    """
+
+    def __init__(self, _id=None, _instruction=None, _parameters=None):
+        """Create an instruction packet."""
+
+        # Check the ID byte
+        if 0x00 <= _id <= 0xfe:
+            self.dynamixel_id = _id
         else:
-            warnings.warn('Wrong id')
+            warnings.warn('Wrong dynamixel_id')
 
-        # Assert instruction
-        if instruction in INSTRUCTIONS:
-            self.instruction = instruction
+        # Check the instruction byte
+        if _instruction in INSTRUCTIONS:
+            self.instruction = _instruction
         else:
             warnings.warn('Wrong instruction')
 
-        # Assert number of parameters
-        num_param_min = NUMBER_OF_PARAMETERS[instruction]['min']
-        num_param_max = NUMBER_OF_PARAMETERS[instruction]['max']
-        if num_param_min <= len(parameters) <= num_param_max:
-            self.parameters = parameters
+        # Check the number of parameters
+        num_param_min = NUMBER_OF_PARAMETERS[self.instruction]['min']
+        num_param_max = NUMBER_OF_PARAMETERS[self.instruction]['max']
+        if num_param_min <= len(_parameters) <= num_param_max:
+            self.parameters = _parameters
         else:
             warnings.warn('Wrong number of parameters')
 
-        self.data = (instruction, ) + parameters
+        self.data = (self.instruction, ) + self.parameters
 

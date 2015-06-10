@@ -57,48 +57,52 @@ MOVING = 0x2e
 LOCK = 0x2f
 PUNCH = 0x30
 
-class Packet:
+class Packet(object):
 
-    id = 0x00
-    data = ()
+    def __init__(self, _id, _data):
+        """Create a raw packet.
 
-    def __init__(self, id=None, data=None):
-        if 0x00 <= id <= 0xfe:
-            self.id = id
+        Instance variable:
+        dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
+                        0xFE is a broadcasting ID;
+        data -- a tuple containing the packet's data;
+        """
+        if 0x00 <= _id <= 0xfe:
+            self.dynamixel_id = _id
         else:
             warnings.warn('Wrong id')
 
-        self.data = data
+        self.data = _data
 
     def length(self):
         """Return the length of the packet.
 
-        Length = data length + 1"""
-
+        Length = data length + 1
+        """
         return len(self.data) + 1
 
     def checksum(self):
         """Compute packet checksum.
         
-        Checksum = ~(id + length + instruction + parameter1 + ... + parameterN)
+        Checksum = ~(dynamixel_id + length + instruction + parameter1 + ... + parameterN)
         where ~ represent the NOT logic operation.
 
         If calculated value is larger than 255, the lower byte is defined as
-        the checksum value."""
-        
-        sum = reduce(lambda x, y: x + y, (self.id,) + (self.length(),) + self.data)
-        checksum = ~sum & 0xff
+        the checksum value.
+        """
+        checksum_data_tuple = (self.dynamixel_id, self.length()) + self.data
+        checksum = ~sum(checksum_data_tuple) & 0xff
         return checksum
 
-    def to_integer_list(self):
-        "Return the packet as a tuple of integers."
-        return PACKET_HEADER + (self.id,) + (self.length(),) + self.data + (self.checksum(),)
+    def to_integer_tuple(self):
+        """Return the packet as a tuple of integers."""
+        return PACKET_HEADER + (self.dynamixel_id, self.length()) + self.data + (self.checksum(),)
 
     def to_printable_string(self):
-        "Return the packet as a string of hexadecimal values."
-        return ' '.join(['%02x' % b for b in self.to_integer_list()])
+        """Return the packet as a string of hexadecimal values."""
+        return ' '.join(['%02x' % integer for integer in self.to_integer_tuple()])
 
-    def to_raw_string(self):
-        "Return the packet as a string of hexadecimal values."
-        return ''.join(map(chr, self.to_integer_list()))
+    def to_byte_array(self):
+        """Return the packet as a bytearray (array of bytes)."""
+        return bytearray(self.to_integer_tuple())
 
