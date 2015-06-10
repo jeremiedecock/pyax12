@@ -16,7 +16,7 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Programming Language :: Python :: 2.5',
                'Topic :: System :: Hardware :: Hardware Drivers']
 
-PACKAGES = ['pydynamixel']
+PACKAGES = ['pyax12']
 
 README_FILE = open('README.md', 'r')
 
