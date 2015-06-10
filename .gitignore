@@ -5,6 +5,7 @@ dist/
 scripts/
 debian/
 doc/dynamixel/
+__pycache__/
 *.swp
 *.pyc
 *.pyo
