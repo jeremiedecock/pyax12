@@ -35,7 +35,7 @@ class StatusPacket(Packet):
         if len(byte_array_packet) >= 6:
             self.dynamixel_id = byte_array_packet[2]
             self.error = byte_array_packet[4]
-            self.parameters = byte_array_packet[5:-1]
+            self.parameters = tuple([byte_value for byte_value in byte_array_packet[5:-1]])
 
             # Write error bits
             self.instruction_error = bool(self.error & (1 << 6)) 
