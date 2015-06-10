@@ -20,6 +20,14 @@ in a terminal:
 python setup.py install
 ```
 
+## Warning
+
+If you use the USB2Dynamixel device, make sure its switch is set on "TTL"
+(otherwise status packets won't be readable).
+
+Also, please check whether the serial port, the baudrate and the Dynamixel IDs
+defined in PyAX-12 fits with your hardware.
+
 ## License
 
 PyAX-12 is distributed under the [MIT License](http://opensource.org/licenses/MIT).
