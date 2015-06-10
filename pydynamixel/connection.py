@@ -17,6 +17,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import serial
+import time
 from pydynamixel.status_packet import StatusPacket
 
 class Connection(object):
@@ -45,24 +46,43 @@ class Connection(object):
     def send(self, packet):
         """Send a packet."""
 
+        self.flush()
+
         # Send the packet #################################
 
         byte_array_instruction = packet.to_byte_array()
         self.serial_connection.write(byte_array_instruction)
 
         # Receive the reply (status packet) ###############
+        
+        # WARNING:
+        # If you use the USB2Dynamixel device, make sure its switch is set on
+        # "TTL" (otherwise status packets won't be readable).
 
-        #reply = self.serial_connection.read(int(self.baudrate / 8 * self.timeout))
-        byte_array_status = self.serial_connection.read(120)
-        #print(byte_array_status)
+        time.sleep(0.01) # TODO
+        num_bytes_in_read_buffer = self.serial_connection.inWaiting()
 
+        byte_array_status = self.serial_connection.read(num_bytes_in_read_buffer) # TODO: not robust...
+
+        # TODO: make the reading status more robust. See:
+        # - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
+        # - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
+        # - PyPot: https://github.com/poppy-project/pypot/blob/master/pypot/dynamixel/io/abstract_io.py#L503
         status_packet = None
         if len(byte_array_status) > 0:
             status_packet = StatusPacket(byte_array_status)
 
         return status_packet
 
+
     def close(self):
         """Close the serial connection."""
         self.serial_connection.close()
+
+
+    def flush(self):
+        """Close the serial connection."""
+
+        self.serial_connection.flushInput()
+        #self.serial_connection.flushOutput()  # TODO ?
 
