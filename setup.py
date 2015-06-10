@@ -18,7 +18,7 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
 
 PACKAGES = ['pydynamixel']
 
-README_FILE = open('README', 'r')
+README_FILE = open('README.md', 'r')
 
 
 def get_version():
@@ -99,14 +99,14 @@ for source, dest in SCRIPTS.iteritems():
 
 # Don't use unicode strings in setup arguments or bdist_rpm will fail.
 setup(author='Jeremie DECOCK',
-      author_email='gremy@tuxfamily.org',
+      author_email='jd.jdhp@gmail.com',
       classifiers=CLASSIFIERS,
       description='A library to control dynamixel AX-12+ servos with python',
       license='MIT license',
       long_description=README_FILE.read(),
       maintainer='Jeremie DECOCK',
-      maintainer_email='gremy@tuxfamily.org',
-      name='pydynamixel',
+      maintainer_email='jd.jdhp@gmail.com',
+      name='pyax12',
       packages=PACKAGES,
       platforms=['Linux'],
       requires=['pyserial'],
