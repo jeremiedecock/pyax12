@@ -1,20 +1,22 @@
-Pydynamixel
+# [PyAX-12](http://www.jdhp.org/projects_en.html#pydynamixel)
 
-Copyright (c) 2010 Jeremie DECOCK (http://www.jdhp.org)
+Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
-http://www.jdhp.org/
+## Description
 
-A library to control dynamixel AX-12+ servos with python
+PyAX-12 is a Python library to control Dynamixel AX-12+ servos.
 
-DEPENDENCIES
-------------
+## Dependencies
 
-python >=2.5
-python-serial
+Python >= 3.0
+Python-serial
 
+## Install
 
-INSTALL
--------
+```
+python setup.py install
+```
 
-$ python setup.py install
+## License
 
+PyAX-12 is distributed under the [MIT License](http://opensource.org/licenses/MIT).
