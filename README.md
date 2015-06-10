@@ -9,7 +9,7 @@ PyAX-12 is a Python library to control Dynamixel AX-12+ servos.
 ## Dependencies
 
 * Python >= 3.0
-* Python-serial
+* [Python-serial](http://pyserial.sourceforge.net)
 
 ## Install
 
