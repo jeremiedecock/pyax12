@@ -1,4 +1,4 @@
-# [PyAX-12](http://www.jdhp.org/projects_en.html#pydynamixel)
+# [PyAX-12](http://www.jdhp.org/projects_en.html#pyax12)
 
 Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
