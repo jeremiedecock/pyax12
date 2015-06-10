@@ -61,7 +61,7 @@ class InstructionPacket(Packet):
                   needed to be sent other than the instruction itself.
     """
 
-    def __init__(self, _id=None, _instruction=None, _parameters=None):
+    def __init__(self, _id=None, _instruction=None, _parameters=()):
         """Create an instruction packet."""
 
         # Check the ID byte
