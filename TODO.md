@@ -2,20 +2,24 @@
 
 ## Version 0.3
 
+- [ ] finir de changer le nom "pydynamixel" -> "pyax12"
+
+## Version 0.4
+
 - [ ] écrire les fonctions dump(), scan(), reset() (et d'autres ?)
 - [ ] ajouter des méthodes "print()" pour connexion, InstructionPacket et
       StatusPacket qui affichent des informations facilement intelligibles par un
       humain plutôt que des codes hexa (ex: "position=...°\nspeed=..." ; "baudrate=...\nport=...\n...")
 - [ ] ajouter/pusher un tag v0.3
 
-## Version 0.4
+## Version 0.5
 
 - [ ] ajouter des exemples
 - [ ] ajouter une vidéo de démonstration dans le README.md
 - [ ] amélorer la description dans le README.md
 - [ ] ajouter/pusher un tag v0.4
 
-## Version 0.5
+## Version 0.6
 
 - [ ] corriger les "TODO" restant
 - [ ] vérifier systématiquement la validité des arguments (type, bornes, ...)
@@ -25,7 +29,6 @@
 
 ## Version 1.0
 
-- [ ] finir de changer le nom "pydynamixel" -> "pyax12"
 - [ ] revoir la gestion des modules/paquets/imports (cf. pyai) ?
 - [ ] tester si la génération de paquets Debian fonctionne toujours
 - [ ] tester si la setup.py fonctionne toujours
