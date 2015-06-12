@@ -1,6 +1,6 @@
 # -*- coding : utf-8 -*-
 
-# PyDynamixel
+# PyAX12
 
 # Copyright (c) 2010 Jeremie Decock (http://www.jdhp.org)
 
@@ -18,7 +18,7 @@
 
 import serial
 import time
-from pydynamixel.status_packet import StatusPacket
+from pyax12.status_packet import StatusPacket
 
 class Connection(object):
     """Create a serial connection with dynamixel actuators."""

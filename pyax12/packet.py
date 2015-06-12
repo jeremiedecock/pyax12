@@ -1,6 +1,6 @@
 # -*- coding : utf-8 -*-
 
-# PyDynamixel
+# PyAX12
 
 # Copyright (c) 2010 Jeremie Decock (http://www.jdhp.org)
 

@@ -2,7 +2,7 @@
 
 ## Version 0.3
 
-- [ ] finir de changer le nom "pydynamixel" -> "pyax12"
+- [x] finir de changer le nom "pydynamixel" -> "pyax12"
 
 ## Version 0.4
 

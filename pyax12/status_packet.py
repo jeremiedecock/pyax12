@@ -1,6 +1,6 @@
 # -*- coding : utf-8 -*-
 
-# PyDynamixel
+# PyAX12
 
 # Copyright (c) 2010 Jeremie Decock (http://www.jdhp.org)
 
@@ -16,7 +16,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-from pydynamixel.packet import Packet
+from pyax12.packet import Packet
 
 class StatusPacket(Packet):
     """The Status Packet is the response packet from the Dynamixel units to the main

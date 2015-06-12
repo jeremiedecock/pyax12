@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import pydynamixel.packet as pk
-import pydynamixel.connection
-import pydynamixel.instruction_packet as ip
+import pyax12.packet as pk
+import pyax12.connection
+import pyax12.instruction_packet as ip
 
 import argparse
 import time
@@ -22,7 +22,7 @@ def main():
 
     # CONNECT TO THE SERIAL PORT
 
-    serial_connection = pydynamixel.connection.Connection(_port=args.port, _baudrate=args.baudrate, _timeout=args.timeout)
+    serial_connection = pyax12.connection.Connection(_port=args.port, _baudrate=args.baudrate, _timeout=args.timeout)
 
     # SWITCH ON THE LED
 
