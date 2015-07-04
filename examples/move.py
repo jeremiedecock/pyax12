@@ -16,7 +16,7 @@ def main():
 
     parser.add_argument("--dynamixel_id", "-i",  help="The unique ID of a Dynamixel unit to work with (254 is a broadcasting ID)", metavar="INTEGER", type=int, default=pk.BROADCAST_ID)
     parser.add_argument("--baudrate", "-b",  help="The baudrate speed (e.g. 57600)", metavar="INTEGER", type=int, default=57600)
-    parser.add_argument("--timeout", "-t",  help="The timeout value for the connection", metavar="FLOAT", type=float, default=0.1)
+    parser.add_argument("--timeout", "-t",  help="The timeout value for the connection (in seconds)", metavar="FLOAT", type=float, default=0.1)
     parser.add_argument("--port", "-p",  help="The serial device to connect with (e.g. '/dev/ttyUSB0' for Unix users)", metavar="STRING", default="/dev/ttyUSB0")
     args = parser.parse_args()
 
