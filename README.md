@@ -4,7 +4,10 @@ Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
 ## Description
 
-PyAX-12 is a Python library to control Dynamixel AX-12+ servos.
+PyAX-12 is an open source lightweight Python library to control
+[Dynamixel AX-12+](http://www.robotis.com/xe/dynamixel_en) actuators.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/sXrEGmjz-S4" frameborder="0" allowfullscreen></iframe>
 
 ## Dependencies
 
