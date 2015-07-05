@@ -24,16 +24,12 @@
 import pyax12.packet as pk
 import pyax12.connection
 import pyax12.instruction_packet as ip
+import pyax12.utils as utils
 
 import argparse
 import time
 
 import tkinter as tk
-
-def int_to_hex_tuple(val):
-    s = '%04x' % val
-    t = (int(s[2:4], 16), int(s[0:2], 16))
-    return t
 
 def main():
 
@@ -60,19 +56,36 @@ def main():
 
     def scale_cb(ev=None):
         position = position_scale.get()    # Get the scale value (integer or float)
-        position_byte_tuple = int_to_hex_tuple(position)
+        position_byte_tuple = utils.int_to_little_endian_hex_tuple(position)
 
         speed = speed_scale.get()    # Get the scale value (integer or float)
-        speed_byte_tuple = int_to_hex_tuple(speed)
+        speed_byte_tuple = utils.int_to_little_endian_hex_tuple(speed)
 
         instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.GOAL_POSITION, position_byte_tuple[0], position_byte_tuple[1], speed_byte_tuple[0], speed_byte_tuple[1]))
         status_packet = serial_connection.send(instruction_packet)
 
-    position_scale = tk.Scale(root, from_=0, to=1024, orient=tk.VERTICAL, command=scale_cb)  # Arguments "orient" and "command" are optional
-    position_scale.pack(fill=tk.Y, expand=1, side=tk.LEFT)
+    servo_frame = tk.LabelFrame(root, text="Servo #" + str(args.dynamixel_id), padx=5, pady=5)
+    servo_frame.pack(fill=tk.Y, expand=1, padx=10, pady=10)
 
-    speed_scale = tk.Scale(root, from_=0, to=1024, orient=tk.VERTICAL, command=scale_cb)  # Arguments "orient" and "command" are optional
-    speed_scale.pack(fill=tk.Y, expand=1, side=tk.RIGHT)
+    # Position
+    position_frame = tk.Frame(servo_frame)
+    position_frame.pack(fill=tk.Y, expand=1, side=tk.LEFT)
+
+    position_label = tk.Label(position_frame, text="Position")
+    position_label.pack(side=tk.TOP)
+
+    position_scale = tk.Scale(position_frame, from_=0, to=1024, orient=tk.VERTICAL, command=scale_cb)  # Arguments "orient" and "command" are optional
+    position_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
+
+    # Speed
+    speed_frame = tk.Frame(servo_frame)
+    speed_frame.pack(fill=tk.Y, expand=1, side=tk.RIGHT)
+
+    speed_label = tk.Label(speed_frame, text="Speed")
+    speed_label.pack(side=tk.TOP)
+
+    speed_scale = tk.Scale(speed_frame, from_=0, to=1024, orient=tk.VERTICAL, command=scale_cb)  # Arguments "orient" and "command" are optional
+    speed_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
 
     position_scale.set(512)         # Set the scale value
     speed_scale.set(512)            # Set the scale value
