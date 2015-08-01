@@ -1,6 +1,6 @@
-include VERSION
 include AUTHORS
-include COPYING
+include LICENSE
+include README.rst
+include VERSION
 include debian-dist.sh
-include MANIFEST.in
 recursive-include examples *.py
