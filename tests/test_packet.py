@@ -32,7 +32,107 @@ class TestPacket(unittest.TestCase):
 
     # Tests for the dynamixel_checksum function ###############################
 
-    
+    def test_checksum_func_incomplete(self):
+        """Check that the dynamixel_checksum function fails when the
+        "byte_tuple" argument is incomplete (len(byte_tuple) < 3)."""
+
+        byte_tuple = (0x01, 0x02)                      # incomplete packet
+
+        with self.assertRaises(ValueError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_type(self):
+        """Check that the dynamixel_checksum function fails when the
+        "byte_tuple" argument has a wrong type (float)."""
+
+        byte_tuple = 1.0                               # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_byte_type(self):
+        """Check that the dynamixel_checksum function fails when an item of the
+        "byte_tuple" argument has a wrong type (float)."""
+
+        byte_tuple = (0x01, 1.0, 0x02, 0x2b, 0x01)     # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_byte_value_low(self):
+        """Check that the dynamixel_checksum function fails when an item of the
+        "byte_tuple" argument has a wrong value (too low value)."""
+
+        byte_tuple = (0x01, -1, 0x02, 0x2b, 0x01)      # wrong value
+
+        with self.assertRaises(ValueError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_byte_value_hi(self):
+        """Check that the dynamixel_checksum function fails when an item of the
+        "byte_tuple" argument has a wrong value (too high value)."""
+
+        byte_tuple = (0x01, 0xffff, 0x02, 0x2b, 0x01)  # wrong value
+
+        with self.assertRaises(ValueError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_id_value_hi(self):
+        """Check that the dynamixel_checksum function fails when the "id" byte
+        of the "byte_tuple" argument has a wrong value (too high value)."""
+
+        byte_tuple = (0xff,)             # wrong id
+        byte_tuple += (4,)               # length
+        byte_tuple += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
+
+        with self.assertRaises(ValueError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_length_value_low(self):
+        """Check that the dynamixel_checksum function fails when the "length"
+        byte of the "byte_tuple" argument has a wrong value (too low value).
+        """
+
+        byte_tuple = (1,)                # id
+        byte_tuple += (1,)               # wrong length
+        byte_tuple += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
+
+        with self.assertRaises(ValueError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_wrong_length_value_hi(self):
+        """Check that the dynamixel_checksum function fails when the "length"
+        byte of the "byte_tuple" argument has a wrong value (too high value).
+        """
+
+        byte_tuple = (1,)                # id
+        byte_tuple += (9,)               # wrong length
+        byte_tuple += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
+
+        with self.assertRaises(ValueError):
+            pk.dynamixel_checksum(byte_tuple)
+
+
+    def test_checksum_func_example1(self):
+        """Check the "dynamixel_checksum" function using the example 2 of the
+        Dynamixel user guide: "Reading the internal temperature of the
+        Dynamixel actuator with an ID of 1" (p.20)."""
+
+        byte_tuple = (1,)                # id
+        byte_tuple += (4,)               # length
+        byte_tuple += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
+
+        checksum_byte = pk.dynamixel_checksum(byte_tuple)
+        expected_checksum_byte = 0xcc
+
+        self.assertEqual(checksum_byte, expected_checksum_byte)
 
     # Tests for the Packet class ##############################################
 
