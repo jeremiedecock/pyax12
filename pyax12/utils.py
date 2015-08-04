@@ -2,7 +2,7 @@
 
 # PyAX12
 
-# Copyright (c) 2010 Jeremie Decock (http://www.jdhp.org)
+# Copyright (c) 2010,2015 Jeremie Decock (http://www.jdhp.org)
 
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -16,66 +16,56 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-import pyax12.packet as pk
-import pyax12.instruction_packet as ip
+"""This module contains some general purpose utility functions."""
 
-def int_to_little_endian_hex_tuple(val):
+__all__ = ['int_to_little_endian_hex_tuple',
+           'int_seq_to_hex_str']
+
+
+def int_to_little_endian_hex_tuple(integer):
     """Convert a two-bytes integer into a pair of one-byte integers using
     the little-endian notation (i.e. the less significant byte first).
 
-    The "val" input must be a 2 bytes integer (i.e. val must be greater or
-    equal to 0 and less or equal to 1024).
+    The "integer" input must be a 2 bytes integer (i.e. "integer" must be
+    greater or equal to 0 and less or equal to 65535 (0xffff)).
 
-    For instance, with the input decimal value val=700 (0x02bc in hexadecimal
-    notation) this function will return the tuple (0xbc, 0x02).
+    For instance, with the input decimal value integer=700 (0x02bc in
+    hexadecimal notation) this function will return the tuple (0xbc, 0x02).
     """
-    assert 0 <= val <= 1024
-    hex_string = '%04x' % val
+
+    # Check argument type to make exception messages more explicit
+    if not isinstance(integer, int):
+        msg = "An integer in range(0x00, 0xffff) is required (got {})."
+        raise TypeError(msg.format(type(integer)))
+
+    # Check the argument value
+    if not (0 <= integer <= 0xffff):
+        msg = "An integer in range(0x00, 0xffff) is required (got {})."
+        raise ValueError(msg.format(integer))
+
+    hex_string = '%04x' % integer
     hex_tuple = (int(hex_string[2:4], 16), int(hex_string[0:2], 16))
+
     return hex_tuple
 
 
-def read_control_table(serial_connection, dynamixel_id, address, length):
-    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.READ_DATA, _parameters=(address, length))
+def int_seq_to_hex_str(integer_tuple, separator=","):
+    """Convert a squence of integers to a string of hexadecimal numbers.
 
-    status_packet = serial_connection.send(instruction_packet)
+    For instance, with the input tuple (255, 0, 10)
+    this function will return the string "ff,00,0a".
+    """
 
-    value_tuple = None
-    if status_packet is not None:
-        value_tuple = status_packet.parameters
+    # Check arguments type to make exception messages more explicit
+    for integer in integer_tuple:
+        if not isinstance(integer, int):
+            msg = "An integer in range (0x00, 0xff) is required (got {})."
+            raise TypeError(msg.format(type(integer)))
 
-    return value_tuple
+    # Check the integer_tuple items
+    for integer in integer_tuple:
+        if not (0x00 <= integer <= 0xff):
+            msg = "An integer in range (0x00, 0xff) is required (got {})."
+            raise ValueError(msg.format(integer))
 
-
-def write_control_table(serial_connection, dynamixel_id, address, value_tuple):
-    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(address, ) + value_tuple)
-
-    status_packet = serial_connection.send(instruction_packet)
-
-    if status_packet is not None:
-        pass
-        # TODO warning
-
-
-def dump(serial_connection, dynamixel_id):
-    pass
-
-
-def scan(serial_connection, id_tuple):
-
-    for dynamixel_id in id_tuple:
-        if 0 <= dynamixel_id <= 254:
-            instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.PING)
-
-            status_packet = serial_connection.send(instruction_packet)
-
-            value_tuple = None
-            if status_packet is not None:
-                value_tuple = status_packet.parameters
-                # TODO check errors and print available IDs
-        else:
-            pass # TODO exception
-
-
-def reset(serial_connection, dynamixel_id):
-    pass
+    return separator.join(['%02x' % integer for integer in integer_tuple])
