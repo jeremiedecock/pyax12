@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Copyright (c) 2010 Jérémie DECOCK (http://www.jdhp.org)
@@ -13,7 +13,7 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Intended Audience :: Developers',
                'License :: OSI Approved :: MIT License',
                'Operating System :: POSIX :: Linux',
-               'Programming Language :: Python :: 2.5',
+               'Programming Language :: Python :: 3.0',
                'Topic :: System :: Hardware :: Hardware Drivers']
 
 PACKAGES = ['pyax12']
