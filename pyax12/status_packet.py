@@ -50,6 +50,11 @@ class StatusPacket(pk.Packet):
                              returned by Dynamixel units.
         """
 
+        # Check arguments type to make exception messages more explicit
+        if not isinstance(byte_array_packet, bytearray):
+            msg = "A bytearray is required (got {})."
+            raise TypeError(msg.format(type(byte_array_packet)))
+
         if len(byte_array_packet) >= 6:
 
             self.dynamixel_id = byte_array_packet[2]
