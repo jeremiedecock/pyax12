@@ -95,8 +95,6 @@ class StatusPacket(pk.Packet):
                 raise ValueError(msg.format(packet_str))
 
             # TODO: if an error bit flag is ON:
-            #       check params length and value
-            #       if ok, parse param
             #       raise exception on error bits (user defined exceptions)
 
             # Set self.data
