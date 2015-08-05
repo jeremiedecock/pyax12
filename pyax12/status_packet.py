@@ -28,8 +28,8 @@ import pyax12.packet as pk
 from pyax12 import utils
 
 class StatusPacket(pk.Packet):
-    """The Status Packet is the response packet from the Dynamixel units to the main
-    controller after receiving an instruction packet.
+    """The Status Packet is the response packet from the Dynamixel units to the
+    main controller after receiving an instruction packet.
 
     The structure of the status packet is as the following:
 
@@ -54,7 +54,7 @@ class StatusPacket(pk.Packet):
 
             self.dynamixel_id = byte_array_packet[2]
             self.error = byte_array_packet[4]
-            self.parameters = tuple([byte_value for byte_value in byte_array_packet[5:-1]])
+            self.parameters = tuple([byte for byte in byte_array_packet[5:-1]])
 
             # Write error bits
             self.instruction_error = bool(self.error & (1 << 6))
@@ -83,7 +83,8 @@ class StatusPacket(pk.Packet):
 
             # Check the ID byte
             if not (0x00 <= self.dynamixel_id <= 0xfe):
-                msg = "Wrong dynamixel_id: {:#x} (should be in range(0x00, 0xfe))."
+                msg = "Wrong dynamixel_id:"
+                msg += " {:#x} (should be in range(0x00, 0xfe))."
                 raise ValueError(msg.format(self.dynamixel_id))
 
             # Check length (length = num_params + 2 = full_packet_length - 4)
