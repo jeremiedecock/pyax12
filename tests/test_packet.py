@@ -260,6 +260,22 @@ class TestPacket(unittest.TestCase):
         self.assertEqual(raw_packet.to_byte_array(), expected_str)
 
 
+    def test_to_bytes_func(self):
+        """Check the pk.to_bytes() function.
+
+        Based on the Dynamixel user guide, example 2: "Reading the internal
+        temperature of the Dynamixel actuator with an ID of 1" (p.20).
+        """
+
+        dynamixel_id = 1
+        data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
+
+        raw_packet = pk.Packet(dynamixel_id, data)
+
+        expected_str = b'\xff\xff\x01\x04\x02\x2b\x01\xcc'
+        self.assertEqual(raw_packet.to_bytes(), expected_str)
+
+
 if __name__ == '__main__':
     unittest.main()
 
