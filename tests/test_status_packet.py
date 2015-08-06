@@ -153,7 +153,7 @@ class TestStatusPacket(unittest.TestCase):
 
         try:
             StatusPacket(bytearray_packet)
-        except:
+        except Exception:
             self.fail("Encountered an unexpected exception.")
 
 
