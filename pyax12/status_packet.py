@@ -27,6 +27,48 @@ __all__ = ['StatusPacket']
 import pyax12.packet as pk
 from pyax12 import utils
 
+# EXCEPTION CLASSES ###########################################################
+
+class StatusPacketError(Exception):
+    """Base class for exceptions in the status_packet module."""
+    pass
+
+class InstructionError(StatusPacketError):
+    """Exception raised if an undefined instruction is sent or an action
+    instruction is sent without a Reg_Write instruction."""
+    pass
+
+class OverloadError(StatusPacketError):
+    """Exception raised if the specified maximum torque can't control the
+    applied load."""
+    pass
+
+class ChecksumError(StatusPacketError):
+    """Exception raised if the checksum of the instruction packet is
+    incorrect."""
+    pass
+
+class RangeError(StatusPacketError):
+    """Exception raised if the instruction sent is out of the defined range."""
+    pass
+
+class OverheatingError(StatusPacketError):
+    """Exception raised if the internal temperature of the Dynamixel unit is
+    above the operating temperature range as defined in the control table."""
+    pass
+
+class AngleLimitError(StatusPacketError):
+    """Exception raised if the goal position is set outside of the range
+    between "CW Angle Limit" and "CCW Angle Limit"."""
+    pass
+
+class InputVoltageError(StatusPacketError):
+    """Exception raised if the voltage is out of the operating voltage range as
+    defined in the control table."""
+    pass
+
+# STATUS PACKET CLASS #########################################################
+
 class StatusPacket(pk.Packet):
     """The Status Packet is the response packet from the Dynamixel units to the
     main controller after receiving an instruction packet.
@@ -99,8 +141,27 @@ class StatusPacket(pk.Packet):
                 packet_str = utils.int_seq_to_hex_str(tuple(byte_array_packet))
                 raise ValueError(msg.format(packet_str))
 
-            # TODO: if an error bit flag is ON:
-            #       raise exception on error bits (user defined exceptions)
+            # Check error bit flags
+            if self.instruction_error:
+                raise InstructionError()
+
+            if self.overload_error:
+                raise OverloadError()
+
+            if self.checksum_error:
+                raise ChecksumError()
+
+            if self.range_error:
+                raise RangeError()
+
+            if self.overheating_error:
+                raise OverheatingError()
+
+            if self.angle_limit_error:
+                raise AngleLimitError()
+
+            if self.input_voltage_error:
+                raise InputVoltageError()
 
             # Set self.data
             self.data = (self.error, ) + self.parameters
