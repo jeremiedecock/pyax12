@@ -18,7 +18,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 """
-This module contain unit tests for the "InstructionPacket" class.
+This module contains unit tests for the "InstructionPacket" class.
 """
 
 import pyax12.packet as pk
