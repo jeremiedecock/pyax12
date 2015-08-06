@@ -265,10 +265,20 @@ class Packet(object):
 
 
     def to_byte_array(self):
-        """Return the packet as a bytearray (array of bytes).
+        """Return the packet as a bytearray (a mutable sequence of bytes).
 
         Returns something like: bytearray(b'\xff\xff\xfe\x04\x03\x03\x01\xf6').
         """
 
         return bytearray(self.to_integer_tuple())
+
+
+    def to_bytes(self):
+        """Return the packet as a bytes string (an immutable sequence of
+        bytes).
+
+        Returns something like: b'\xff\xff\xfe\x04\x03\x03\x01\xf6'.
+        """
+
+        return bytes(self.to_integer_tuple())
 
