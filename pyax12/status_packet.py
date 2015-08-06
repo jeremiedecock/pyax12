@@ -88,28 +88,29 @@ class StatusPacket(pk.Packet):
     +----+----+--+------+-----+----------+---+-----------+---------+
     """
 
-    def __init__(self, byte_array_packet):
+    def __init__(self, bytes_packet):
         """Create a status packet.
 
         StatusPacket is not intended to be instancied by users (except maybe
-        for debugging prupose). Under normal conditions of use, StatusPacket's
-        instances are automatically created by the "Connection" class.
+        for testing and debugging prupose). Under normal conditions of use,
+        StatusPacket's instances are automatically created by the "Connection"
+        class.
 
         Keyword arguments:
-        byte_array_packet -- a bytearray containing the full status packet
-                             returned by Dynamixel units.
+        bytes_packet -- a "bytes" instance containing the full status packet
+                        returned by Dynamixel units.
         """
 
         # Check arguments type to make exception messages more explicit
-        if not isinstance(byte_array_packet, bytearray):
-            msg = "A bytearray is required (got {})."
-            raise TypeError(msg.format(type(byte_array_packet)))
+        if not isinstance(bytes_packet, bytes):
+            msg = 'A "bytes" type is required (got {}).'
+            raise TypeError(msg.format(type(bytes_packet)))
 
-        if len(byte_array_packet) >= 6:
+        if len(bytes_packet) >= 6:
 
-            self.dynamixel_id = byte_array_packet[2]
-            self.error = byte_array_packet[4]
-            self.parameters = tuple([byte for byte in byte_array_packet[5:-1]])
+            self.dynamixel_id = bytes_packet[2]
+            self.error = bytes_packet[4]
+            self.parameters = tuple([byte for byte in bytes_packet[5:-1]])
 
             # Write error bits
             self.instruction_error = bool(self.error & (1 << 6))
@@ -121,7 +122,7 @@ class StatusPacket(pk.Packet):
             self.input_voltage_error = bool(self.error & (1 << 0))
 
             # Check the header bytes
-            header_tuple = tuple(byte_array_packet[0:2])
+            header_tuple = tuple(bytes_packet[0:2])
             if header_tuple != (0xff, 0xff):
                 msg = 'Wrong header: {} (should be in "ff ff")).'
                 header_str = utils.int_seq_to_hex_str(header_tuple)
@@ -129,11 +130,11 @@ class StatusPacket(pk.Packet):
 
             # Verify the checksum (it should be the first byte to check to
             # avoid wrong error message in case of transmission error)
-            byte_tuple = tuple(byte_array_packet[2:-1])
+            byte_tuple = tuple(bytes_packet[2:-1])
             computed_checksum = pk.dynamixel_checksum(byte_tuple)
-            if computed_checksum != byte_array_packet[-1]:
+            if computed_checksum != bytes_packet[-1]:
                 msg = 'Wrong checksum: {}.'
-                packet_str = utils.int_seq_to_hex_str(tuple(byte_array_packet))
+                packet_str = utils.int_seq_to_hex_str(tuple(bytes_packet))
                 raise ValueError(msg.format(packet_str))
 
             # Check the ID byte
@@ -143,10 +144,10 @@ class StatusPacket(pk.Packet):
                 raise ValueError(msg.format(self.dynamixel_id))
 
             # Check length (length = num_params + 2 = full_packet_length - 4)
-            measured_length = len(byte_array_packet) - 4
-            if measured_length != byte_array_packet[3]:
+            measured_length = len(bytes_packet) - 4
+            if measured_length != bytes_packet[3]:
                 msg = 'Wrong length: {}.'
-                packet_str = utils.int_seq_to_hex_str(tuple(byte_array_packet))
+                packet_str = utils.int_seq_to_hex_str(tuple(bytes_packet))
                 raise ValueError(msg.format(packet_str))
 
             # Check error bit flags
@@ -175,6 +176,6 @@ class StatusPacket(pk.Packet):
             self.data = (self.error, ) + self.parameters
         else:
             msg = "Incomplete packet: ({})."
-            packet_str = utils.int_seq_to_hex_str(byte_array_packet)
+            packet_str = utils.int_seq_to_hex_str(bytes_packet)
             raise ValueError(msg.format(packet_str))
 
