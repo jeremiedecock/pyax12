@@ -92,8 +92,10 @@ class InstructionPacket(Packet):
         _id -- the the unique ID of the Dynamixel unit which have to execute
                this instruction packet.
         _instruction -- the instruction for the Dynamixel actuator to perform.
-        _parameters -- a tuple of bytes used if there is additional information
-                       needed to be sent other than the instruction itself."""
+        _parameters -- a sequence of bytes used if there is additional
+                       information needed to be sent other than the instruction
+                       itself.
+        """
 
         # Check arguments type to make exception messages more explicit
         if not isinstance(_id, int):
