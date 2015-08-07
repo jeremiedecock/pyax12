@@ -50,117 +50,179 @@ class TestStatusPacket(unittest.TestCase):
     Contains unit tests for the "StatusPacket" class.
     """
 
+    def test_correct_arg_type(self):
+        """Check that the instanciation of StatusPacket doesn't fail when the
+        argument "packet" is correct.
+
+        This test is based on the example 2 of the Dynamixel user guide:
+        "Reading the internal temperature of the Dynamixel actuator with an ID
+        of 1" (p.20).
+
+        In this test, status packet are made artificially, no connection to any
+        actual Dynamixel actuator is required."""
+
+        # Test with a tuple of bytes
+        packet = (0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb)
+
+        try:
+            StatusPacket(packet)
+        except (TypeError, ValueError, StatusPacketError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Test with a list of bytes
+        packet = [0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb]
+
+        try:
+            StatusPacket(packet)
+        except (TypeError, ValueError, StatusPacketError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Test with a bytes string
+        packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb))
+
+        try:
+            StatusPacket(packet)
+        except (TypeError, ValueError, StatusPacketError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Test with a bytearray
+        packet = bytearray((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb))
+
+        try:
+            StatusPacket(packet)
+        except (TypeError, ValueError, StatusPacketError):
+            self.fail("Encountered an unexpected exception.")
+
+
     def test_wrong_arg_type(self):
         """Check that the instanciation of StatusPacket fails when the argument
-        "bytes_packet" has a wrong type."""
+        "packet" has a wrong type."""
 
-        # Wrong type (tuple instead bytes)
-        bytes_packet = (0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb)
+        # Wrong type: int
+        packet = 1
 
         with self.assertRaises(TypeError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
+
+        # Wrong type: None
+        packet = None
+
+        with self.assertRaises(TypeError):
+            StatusPacket(packet)
+
+        # Wrong type: float
+        packet = 1.0
+
+        with self.assertRaises(TypeError):
+            StatusPacket(packet)
+
+        # Wrong type: string
+        packet = "hello"
+
+        with self.assertRaises(TypeError):
+            StatusPacket(packet)
 
 
     def test_bytes_len(self):
         """Check that the instanciation of StatusPacket fails when the argument
-        "bytes_packet" is too short: at least 6 bytes are required to make
+        "packet" is too short: at least 6 bytes are required to make
         a valid packet (two for the header, one for the dynamixel ID, one for
         the packet "length", one for the error code, one for the checksum and
         the rest for parameters)."""
 
         # Wrong packet: too short (at least 6 bytes are required)
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00))
+        packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: too short (at least 6 bytes are required)
-        bytes_packet = bytes((0xff,))
+        packet = bytes((0xff,))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: too short (at least 6 bytes are required)
-        bytes_packet = bytes(())
+        packet = bytes(())
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
 
     def test_header_bytes(self):
         """Check that the instanciation of StatusPacket fails when the argument
-        "bytes_packet" has a wrong header (when the two first bytes are
+        "packet" has a wrong header (when the two first bytes are
         not equal to "\xff\xff")."""
 
         # Wrong packet: the two first bytes are not equal to "\xff\xff"
-        bytes_packet = bytes((0xff, 0, 0x01, 0x03, 0x00, 0x20, 0xdb))
+        packet = bytes((0xff, 0, 0x01, 0x03, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: the two first bytes are not equal to "\xff\xff"
-        bytes_packet = bytes((0, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb))
+        packet = bytes((0, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: the two first bytes are not equal to "\xff\xff"
-        bytes_packet = bytes((0, 0, 0x01, 0x03, 0x00, 0x20, 0xdb))
+        packet = bytes((0, 0, 0x01, 0x03, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
 
     def test_checksum_byte(self):
         """Check that the instanciation of StatusPacket fails when the argument
-        "bytes_packet" has a wrong "checksum" byte (the last byte)."""
+        "packet" has a wrong "checksum" byte (the last byte)."""
 
         # Wrong packet: wrong "checksum" byte (the last byte)
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0))
+        packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
 
     def test_id_byte(self):
         """Check that the instanciation of StatusPacket fails when the argument
-        "bytes_packet" has a wrong "id" byte (the third byte)."""
+        "packet" has a wrong "id" byte (the third byte)."""
 
         # Wrong packet: wrong "id" byte (the third byte)
-        bytes_packet = bytes((0xff, 0xff, 0xff, 0x03, 0x00, 0x20, 0))
+        packet = bytes((0xff, 0xff, 0xff, 0x03, 0x00, 0x20, 0))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
 
     def test_lenth_byte(self):
         """Check that the instanciation of StatusPacket fails when the argument
-        "bytes_packet" has a wrong "length" byte (the fourth packet's byte
-        must be equal to "len(bytes_packet) - 4")."""
+        "packet" has a wrong "length" byte (the fourth packet's byte
+        must be equal to "len(packet) - 4")."""
 
         # Wrong packet: wrong "length" byte (the fourth byte)
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0x02, 0x00, 0x20, 0xdb))
+        packet = bytes((0xff, 0xff, 0x01, 0x02, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: wrong "length" byte (the fourth byte)
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0x00, 0x00, 0x20, 0xdb))
+        packet = bytes((0xff, 0xff, 0x01, 0x00, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: wrong "length" byte (the fourth byte)
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0x04, 0x00, 0x20, 0xdb))
+        packet = bytes((0xff, 0xff, 0x01, 0x04, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
         # Wrong packet: wrong "length" byte (the fourth byte)
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0xff, 0x00, 0x20, 0xdb))
+        packet = bytes((0xff, 0xff, 0x01, 0xff, 0x00, 0x20, 0xdb))
 
         with self.assertRaises(ValueError):
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
 
     ###
 
@@ -251,10 +313,10 @@ class TestStatusPacket(unittest.TestCase):
         actual Dynamixel actuator is required."""
 
         # Return the internal temperature of the Dynamixel actuator #1
-        bytes_packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb))
+        packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0xdb))
 
         try:
-            StatusPacket(bytes_packet)
+            StatusPacket(packet)
         except (TypeError, ValueError, StatusPacketError):
             self.fail("Encountered an unexpected exception.")
 
