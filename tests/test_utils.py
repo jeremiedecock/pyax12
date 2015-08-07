@@ -40,145 +40,193 @@ class TestUtils(unittest.TestCase):
     implemented in the "utils" module.
     """
 
-    # Check int_to_little_endian_hex_tuple() ##################################
+    # Check int_to_little_endian_bytes() ######################################
 
-    def test_int_to_le_hex_tuple_func_type(self):
-        """Check that the utils.int_to_little_endian_hex_tuple() function fails
+    def test_int_to_little_endian_bytes_type(self):
+        """Check that the utils.int_to_little_endian_bytes() function fails
         when the "integer" argument's type is wrong (float)."""
 
         with self.assertRaises(TypeError):
-            utils.int_to_little_endian_hex_tuple(1.0)
+            utils.int_to_little_endian_bytes(1.0)
+
+        with self.assertRaises(TypeError):
+            utils.int_to_little_endian_bytes("hello")
+
+        with self.assertRaises(TypeError):
+            utils.int_to_little_endian_bytes((1, ))
+
+        with self.assertRaises(TypeError):
+            utils.int_to_little_endian_bytes(bytes((1, )))
+
+        with self.assertRaises(TypeError):
+            utils.int_to_little_endian_bytes(bytearray((1, )))
 
 
-    def test_int_to_le_hex_tuple_func_value_low(self):
-        """Check that the utils.int_to_little_endian_hex_tuple() function fails
+    def test_int_to_little_endian_bytes_value_lo(self):
+        """Check that the utils.int_to_little_endian_bytes() function fails
         when the "integer" argument's value is wrong (too low)."""
 
         with self.assertRaises(ValueError):
-            utils.int_to_little_endian_hex_tuple(-1)       # too low
+            utils.int_to_little_endian_bytes(-1)       # too low
 
 
-    def test_int_to_le_hex_tuple_func_value_hi(self):
-        """Check that the utils.int_to_little_endian_hex_tuple() function fails
+    def test_int_to_little_endian_bytes_value_hi(self):
+        """Check that the utils.int_to_little_endian_bytes() function fails
         when the "integer" argument's value is wrong (too high)."""
 
         with self.assertRaises(ValueError):
-            utils.int_to_little_endian_hex_tuple(0xffffff) # too high
+            utils.int_to_little_endian_bytes(0xffffff) # too high
 
 
-    def test_int_to_le_hex_tuple_func_1(self):
-        """Check the returned value of utils.int_to_little_endian_hex_tuple().
-        """
+    def test_int_to_little_endian_bytes_1(self):
+        """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        hex_tuple = utils.int_to_little_endian_hex_tuple(0)
+        hex_tuple = utils.int_to_little_endian_bytes(0)
         expected_tuple = (0x00, 0x00)
 
         self.assertEqual(hex_tuple, expected_tuple)
 
 
-    def test_int_to_le_hex_tuple_func_2(self):
-        """Check the returned value of utils.int_to_little_endian_hex_tuple().
-        """
+    def test_int_to_little_endian_bytes_2(self):
+        """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        hex_tuple = utils.int_to_little_endian_hex_tuple(0xffff)
+        hex_tuple = utils.int_to_little_endian_bytes(0xffff)
         expected_tuple = (0xff, 0xff)
 
         self.assertEqual(hex_tuple, expected_tuple)
 
 
-    def test_int_to_le_hex_tuple_func_3(self):
-        """Check the returned value of utils.int_to_little_endian_hex_tuple().
-        """
+    def test_int_to_little_endian_bytes_3(self):
+        """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        hex_tuple = utils.int_to_little_endian_hex_tuple(0x02bc)
+        hex_tuple = utils.int_to_little_endian_bytes(0x02bc)
         expected_tuple = (0xbc, 0x02)
 
         self.assertEqual(hex_tuple, expected_tuple)
 
 
-    def test_int_to_le_hex_tuple_func_4(self):
-        """Check the returned value of utils.int_to_little_endian_hex_tuple().
-        """
+    def test_int_to_little_endian_bytes_4(self):
+        """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        hex_tuple = utils.int_to_little_endian_hex_tuple(0xbc)
+        hex_tuple = utils.int_to_little_endian_bytes(0xbc)
         expected_tuple = (0xbc, 0x00)
 
         self.assertEqual(hex_tuple, expected_tuple)
 
 
-    def test_int_to_le_hex_tuple_func_5(self):
-        """Check the returned value of utils.int_to_little_endian_hex_tuple().
-        """
+    def test_int_to_little_endian_bytes_5(self):
+        """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        hex_tuple = utils.int_to_little_endian_hex_tuple(1)
+        hex_tuple = utils.int_to_little_endian_bytes(1)
         expected_tuple = (0x01, 0x00)
 
         self.assertEqual(hex_tuple, expected_tuple)
 
 
 
-    # Check int_seq_to_hex_str() ##############################################
+    # Check pretty_hex_str() ##################################################
 
-    def test_int_seq_to_hex_str_func_type(self):
-        """Check that the utils.int_seq_to_hex_str() function fails when the
-        "tuple_of_integers" argument's type is wrong (int)."""
+    def test_pretty_hex_str_type(self):
+        """Check that the utils.pretty_hex_str() function fails when the
+        "bytes_seq" argument's type is wrong (int)."""
 
         with self.assertRaises(TypeError):
-            utils.int_seq_to_hex_str(0)
+            utils.pretty_hex_str(1.0)
 
-
-    def test_int_seq_to_hex_str_func_items_type(self):
-        """Check that the utils.int_seq_to_hex_str() function fails when the
-        "tuple_of_integers" items have wrong type (float)."""
-
-        tuple_of_integers = (1.0, 0, 10)       # wrong type (float)
         with self.assertRaises(TypeError):
-            utils.int_seq_to_hex_str(tuple_of_integers)
+            utils.pretty_hex_str("hello")
 
 
-    def test_int_seq_to_hex_str_func_items_value_low(self):
-        """Check that the utils.int_seq_to_hex_str() function fails when the
-        "integer_tuple" items's value is wrong (too low)."""
+    def test_pretty_hex_str_items_type(self):
+        """Check that the utils.pretty_hex_str() function fails when the
+        "bytes_seq" items have wrong type (float)."""
 
-        tuple_of_integers = (-1, 0, 10)        # the first item is too low
+        bytes_seq = (1.0, 0, 10)       # wrong type (float)
+        with self.assertRaises(TypeError):
+            utils.pretty_hex_str(bytes_seq)
+
+        bytes_seq = ("hello", 0, 10)   # wrong type (str)
+        with self.assertRaises(TypeError):
+            utils.pretty_hex_str(bytes_seq)
+
+        bytes_seq = ((1, ), 0, 10)     # wrong type (tuple)
+        with self.assertRaises(TypeError):
+            utils.pretty_hex_str(bytes_seq)
+
+
+    def test_pretty_hex_str_items_value_lo(self):
+        """Check that the utils.pretty_hex_str() function fails when the
+        "bytes_seq" items's value is wrong (too low)."""
+
+        bytes_seq = (-1, 0, 10)        # the first item is too low
         with self.assertRaises(ValueError):
-            utils.int_seq_to_hex_str(tuple_of_integers)
+            utils.pretty_hex_str(bytes_seq)
 
 
-    def test_int_seq_to_hex_str_func_items_value_hi(self):
-        """Check that the utils.int_seq_to_hex_str() function fails when the
-        "integer_tuple" items's value is wrong (too high)."""
+    def test_pretty_hex_str_items_value_hi(self):
+        """Check that the utils.pretty_hex_str() function fails when the
+        "bytes_seq" items's value is wrong (too high)."""
 
-        tuple_of_integers = (0xffff, 0, 10)    # the first item is too high
+        bytes_seq = (0xffff, 0, 10)    # the first item is too high
         with self.assertRaises(ValueError):
-            utils.int_seq_to_hex_str(tuple_of_integers)
+            utils.pretty_hex_str(bytes_seq)
 
 
-    def test_int_seq_to_hex_str_func_1(self):
-        """Check the returned value of utils.int_seq_to_hex_str()."""
+    def test_pretty_hex_str_arg_type_ok(self):
+        """Check the returned value of utils.pretty_hex_str() when various
+        correct arguments are given."""
 
-        tuple_of_integers = (0xff, 0, 0x0a)
-        hex_str = utils.int_seq_to_hex_str(tuple_of_integers)
+        # Test with a tuple of bytes
+        bytes_seq = (0xff, 0x00, 0x0a)
+        hex_str = utils.pretty_hex_str(bytes_seq)
         expected_str = "ff,00,0a"
 
         self.assertEqual(hex_str, expected_str)
 
+        # Test with a list of bytes
+        bytes_seq = [0xff, 0x00, 0x0a]
+        hex_str = utils.pretty_hex_str(bytes_seq)
+        expected_str = "ff,00,0a"
 
-    def test_int_seq_to_hex_str_func_2(self):
-        """Check the returned value of utils.int_seq_to_hex_str()."""
+        self.assertEqual(hex_str, expected_str)
 
-        tuple_of_integers = (0xff,)
-        hex_str = utils.int_seq_to_hex_str(tuple_of_integers)
+        # Test with a bytes string
+        bytes_seq = bytes((0xff, 0x00, 0x0a))
+        hex_str = utils.pretty_hex_str(bytes_seq)
+        expected_str = "ff,00,0a"
+
+        self.assertEqual(hex_str, expected_str)
+
+        # Test with a bytearray
+        bytes_seq = bytearray((0xff, 0x00, 0x0a))
+        hex_str = utils.pretty_hex_str(bytes_seq)
+        expected_str = "ff,00,0a"
+
+        self.assertEqual(hex_str, expected_str)
+
+        # Test with an integer
+        bytes_seq = 0xff
+        hex_str = utils.pretty_hex_str(bytes_seq)
         expected_str = "ff"
 
         self.assertEqual(hex_str, expected_str)
 
 
-    def test_int_seq_to_hex_str_func_3(self):
-        """Check the returned value of utils.int_seq_to_hex_str()."""
+    def test_pretty_hex_str_1(self):
+        """Check the returned value of utils.pretty_hex_str()."""
 
-        tuple_of_integers = (0xff,) * 10
-        hex_str = utils.int_seq_to_hex_str(tuple_of_integers)
+        bytes_seq = (0xff,)
+        hex_str = utils.pretty_hex_str(bytes_seq)
+        expected_str = "ff"
+
+        self.assertEqual(hex_str, expected_str)
+
+
+    def test_pretty_hex_str_2(self):
+        """Check the returned value of utils.pretty_hex_str()."""
+
+        bytes_seq = (0xff,) * 10
+        hex_str = utils.pretty_hex_str(bytes_seq)
         expected_str = "ff," * 9 + "ff"
 
         self.assertEqual(hex_str, expected_str)

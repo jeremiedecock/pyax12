@@ -26,11 +26,15 @@
 
 """This module contains some general purpose utility functions."""
 
-__all__ = ['int_to_little_endian_hex_tuple',
-           'int_seq_to_hex_str']
-
+__all__ = ['int_to_little_endian_bytes',
+           'pretty_hex_str']
 
 def int_to_little_endian_hex_tuple(integer):
+    """Deprecated (kept to prevent compatibility issue)."""
+    int_to_little_endian_bytes(integer)
+
+
+def int_to_little_endian_bytes(integer):
     """Convert a two-bytes integer into a pair of one-byte integers using
     the little-endian notation (i.e. the less significant byte first).
 
@@ -57,23 +61,26 @@ def int_to_little_endian_hex_tuple(integer):
     return hex_tuple
 
 
-def int_seq_to_hex_str(integer_tuple, separator=","):
-    """Convert a squence of integers to a string of hexadecimal numbers.
+def int_seq_to_hex_str(bytes_seq, separator=","):
+    """Deprecated (kept to prevent compatibility issue)."""
+    pretty_hex_str(bytes_seq, separator)
+
+
+def pretty_hex_str(bytes_seq, separator=","):
+    """Convert a squence of bytes to a string of hexadecimal numbers.
 
     For instance, with the input tuple (255, 0, 10)
     this function will return the string "ff,00,0a".
+
+    Keyword arguments:
+    bytes_seq -- a sequence of bytes to process. It must be compatible with the
+                 "bytes" type.
     """
 
-    # Check arguments type to make exception messages more explicit
-    for integer in integer_tuple:
-        if not isinstance(integer, int):
-            msg = "An integer in range (0x00, 0xff) is required (got {})."
-            raise TypeError(msg.format(type(integer)))
+    # Check the argument and convert it to "bytes" if necessary
+    if isinstance(bytes_seq, int):
+        bytes_seq = bytes((bytes_seq, ))
+    else:
+        bytes_seq = bytes(bytes_seq)
 
-    # Check the integer_tuple items
-    for integer in integer_tuple:
-        if not (0x00 <= integer <= 0xff):
-            msg = "An integer in range (0x00, 0xff) is required (got {})."
-            raise ValueError(msg.format(integer))
-
-    return separator.join(['%02x' % integer for integer in integer_tuple])
+    return separator.join(['%02x' % byte for byte in bytes_seq])
