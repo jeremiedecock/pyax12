@@ -31,13 +31,14 @@ This module contains unit tests for the "StatusPacket" class.
 
 from pyax12.status_packet import StatusPacket
 
+from pyax12.status_packet import StatusPacketError
 from pyax12.status_packet import InstructionError
-from pyax12.status_packet import OverloadError
+#from pyax12.status_packet import OverloadError
 from pyax12.status_packet import ChecksumError
 from pyax12.status_packet import RangeError
-from pyax12.status_packet import OverheatingError
-from pyax12.status_packet import AngleLimitError
-from pyax12.status_packet import InputVoltageError
+#from pyax12.status_packet import OverheatingError
+#from pyax12.status_packet import AngleLimitError
+#from pyax12.status_packet import InputVoltageError
 
 from pyax12.packet import Packet
 from pyax12.connection import Connection
@@ -165,11 +166,11 @@ class TestStatusPacket(unittest.TestCase):
 
     def test_instruction_error(self):
         """Check that the "InstructionError" exception is raised when the
-        "instruction error" flag is ON on the StatusPacket's "error" byte.
-        
-        This test require to be connected to the Dynamixel number 1 using
-        port "/dev/ttyUSB0" (thus it works on Unix systems only) at 57600
-        baud."""
+        "instruction error" flag is ON in the StatusPacket's "error" byte.
+
+        This test requires to be connected to the Dynamixel number 1 using
+        port "/dev/ttyUSB0" at 57600 baud (thus it only works on Unix systems
+        with FTDI devices)."""
 
         # Connect to the serial port
         port = "/dev/ttyUSB0" # TODO
@@ -186,7 +187,56 @@ class TestStatusPacket(unittest.TestCase):
 
         # Send the wrong instruction packet and get the response
         with self.assertRaises(InstructionError):
-            status_packet = serial_connection.send(instruction_packet)
+            serial_connection.send(instruction_packet)
+
+
+    def test_checksum_error(self):
+        """Check that the "ChecksumError" exception is raised when the
+        "checksum error" flag is ON in the StatusPacket's "error" byte.
+
+        This test requires to be connected to the Dynamixel number 1 using
+        port "/dev/ttyUSB0" at 57600 baud (thus it only works on Unix systems
+        with FTDI devices)."""
+
+        # Connect to the serial port
+        port = "/dev/ttyUSB0" # TODO
+        baudrate = 57600      # TODO
+        timeout = 0.1         # TODO
+        serial_connection = Connection(port, baudrate, timeout)
+
+        # Make a wrong instruction packet (based on the example 2 of the
+        # Dynamixel user guide: "Reading the internal temperature of the
+        # Dynamixel actuator with an ID of 1" (p.20))
+        packet = bytes((0xff, 0xff, 0x01, 0x04, 0x02, 0x2b, 0x01, 0))
+
+        # Send the wrong instruction packet and get the response
+        with self.assertRaises(ChecksumError):
+            serial_connection.send(packet)
+
+
+    def test_range_error(self):
+        """Check that the "RangeError" exception is raised when the
+        "range error" flag is ON in the StatusPacket's "error" byte.
+
+        This test requires to be connected to the Dynamixel number 1 using
+        port "/dev/ttyUSB0" at 57600 baud (thus it only works on Unix systems
+        with FTDI devices)."""
+
+        # Connect to the serial port
+        port = "/dev/ttyUSB0" # TODO
+        baudrate = 57600      # TODO
+        timeout = 0.1         # TODO
+        serial_connection = Connection(port, baudrate, timeout)
+
+        # Make a wrong instruction packet (set the LED byte in the control
+        # table)
+        dynamixel_id = 1
+        data = (0x03, 0x19, 0xff)   # wrong parameter value (the last byte)
+        instruction_packet = Packet(dynamixel_id, data)
+
+        # Send the wrong instruction packet and get the response
+        with self.assertRaises(RangeError):
+            serial_connection.send(instruction_packet)
 
     # TODO...
 
@@ -196,7 +246,7 @@ class TestStatusPacket(unittest.TestCase):
         """Check the example 2 from the Dynamixel user guide: "Reading the
         internal temperature of the Dynamixel actuator with an ID of 1"
         (p.20).
-        
+
         In this test, status packet are made artificially, no connection to an
         actual Dynamixel actuator is required."""
 
@@ -205,7 +255,7 @@ class TestStatusPacket(unittest.TestCase):
 
         try:
             StatusPacket(bytes_packet)
-        except Exception:
+        except (TypeError, ValueError, StatusPacketError):
             self.fail("Encountered an unexpected exception.")
 
 
@@ -213,10 +263,10 @@ class TestStatusPacket(unittest.TestCase):
         """Check the example 2 from the Dynamixel user guide: "Reading the
         internal temperature of the Dynamixel actuator with an ID of 1"
         (p.20).
-        
-        This test require to be connected to the Dynamixel number 1 using
-        port "/dev/ttyUSB0" (thus it works on Unix systems only) at 57600
-        baud."""
+
+        This test requires to be connected to the Dynamixel number 1 using
+        port "/dev/ttyUSB0" at 57600 baud (thus it only works on Unix systems
+        with FTDI devices)."""
 
         # Connect to the serial port
         port = "/dev/ttyUSB0" # TODO
@@ -232,8 +282,8 @@ class TestStatusPacket(unittest.TestCase):
         instruction_packet = Packet(dynamixel_id, data)
 
         try:
-            status_packet = serial_connection.send(instruction_packet)
-        except Exception:
+            serial_connection.send(instruction_packet)
+        except (TypeError, ValueError, StatusPacketError):
             self.fail("Encountered an unexpected exception.")
 
 
