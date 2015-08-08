@@ -30,6 +30,8 @@ import pyax12.connection
 import pyax12.instruction_packet as ip
 import pyax12.utils as utils
 
+from pyax12.argparse_default import common_argument_parser
+
 import argparse
 import time
 
@@ -37,22 +39,14 @@ import tkinter as tk
 
 def main():
 
-    # PARSE OPTIONS
-
-    parser = argparse.ArgumentParser(description='A PyAX-12 demo.')
-
-    parser.add_argument("--dynamixel_id", "-i",  help="The unique ID of a Dynamixel unit to work with (254 is a broadcasting ID)", metavar="INTEGER", type=int, default=pk.BROADCAST_ID)
-    parser.add_argument("--baudrate", "-b",  help="The baudrate speed (e.g. 57600)", metavar="INTEGER", type=int, default=57600)
-    parser.add_argument("--timeout", "-t",  help="The timeout value for the connection (in seconds)", metavar="FLOAT", type=float, default=0.1)
-    parser.add_argument("--port", "-p",  help="The serial device to connect with (e.g. '/dev/ttyUSB0' for Unix users)", metavar="STRING", default="/dev/ttyUSB0")
+    # Parse options
+    parser = common_argument_parser(desc=main.__doc__)
     args = parser.parse_args()
 
-    # CONNECT TO THE SERIAL PORT
+    # Connect to the serial port
+    serial_connection = pyax12.connection.Connection(args.port, args.baudrate, args.timeout)
 
-    serial_connection = pyax12.connection.Connection(_port=args.port, _baudrate=args.baudrate, _timeout=args.timeout)
-
-    # TKINTER GUI
-
+    # Tkinter GUI
     root = tk.Tk()
     root.geometry("150x500")   # Set the size of the "root" window
 
@@ -60,12 +54,12 @@ def main():
 
     def scale_cb(ev=None):
         position = position_scale.get()    # Get the scale value (integer or float)
-        position_byte_tuple = utils.int_to_little_endian_hex_tuple(position)
+        position_bytes = utils.int_to_little_endian_bytes(position)
 
         speed = speed_scale.get()    # Get the scale value (integer or float)
-        speed_byte_tuple = utils.int_to_little_endian_hex_tuple(speed)
+        speed_bytes = utils.int_to_little_endian_bytes(speed)
 
-        instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.GOAL_POSITION, position_byte_tuple[0], position_byte_tuple[1], speed_byte_tuple[0], speed_byte_tuple[1]))
+        instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.GOAL_POSITION, position_bytes[0], position_bytes[1], speed_bytes[0], speed_bytes[1]))
         status_packet = serial_connection.send(instruction_packet)
 
     servo_frame = tk.LabelFrame(root, text="Servo #" + str(args.dynamixel_id), padx=5, pady=5)

@@ -29,10 +29,6 @@
 __all__ = ['int_to_little_endian_bytes',
            'pretty_hex_str']
 
-def int_to_little_endian_hex_tuple(integer):
-    """Deprecated (kept to prevent compatibility issue)."""
-    int_to_little_endian_bytes(integer)
-
 
 def int_to_little_endian_bytes(integer):
     """Converts a two-bytes integer into a pair of one-byte integers using
