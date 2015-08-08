@@ -78,8 +78,8 @@ def little_endian_bytes_to_int(little_endian_byte_seq):
                               according to the little-endian notation).
     """
 
-    # Check the argument and convert it to "bytes" if necessary
-    # Assert "little_endian_byte_seq" items are in range (0, 0xff)
+    # Check the argument and convert it to "bytes" if necessary.
+    # Assert "little_endian_byte_seq" items are in range (0, 0xff).
     # "TypeError" and "ValueError" are sent by the "bytes" constructor if
     # necessary.
     # The statement "tuple(little_endian_byte_seq)" implicitely rejects
