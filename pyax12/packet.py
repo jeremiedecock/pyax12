@@ -96,40 +96,32 @@ def dynamixel_checksum(byte_seq):
     the checksum value.
 
     Keyword arguments:
-    byte_seq -- a tuple containing the packet's bytes involved in the
+    byte_seq -- a byte sequence containing the packet's bytes involved in the
                 computation of the checksum (i.e. from the third to the
                 penultimate byte of the "full packet" considered).
     """
 
+    # Check the argument and convert it to "bytes" if necessary.
+    # Assert "byte_seq" items are in range (0, 0xff).
+    # "TypeError" and "ValueError" are sent by the "bytes" constructor if
+    # necessary.
+    # The statement "tuple(byte_seq)" implicitely rejects integers (and all
+    # non-iterable objects) to compensate the fact that the bytes constructor
+    # doesn't reject them: bytes(3) is valid and returns b'\x00\x00\x00'
+    byte_seq = bytes(tuple(byte_seq))
+
     # Check the argument's length
     if len(byte_seq) < 3:
-        msg = "At least three bytes are required (got ({}))."
-        raise ValueError(msg.format(byte_seq))
-
-    # Check the argument's bytes type
-    for byte in byte_seq:
-        if not isinstance(byte, int):
-            msg = "Wrong data type: {} (an integer is required)."
-            raise TypeError(msg.format(type(byte)))
-
-    # Check the argument's bytes value
-    for byte in byte_seq:
-        if not (0x00 <= byte <= 0xff):
-            msg = "Wrong byte value: ({})"
-            msg += " (an integer in range (0x00, 0xff) is required)."
-            bytes_str = utils.pretty_hex_str(byte_seq)
-            raise ValueError(msg.format(bytes_str))
+        raise ValueError("At least three bytes are required.")
 
     # Check the ID byte
     if not (0x00 <= byte_seq[0] <= 0xfe):
-        msg = "Wrong dynamixel_id: {:#x} (should be in range(0x00, 0xfe))."
-        raise ValueError(msg.format(byte_seq[0]))
+        msg = "Wrong dynamixel_id, a byte in range(0x00, 0xfe) is required."
+        raise ValueError(msg)
 
     # Check the "length" byte
     if byte_seq[1] != (len(byte_seq) - 1):
-        msg = 'Wrong length: {}.'
-        packet_str = utils.pretty_hex_str(byte_seq)
-        raise ValueError(msg.format(packet_str))
+        raise ValueError('Wrong length, at least 3 bytes are required.')
 
     checksum = ~sum(byte_seq) & 0xff
 
