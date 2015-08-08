@@ -65,65 +65,65 @@ def int_to_little_endian_bytes(integer):
     return hex_tuple
 
 
-def little_endian_bytes_to_int(little_endian_bytes_seq):
+def little_endian_bytes_to_int(little_endian_byte_seq):
     """Converts a pair of bytes into an integer.
 
-    The "little_endian_bytes_seq" input must be a 2 bytes sequence defined
+    The "little_endian_byte_seq" input must be a 2 bytes sequence defined
     according to the little-endian notation (i.e. the less significant byte
     first).
 
-    For instance, if the "little_endian_bytes_seq" input is equals to
+    For instance, if the "little_endian_byte_seq" input is equals to
     (0xbc, 0x02) this function returns the decimal value 700 (0x02bc in
     hexadecimal notation).
 
     Keyword arguments:
-    little_endian_bytes_seq -- the 2 bytes sequence to be converted (must be
-                               compatible with the "bytes" type and defined
-                               according to the little-endian notation).
+    little_endian_byte_seq -- the 2 bytes sequence to be converted (must be
+                              compatible with the "bytes" type and defined
+                              according to the little-endian notation).
     """
 
     # Check the argument and convert it to "bytes" if necessary
-    # Assert "little_endian_bytes_seq" items are in range (0, 0xff)
+    # Assert "little_endian_byte_seq" items are in range (0, 0xff)
     # "TypeError" and "ValueError" are sent by the "bytes" constructor if
     # necessary.
-    # The statement "tuple(little_endian_bytes_seq)" implicitely rejects
+    # The statement "tuple(little_endian_byte_seq)" implicitely rejects
     # integers (and all non-iterable objects) to compensate the fact that the
     # bytes constructor doesn't reject them: bytes(2) is valid and returns
     # b'\x00\x00'
-    little_endian_bytes_seq = bytes(tuple(little_endian_bytes_seq))
+    little_endian_byte_seq = bytes(tuple(little_endian_byte_seq))
 
     # Check that the argument is a sequence of two items
-    if len(little_endian_bytes_seq) != 2:
+    if len(little_endian_byte_seq) != 2:
         raise ValueError("A sequence of two bytes is required.")
 
-    integer = little_endian_bytes_seq[1] * 0x100 + little_endian_bytes_seq[0]
+    integer = little_endian_byte_seq[1] * 0x100 + little_endian_byte_seq[0]
 
     return integer
 
 
-def int_seq_to_hex_str(bytes_seq, separator=","):
+def int_seq_to_hex_str(byte_seq, separator=","):
     """Deprecated (kept to prevent compatibility issue)."""
-    pretty_hex_str(bytes_seq, separator)
+    pretty_hex_str(byte_seq, separator)
 
 
-def pretty_hex_str(bytes_seq, separator=","):
+def pretty_hex_str(byte_seq, separator=","):
     """Converts a squence of bytes to a string of hexadecimal numbers.
 
     For instance, with the input tuple (255, 0, 10)
     this function will return the string "ff,00,0a".
 
     Keyword arguments:
-    bytes_seq -- a sequence of bytes to process. It must be compatible with the
-                 "bytes" type.
+    byte_seq -- a sequence of bytes to process. It must be compatible with the
+                "bytes" type.
     """
 
     # Check the argument and convert it to "bytes" if necessary.
-    # This conversion assert "bytes_seq" items are in range (0, 0xff).
+    # This conversion assert "byte_seq" items are in range (0, 0xff).
     # "TypeError" and "ValueError" are sent by the "bytes" constructor if
     # necessary.
-    if isinstance(bytes_seq, int):
-        bytes_seq = bytes((bytes_seq, ))
+    if isinstance(byte_seq, int):
+        byte_seq = bytes((byte_seq, ))
     else:
-        bytes_seq = bytes(bytes_seq)
+        byte_seq = bytes(byte_seq)
 
-    return separator.join(['%02x' % byte for byte in bytes_seq])
+    return separator.join(['%02x' % byte for byte in byte_seq])

@@ -127,7 +127,7 @@ class TestUtils(unittest.TestCase):
 
     def test_little_endian_bytes_to_int_wrong_arg_type(self):
         """Check that the utils.int_to_little_endian_bytes() function fails
-        when the "little_endian_bytes_seq" argument's type is wrong."""
+        when the "little_endian_byte_seq" argument's type is wrong."""
 
         with self.assertRaises(TypeError):
             utils.little_endian_bytes_to_int(0)
@@ -150,32 +150,32 @@ class TestUtils(unittest.TestCase):
 
     def test_little_endian_bytes_to_int_good_arg_type(self):
         """Check that the utils.int_to_little_endian_bytes() function doesn't
-        fail when the "little_endian_bytes_seq" argument's type is right."""
+        fail when the "little_endian_byte_seq" argument's type is right."""
 
         # Test with a tuple of bytes
-        bytes_seq = (0xbc, 0x02)
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = (0xbc, 0x02)
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0x02bc
 
         self.assertEqual(integer, expected_integer)
 
         # Test with a list of bytes
-        bytes_seq = [0xbc, 0x02]
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = [0xbc, 0x02]
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0x02bc
 
         self.assertEqual(integer, expected_integer)
 
         # Test with a bytes string
-        bytes_seq = bytes((0xbc, 0x02))
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = bytes((0xbc, 0x02))
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0x02bc
 
         self.assertEqual(integer, expected_integer)
 
         # Test with a bytearray
-        bytes_seq = bytearray((0xbc, 0x02))
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = bytearray((0xbc, 0x02))
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0x02bc
 
         self.assertEqual(integer, expected_integer)
@@ -183,43 +183,43 @@ class TestUtils(unittest.TestCase):
 
     def test_little_endian_bytes_to_int_items_type(self):
         """Check that the utils.little_endian_bytes_to_int() function fails
-        when the "little_endian_bytes_seq" items have wrong type."""
+        when the "little_endian_byte_seq" items have wrong type."""
 
-        bytes_seq = (1.0, 0)       # wrong type (float)
+        byte_seq = (1.0, 0)       # wrong type (float)
         with self.assertRaises(TypeError):
-            utils.little_endian_bytes_to_int(bytes_seq)
+            utils.little_endian_bytes_to_int(byte_seq)
 
-        bytes_seq = ("hello", 0)   # wrong type (str)
+        byte_seq = ("hello", 0)   # wrong type (str)
         with self.assertRaises(TypeError):
-            utils.little_endian_bytes_to_int(bytes_seq)
+            utils.little_endian_bytes_to_int(byte_seq)
 
-        bytes_seq = ((1, ), 0)     # wrong type (tuple)
+        byte_seq = ((1, ), 0)     # wrong type (tuple)
         with self.assertRaises(TypeError):
-            utils.little_endian_bytes_to_int(bytes_seq)
+            utils.little_endian_bytes_to_int(byte_seq)
 
 
     def test_little_endian_bytes_to_int_len(self):
         """Check that the utils.little_endian_bytes_to_int() function fails
-        when the "little_endian_bytes_seq" doesn't have exactly 2 items."""
+        when the "little_endian_byte_seq" doesn't have exactly 2 items."""
 
-        bytes_seq = ()           # wrong length
+        byte_seq = ()           # wrong length
         with self.assertRaises(ValueError):
-            utils.little_endian_bytes_to_int(bytes_seq)
+            utils.little_endian_bytes_to_int(byte_seq)
 
-        bytes_seq = (0, )        # wrong length
+        byte_seq = (0, )        # wrong length
         with self.assertRaises(ValueError):
-            utils.little_endian_bytes_to_int(bytes_seq)
+            utils.little_endian_bytes_to_int(byte_seq)
 
-        bytes_seq = (0, 0, 0)    # wrong length
+        byte_seq = (0, 0, 0)    # wrong length
         with self.assertRaises(ValueError):
-            utils.little_endian_bytes_to_int(bytes_seq)
+            utils.little_endian_bytes_to_int(byte_seq)
 
 
     def test_little_endian_bytes_to_int_1(self):
         """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        bytes_seq = (0xbc, 0x02)
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = (0xbc, 0x02)
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0x02bc
 
         self.assertEqual(integer, expected_integer)
@@ -228,8 +228,8 @@ class TestUtils(unittest.TestCase):
     def test_little_endian_bytes_to_int_2(self):
         """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        bytes_seq = (0x00, 0x00)
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = (0x00, 0x00)
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0
 
         self.assertEqual(integer, expected_integer)
@@ -238,8 +238,8 @@ class TestUtils(unittest.TestCase):
     def test_little_endian_bytes_to_int_3(self):
         """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        bytes_seq = (0xff, 0x00)
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = (0xff, 0x00)
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0x00ff
 
         self.assertEqual(integer, expected_integer)
@@ -248,8 +248,8 @@ class TestUtils(unittest.TestCase):
     def test_little_endian_bytes_to_int_4(self):
         """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        bytes_seq = (0x00, 0xff)
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = (0x00, 0xff)
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0xff00
 
         self.assertEqual(integer, expected_integer)
@@ -258,8 +258,8 @@ class TestUtils(unittest.TestCase):
     def test_little_endian_bytes_to_int_5(self):
         """Check the returned value of utils.int_to_little_endian_bytes()."""
 
-        bytes_seq = (0xff, 0xff)
-        integer = utils.little_endian_bytes_to_int(bytes_seq)
+        byte_seq = (0xff, 0xff)
+        integer = utils.little_endian_bytes_to_int(byte_seq)
         expected_integer = 0xffff
 
         self.assertEqual(integer, expected_integer)
@@ -269,7 +269,7 @@ class TestUtils(unittest.TestCase):
 
     def test_pretty_hex_str_wrong_arg_type(self):
         """Check that the utils.pretty_hex_str() function fails when the
-        "bytes_seq" argument's type is wrong (int)."""
+        "byte_seq" argument's type is wrong (int)."""
 
         with self.assertRaises(TypeError):
             utils.pretty_hex_str(1.0)
@@ -283,36 +283,36 @@ class TestUtils(unittest.TestCase):
         correct arguments are given."""
 
         # Test with a tuple of bytes
-        bytes_seq = (0xff, 0x00, 0x0a)
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = (0xff, 0x00, 0x0a)
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff,00,0a"
 
         self.assertEqual(hex_str, expected_str)
 
         # Test with a list of bytes
-        bytes_seq = [0xff, 0x00, 0x0a]
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = [0xff, 0x00, 0x0a]
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff,00,0a"
 
         self.assertEqual(hex_str, expected_str)
 
         # Test with a bytes string
-        bytes_seq = bytes((0xff, 0x00, 0x0a))
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = bytes((0xff, 0x00, 0x0a))
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff,00,0a"
 
         self.assertEqual(hex_str, expected_str)
 
         # Test with a bytearray
-        bytes_seq = bytearray((0xff, 0x00, 0x0a))
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = bytearray((0xff, 0x00, 0x0a))
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff,00,0a"
 
         self.assertEqual(hex_str, expected_str)
 
         # Test with an integer
-        bytes_seq = 0xff
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = 0xff
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff"
 
         self.assertEqual(hex_str, expected_str)
@@ -320,44 +320,44 @@ class TestUtils(unittest.TestCase):
 
     def test_pretty_hex_str_items_type(self):
         """Check that the utils.pretty_hex_str() function fails when the
-        "bytes_seq" items have wrong type."""
+        "byte_seq" items have wrong type."""
 
-        bytes_seq = (1.0, 0, 10)       # wrong type (float)
+        byte_seq = (1.0, 0, 10)       # wrong type (float)
         with self.assertRaises(TypeError):
-            utils.pretty_hex_str(bytes_seq)
+            utils.pretty_hex_str(byte_seq)
 
-        bytes_seq = ("hello", 0, 10)   # wrong type (str)
+        byte_seq = ("hello", 0, 10)   # wrong type (str)
         with self.assertRaises(TypeError):
-            utils.pretty_hex_str(bytes_seq)
+            utils.pretty_hex_str(byte_seq)
 
-        bytes_seq = ((1, ), 0, 10)     # wrong type (tuple)
+        byte_seq = ((1, ), 0, 10)     # wrong type (tuple)
         with self.assertRaises(TypeError):
-            utils.pretty_hex_str(bytes_seq)
+            utils.pretty_hex_str(byte_seq)
 
 
     def test_pretty_hex_str_items_value_lo(self):
         """Check that the utils.pretty_hex_str() function fails when the
-        "bytes_seq" items's value is wrong (too low)."""
+        "byte_seq" items's value is wrong (too low)."""
 
-        bytes_seq = (-1, 0, 10)        # the first item is too low
+        byte_seq = (-1, 0, 10)        # the first item is too low
         with self.assertRaises(ValueError):
-            utils.pretty_hex_str(bytes_seq)
+            utils.pretty_hex_str(byte_seq)
 
 
     def test_pretty_hex_str_items_value_hi(self):
         """Check that the utils.pretty_hex_str() function fails when the
-        "bytes_seq" items's value is wrong (too high)."""
+        "byte_seq" items's value is wrong (too high)."""
 
-        bytes_seq = (0xffff, 0, 10)    # the first item is too high
+        byte_seq = (0xffff, 0, 10)    # the first item is too high
         with self.assertRaises(ValueError):
-            utils.pretty_hex_str(bytes_seq)
+            utils.pretty_hex_str(byte_seq)
 
 
     def test_pretty_hex_str_1(self):
         """Check the returned value of utils.pretty_hex_str()."""
 
-        bytes_seq = (0xff,)
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = (0xff,)
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff"
 
         self.assertEqual(hex_str, expected_str)
@@ -366,8 +366,8 @@ class TestUtils(unittest.TestCase):
     def test_pretty_hex_str_2(self):
         """Check the returned value of utils.pretty_hex_str()."""
 
-        bytes_seq = (0xff,) * 10
-        hex_str = utils.pretty_hex_str(bytes_seq)
+        byte_seq = (0xff,) * 10
+        hex_str = utils.pretty_hex_str(byte_seq)
         expected_str = "ff," * 9 + "ff"
 
         self.assertEqual(hex_str, expected_str)
