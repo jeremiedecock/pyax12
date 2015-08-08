@@ -82,8 +82,8 @@ PUNCH = 0x30
 
 # CHECKSUM FUNCTION
 
-def dynamixel_checksum(byte_tuple):
-    """Compute and return the checksum of the "byte_tuple" packet.
+def dynamixel_checksum(byte_seq):
+    """Compute and return the checksum of the "byte_seq" packet.
 
     The checksum is the value of the last byte of each packet. It is used
     to prevent transmission errors of packets. Checksums are computed as
@@ -96,42 +96,42 @@ def dynamixel_checksum(byte_tuple):
     the checksum value.
 
     Keyword arguments:
-    byte_tuple -- a tuple containing the packet's bytes involved in the
-                  computation of the checksum (i.e. from the third to the
-                  penultimate byte of the "full packet" considered).
+    byte_seq -- a tuple containing the packet's bytes involved in the
+                computation of the checksum (i.e. from the third to the
+                penultimate byte of the "full packet" considered).
     """
 
     # Check the argument's length
-    if len(byte_tuple) < 3:
+    if len(byte_seq) < 3:
         msg = "At least three bytes are required (got ({}))."
-        raise ValueError(msg.format(byte_tuple))
+        raise ValueError(msg.format(byte_seq))
 
     # Check the argument's bytes type
-    for byte in byte_tuple:
+    for byte in byte_seq:
         if not isinstance(byte, int):
             msg = "Wrong data type: {} (an integer is required)."
             raise TypeError(msg.format(type(byte)))
 
     # Check the argument's bytes value
-    for byte in byte_tuple:
+    for byte in byte_seq:
         if not (0x00 <= byte <= 0xff):
             msg = "Wrong byte value: ({})"
             msg += " (an integer in range (0x00, 0xff) is required)."
-            bytes_str = utils.int_seq_to_hex_str(byte_tuple)
+            bytes_str = utils.pretty_hex_str(byte_seq)
             raise ValueError(msg.format(bytes_str))
 
     # Check the ID byte
-    if not (0x00 <= byte_tuple[0] <= 0xfe):
+    if not (0x00 <= byte_seq[0] <= 0xfe):
         msg = "Wrong dynamixel_id: {:#x} (should be in range(0x00, 0xfe))."
-        raise ValueError(msg.format(byte_tuple[0]))
+        raise ValueError(msg.format(byte_seq[0]))
 
     # Check the "length" byte
-    if byte_tuple[1] != (len(byte_tuple) - 1):
+    if byte_seq[1] != (len(byte_seq) - 1):
         msg = 'Wrong length: {}.'
-        packet_str = utils.int_seq_to_hex_str(byte_tuple)
+        packet_str = utils.pretty_hex_str(byte_seq)
         raise ValueError(msg.format(packet_str))
 
-    checksum = ~sum(byte_tuple) & 0xff
+    checksum = ~sum(byte_seq) & 0xff
 
     return checksum
 
@@ -198,7 +198,7 @@ class Packet(object):
             if not (0x00 <= byte <= 0xff):
                 msg = "Wrong data value: ({})"
                 msg += " (an integer in range (0x00, 0xff) is required)."
-                data_str = utils.int_seq_to_hex_str(_data)
+                data_str = utils.pretty_hex_str(_data)
                 raise ValueError(msg.format(data_str))
 
         self.data = _data
@@ -232,8 +232,8 @@ class Packet(object):
         the checksum value.
         """
 
-        byte_tuple = (self.dynamixel_id, self.length()) + self.data
-        checksum = dynamixel_checksum(byte_tuple)
+        byte_seq = (self.dynamixel_id, self.length()) + self.data
+        checksum = dynamixel_checksum(byte_seq)
 
         return checksum
 

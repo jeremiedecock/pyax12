@@ -97,11 +97,6 @@ def little_endian_bytes_to_int(little_endian_byte_seq):
     return integer
 
 
-def int_seq_to_hex_str(byte_seq, separator=","):
-    """Deprecated (kept to prevent compatibility issue)."""
-    pretty_hex_str(byte_seq, separator)
-
-
 def pretty_hex_str(byte_seq, separator=","):
     """Converts a squence of bytes to a string of hexadecimal numbers.
 
