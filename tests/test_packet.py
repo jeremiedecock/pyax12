@@ -52,7 +52,7 @@ class TestPacket(unittest.TestCase):
 
     def test_checksum_func_wrong_arg_type(self):
         """Check that the dynamixel_checksum function fails when the
-        "byte_seq" argument has a wrong type (float)."""
+        "byte_seq" argument has a wrong type."""
 
         # Check with None
         byte_seq = None                              # wrong type
@@ -60,31 +60,31 @@ class TestPacket(unittest.TestCase):
         with self.assertRaises(TypeError):
             pk.dynamixel_checksum(byte_seq)
 
-        # Check with int
+        # Check with an integer
         byte_seq = 0                                 # wrong type
 
         with self.assertRaises(TypeError):
             pk.dynamixel_checksum(byte_seq)
 
-        # Check with int
+        # Check with an integer
         byte_seq = 1                                 # wrong type
 
         with self.assertRaises(TypeError):
             pk.dynamixel_checksum(byte_seq)
 
-        # Check with int
+        # Check with an integer
         byte_seq = 3                                 # wrong type
 
         with self.assertRaises(TypeError):
             pk.dynamixel_checksum(byte_seq)
 
-        # Check with float
+        # Check with a float
         byte_seq = 1.0                               # wrong type
 
         with self.assertRaises(TypeError):
             pk.dynamixel_checksum(byte_seq)
 
-        # Check with string
+        # Check with a string
         byte_seq = "hello"                           # wrong type
 
         with self.assertRaises(TypeError):
@@ -133,7 +133,26 @@ class TestPacket(unittest.TestCase):
         """Check that the dynamixel_checksum function fails when an item of the
         "byte_seq" argument has a wrong type (float)."""
 
+        # Check with None
+        byte_seq = (0x01, None, 0x02, 0x2b, 0x01)    # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.dynamixel_checksum(byte_seq)
+
+        # Check with float
         byte_seq = (0x01, 1.0, 0x02, 0x2b, 0x01)     # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.dynamixel_checksum(byte_seq)
+
+        # Check with string
+        byte_seq = (0x01, "hi", 0x02, 0x2b, 0x01)    # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.dynamixel_checksum(byte_seq)
+
+        # Check with tuple
+        byte_seq = (0x01, (), 0x02, 0x2b, 0x01)      # wrong type
 
         with self.assertRaises(TypeError):
             pk.dynamixel_checksum(byte_seq)
@@ -213,11 +232,33 @@ class TestPacket(unittest.TestCase):
 
     # Tests for the Packet class ##############################################
 
-    def test_wrong_id_type_float(self):
-        """Check that pk.Packet fails when the "_id" argument's type
-        is wrong (float)."""
+    def test_wrong_id_type(self):
+        """Check that the instanciation of Packet fails when the argument
+        "id_byte" has a wrong type."""
 
+        # Check with None
+        dynamixel_id = None       # wrong id
+        data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with float
         dynamixel_id = 1.0        # wrong id
+        data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with string
+        dynamixel_id = "hi"       # wrong id
+        data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with tuple
+        dynamixel_id = ()         # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
 
         with self.assertRaises(TypeError):
@@ -225,8 +266,8 @@ class TestPacket(unittest.TestCase):
 
 
     def test_wrong_id_value_hi(self):
-        """Check that pk.Packet fails when the "_id" argument's
-        value is wrong (too high value)."""
+        """Check that the instanciation of Packet fails when the argument
+        "id_byte" has a wrong value (too high)."""
 
         dynamixel_id = 1000       # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
@@ -236,8 +277,8 @@ class TestPacket(unittest.TestCase):
 
 
     def test_wrong_id_value_negative(self):
-        """Check that pk.Packet fails when the "_id" argument's
-        value is wrong (negative value)."""
+        """Check that the instanciation of Packet fails when the argument
+        "id_byte" has a wrong value (negative value)."""
 
         dynamixel_id = -1         # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
@@ -247,34 +288,129 @@ class TestPacket(unittest.TestCase):
 
     ###
 
-    def test_wrong_params_type_int(self):
-        """Check that pk.Packet fails when the "_data" argument's type is wrong
-        (int)."""
+    def test_wrong_data_type(self):
+        """Check that the instanciation of Packet fails when the argument
+        "data_bytes" has a wrong type."""
 
+        # Check with None
         dynamixel_id = 1
-        data = 0x00                 # wrong type
+        data = None                              # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with a float
+        dynamixel_id = 1
+        data = 1.0                               # wrong type
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with a string
+        dynamixel_id = 1
+        data = "hello"                           # wrong type
 
         with self.assertRaises(TypeError):
             pk.Packet(dynamixel_id, data)
 
 
-    def test_wrong_params_items_type_float(self):
-        """Check that pk.Packet fails when the "_data" items argument's type is
-        wrong (float)."""
+    def test_good_data_type(self):
+        """Check that the instanciation of Packet doesn't fail when the
+        argument "data_bytes" has a right type."""
 
+        # Check with a tuple
         dynamixel_id = 1
-        data = (0x02, 0x2b, 1.0)    # wrong item type
+        data = (0x02, 0x2b, 0x01)
+
+        try:
+            pk.Packet(dynamixel_id, data)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a list
+        dynamixel_id = 1
+        data = [0x02, 0x2b, 0x01]
+
+        try:
+            pk.Packet(dynamixel_id, data)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a bytes string
+        dynamixel_id = 1
+        data = bytes((0x02, 0x2b, 0x01))
+
+        try:
+            pk.Packet(dynamixel_id, data)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a bytearray
+        dynamixel_id = 1
+        data = bytearray((0x02, 0x2b, 0x01))
+
+        try:
+            pk.Packet(dynamixel_id, data)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with an integer
+        dynamixel_id = 1
+        data = 0x01                 # Ping packet
+
+        try:
+            pk.Packet(dynamixel_id, data)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+
+    def test_wrong_data_items_type(self):
+        """Check that the instanciation of Packet fails when the "data_bytes"
+        items type is wrong."""
+
+        # Check with None
+        dynamixel_id = 1
+        data = (0x02, 0x2b, None)    # wrong item type
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with float
+        dynamixel_id = 1
+        data = (0x02, 0x2b, 1.0)     # wrong item type
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with string
+        dynamixel_id = 1
+        data = (0x02, 0x2b, "hi")    # wrong item type
+
+        with self.assertRaises(TypeError):
+            pk.Packet(dynamixel_id, data)
+
+        # Check with tuple
+        dynamixel_id = 1
+        data = (0x02, 0x2b, ())      # wrong item type
 
         with self.assertRaises(TypeError):
             pk.Packet(dynamixel_id, data)
 
 
-    def test_wrong_params_value(self):
-        """Check that pk.Packet fails when the "_data" items value is wrong
-        (too high value)."""
+    def test_wrong_data_items_value(self):
+        """Check that the instanciation of Packet fails when the "data_bytes"
+        items value is wrong (too high or too low)."""
 
+        # Too high value
         dynamixel_id = 1
         data = (0x02, 0x2b, 0xffff) # wrong value
+
+        with self.assertRaises(ValueError):
+            pk.Packet(dynamixel_id, data)
+
+        # Too low value
+        dynamixel_id = 1
+        data = (0x02, 0x2b, -1)     # wrong value
 
         with self.assertRaises(ValueError):
             pk.Packet(dynamixel_id, data)
@@ -282,7 +418,7 @@ class TestPacket(unittest.TestCase):
     ###
 
     def test_to_integer_tuple_func(self):
-        """Check the pk.to_integer_tuple() function.
+        """Check the "to_integer_tuple()" function.
 
         Based on the Dynamixel user guide, example 2: "Reading the internal
         temperature of the Dynamixel actuator with an ID of 1" (p.20).
@@ -298,7 +434,7 @@ class TestPacket(unittest.TestCase):
 
 
     def test_to_printable_string_func(self):
-        """Check the pk.to_printable_string() function.
+        """Check the "to_printable_string()" function.
 
         Based on the Dynamixel user guide, example 2: "Reading the internal
         temperature of the Dynamixel actuator with an ID of 1" (p.20).
@@ -314,7 +450,7 @@ class TestPacket(unittest.TestCase):
 
 
     def test_to_byte_array_func(self):
-        """Check the pk.to_byte_array() function.
+        """Check the "to_byte_array()" function.
 
         Based on the Dynamixel user guide, example 2: "Reading the internal
         temperature of the Dynamixel actuator with an ID of 1" (p.20).
@@ -330,7 +466,7 @@ class TestPacket(unittest.TestCase):
 
 
     def test_to_bytes_func(self):
-        """Check the pk.to_bytes() function.
+        """Check the "to_bytes()" function.
 
         Based on the Dynamixel user guide, example 2: "Reading the internal
         temperature of the Dynamixel actuator with an ID of 1" (p.20).

@@ -35,12 +35,11 @@ packet).
 __all__ = ['Packet',
            'dynamixel_checksum']
 
-from pyax12 import utils
 
 # GENERAL CONSTANTS
 
 BROADCAST_ID = 0xfe
-PACKET_HEADER = (0xff, 0xff)
+PACKET_HEADER = bytes((0xff, 0xff))
 
 # CONTROL TABLE (ADDRESSES)
 # (see the official Dynamixel AX-12 User's manual p.12)
@@ -151,7 +150,7 @@ class Packet(object):
             the status of the Dynamixel actuator.
     """
 
-    def __init__(self, _id, _data):
+    def __init__(self, id_byte, data_bytes):
         """Create a raw packet.
 
         This constructor has been made for debugging purpose and is not intended
@@ -160,42 +159,87 @@ class Packet(object):
         classes to build Packet instances.
 
         Keyword arguments:
-        _id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD), 0xFE is a
-               broadcasting ID;
-        _data -- a tuple containing the packet's data: the instruction to
-                 perform or the status of the Dynamixel actuator.
-                 This "data" argument contains the fifth to the penultimate
-                 byte of the built packet.
+        id_byte -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD), 0xFE
+                   is a broadcasting ID;
+        data_bytes -- a sequence of byte containing the packet's data: the
+                      instruction to perform or the status of the Dynamixel
+                      actuator.
+                      This "data" argument contains the fifth to the
+                      penultimate byte of the full built packet.
         """
 
-        # Check arguments type to make exception messages more explicit
-        if not isinstance(_id, int):
-            msg = "Wrong dynamixel_id type: {} (an integer is required)."
-            raise TypeError(msg.format(type(_id)))
+        self._dynamixel_id = None  # TODO ?
+        self._data = None          # TODO ?
 
-        for byte in _data:
-            if not isinstance(byte, int):
-                msg = "Wrong data type: {} (an integer is required)."
-                raise TypeError(msg.format(type(byte)))
+        self.dynamixel_id = id_byte
+        self.data = data_bytes
+
+
+    def get_dynamixel_id(self):
+        """The unique ID of a Dynamixel unit affected by this packet.
+
+        This byte either has a value between 0x00 and 0xFD to affect the
+        corresponding Dynamixel unit or it has the value 0xFE to affect all
+        connected units (0xFE is the "broadcasting" ID).
+        """
+
+        return self._dynamixel_id
+
+
+    def set_dynamixel_id(self, id_byte):
+        """Set the dynamixel_id property.
+
+        An integer in range (0, 0xFE) is required.
+        """
 
         # Check the ID byte
-        if 0x00 <= _id <= 0xfe:
-            self.dynamixel_id = _id
+        if not isinstance(id_byte, int):
+            raise TypeError("Wrong dynamixel_id type, an integer is required.")
+
+        if 0x00 <= id_byte <= 0xfe:
+            self._dynamixel_id = id_byte
         else:
-            msg = "Wrong dynamixel_id: {:#x} (should be in range (0x00, 0xfe))."
-            raise ValueError(msg.format(_id))
-
-        # Check the data bytes
-        for byte in _data:
-            if not (0x00 <= byte <= 0xff):
-                msg = "Wrong data value: ({})"
-                msg += " (an integer in range (0x00, 0xff) is required)."
-                data_str = utils.pretty_hex_str(_data)
-                raise ValueError(msg.format(data_str))
-
-        self.data = _data
+            msg = "Wrong dynamixel_id, a value in range (0, 0xfe) is required."
+            raise ValueError(msg)
 
 
+    dynamixel_id = property(get_dynamixel_id, set_dynamixel_id,
+                            get_dynamixel_id.__doc__)
+
+
+    def get_data(self):
+        """A sequence of byte containing the packet's data: the instruction to
+        perform or the status of the Dynamixel actuator.
+
+        The data property contains the fifth to the penultimate byte of the
+        full built packet.
+        """
+
+        return self._data
+
+
+    def set_data(self, data_bytes):
+        """Set the data property.
+
+        A sequence of byte or an integer is required.
+        """
+
+        # Check the data bytes and convert it to "bytes" if necessary.
+        # This conversion assert "data_bytes" items are in range (0, 0xff).
+        # "TypeError" and "ValueError" are sent by the "bytes" constructor if
+        # necessary.
+        if isinstance(data_bytes, int):
+            data_bytes = bytes((data_bytes, ))
+        else:
+            data_bytes = bytes(data_bytes)
+
+        self._data = data_bytes
+
+
+    data = property(get_data, set_data, get_data.__doc__)
+
+
+    @property
     def length(self):
         """Return the length of the packet.
 
@@ -210,6 +254,7 @@ class Packet(object):
         return len(self.data) + 1
 
 
+    @property
     def checksum(self):
         """Compute and return the packet checksum.
 
@@ -224,36 +269,14 @@ class Packet(object):
         the checksum value.
         """
 
-        byte_seq = (self.dynamixel_id, self.length()) + self.data
-        checksum = dynamixel_checksum(byte_seq)
+        byte_array = bytearray()
+        byte_array.append(self.dynamixel_id)
+        byte_array.append(self.length)
+        byte_array.extend(self.data)
+
+        checksum = dynamixel_checksum(byte_array)
 
         return checksum
-
-
-    def to_integer_tuple(self):
-        """Return the packet as a tuple of integers.
-
-        Returns something like: (255, 255, 254, 4, 3, 3, 1, 246).
-        """
-
-        integer_tuple = PACKET_HEADER
-        integer_tuple += (self.dynamixel_id, self.length())
-        integer_tuple += self.data
-        integer_tuple += (self.checksum(),)
-
-        return integer_tuple
-
-
-    def to_printable_string(self):
-        """Return the packet as a string of hexadecimal values.
-
-        Returns something like: ff ff fe 04 03 03 01 f6.
-        """
-
-        integer_tuple = self.to_integer_tuple()
-        packet_str = ' '.join(['%02x' % integer for integer in integer_tuple])
-
-        return packet_str
 
 
     def to_byte_array(self):
@@ -262,7 +285,13 @@ class Packet(object):
         Returns something like: bytearray(b'\xff\xff\xfe\x04\x03\x03\x01\xf6').
         """
 
-        return bytearray(self.to_integer_tuple())
+        byte_array = bytearray(PACKET_HEADER)
+        byte_array.append(self.dynamixel_id)
+        byte_array.append(self.length)
+        byte_array.extend(self.data)
+        byte_array.append(self.checksum)
+
+        return byte_array
 
 
     def to_bytes(self):
@@ -272,5 +301,26 @@ class Packet(object):
         Returns something like: b'\xff\xff\xfe\x04\x03\x03\x01\xf6'.
         """
 
-        return bytes(self.to_integer_tuple())
+        return bytes(self.to_byte_array())
+
+
+    def to_integer_tuple(self):
+        """Return the packet as a tuple of integers.
+
+        Returns something like: (255, 255, 254, 4, 3, 3, 1, 246).
+        """
+
+        return tuple(self.to_byte_array())
+
+
+    def to_printable_string(self):
+        """Return the packet as a string of hexadecimal values.
+
+        Returns something like: ff ff fe 04 03 03 01 f6.
+        """
+
+        byte_array = self.to_byte_array()
+        packet_str = ' '.join(['%02x' % byte for byte in byte_array])
+
+        return packet_str
 
