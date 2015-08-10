@@ -25,52 +25,59 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import pyax12.packet as pk
-import pyax12.connection
-import pyax12.instruction_packet as ip
+"""
+A PyAX-12 demo.
 
-import argparse
+Move the specified Dynamixel unit to 0° (0) then go to 300° (1024) then go back
+to 150° (512).
+"""
+
+import pyax12.packet as pk
+
+from pyax12.connection import Connection
+from pyax12.argparse_default import common_argument_parser
+
 import time
 
 def main():
+    """
+    A PyAX-12 demo.
 
-    # PARSE OPTIONS
+    Move the specified Dynamixel unit to 0° (0) then go to 300° (1023) then go
+    back to 150° (511).
+    """
 
-    parser = argparse.ArgumentParser(description='A PyAX-12 demo.')
-
-    parser.add_argument("--dynamixel_id", "-i",  help="The unique ID of a Dynamixel unit to work with (254 is a broadcasting ID)", metavar="INTEGER", type=int, default=pk.BROADCAST_ID)
-    parser.add_argument("--baudrate", "-b",  help="The baudrate speed (e.g. 57600)", metavar="INTEGER", type=int, default=57600)
-    parser.add_argument("--timeout", "-t",  help="The timeout value for the connection (in seconds)", metavar="FLOAT", type=float, default=0.1)
-    parser.add_argument("--port", "-p",  help="The serial device to connect with (e.g. '/dev/ttyUSB0' for Unix users)", metavar="STRING", default="/dev/ttyUSB0")
+    # Parse options
+    parser = common_argument_parser(desc=main.__doc__)
     args = parser.parse_args()
 
-    # CONNECT TO THE SERIAL PORT
+    # Connect to the serial port
+    serial_connection = Connection(args.port, args.baudrate, args.timeout)
 
-    serial_connection = pyax12.connection.Connection(_port=args.port, _baudrate=args.baudrate, _timeout=args.timeout)
+    ###
 
-    # GOTO TO 180°
+    # Goto to 0°
+    params = (0x00, 0x00, 0x00, 0x02)
+    serial_connection.write_data(args.dynamixel_id, pk.GOAL_POSITION, params)
 
-    instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.GOAL_POSITION, 0x00, 0x02, 0x00, 0x02))
-    print('> ', instruction_packet.to_printable_string())
+    # Wait 2 seconds
+    time.sleep(2)
 
-    status_packet = serial_connection.send(instruction_packet)
+    # Go back to 300°
+    params = (0xff, 0x03, 0x00, 0x02)
+    serial_connection.write_data(args.dynamixel_id, pk.GOAL_POSITION, params)
 
-    if status_packet is not None:
-        print('< ', status_packet.to_printable_string())
+    # Wait 2 seconds
+    time.sleep(2)
 
-    # WAIT 2 SECONDS
+    # Go back to 150°
+    params = (0xff, 0x01, 0x00, 0x02)
+    serial_connection.write_data(args.dynamixel_id, pk.GOAL_POSITION, params)
 
-    time.sleep(1)
+    ###
 
-    # GO BACK TO 0°
-
-    instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.GOAL_POSITION, 0x00, 0x00, 0x00, 0x02))
-    print('> ', instruction_packet.to_printable_string())
-
-    status_packet = serial_connection.send(instruction_packet)
-
-    if status_packet is not None:
-        print('< ', status_packet.to_printable_string())
+    # Close the serial connection
+    serial_connection.close()
 
 if __name__ == '__main__':
     main()

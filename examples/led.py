@@ -25,52 +25,45 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import pyax12.packet as pk
-import pyax12.connection
-import pyax12.instruction_packet as ip
+"""
+A PyAX-12 demo.
 
-import argparse
+Blink (only once) the LED of the specified Dynamixel unit.
+"""
+
+import pyax12.packet as pk
+
+from pyax12.connection import Connection
+from pyax12.argparse_default import common_argument_parser
+
 import time
 
 def main():
+    """
+    A PyAX-12 demo.
 
-    # PARSE OPTIONS
+    Blink (only once) the LED of the specified Dynamixel unit.
+    """
 
-    parser = argparse.ArgumentParser(description='A PyAX-12 demo.')
-
-    parser.add_argument("--dynamixel_id", "-i",  help="The unique ID of a Dynamixel unit to work with (254 is a broadcasting ID)", metavar="INTEGER", type=int, default=pk.BROADCAST_ID)
-    parser.add_argument("--baudrate", "-b",  help="The baudrate speed (e.g. 57600)", metavar="INTEGER", type=int, default=57600)
-    parser.add_argument("--timeout", "-t",  help="The timeout value for the connection", metavar="FLOAT", type=float, default=0.1)
-    parser.add_argument("--port", "-p",  help="The serial device to connect with (e.g. '/dev/ttyUSB0' for Unix users)", metavar="STRING", default="/dev/ttyUSB0")
+    # Parse options
+    parser = common_argument_parser(desc=main.__doc__)
     args = parser.parse_args()
 
-    # CONNECT TO THE SERIAL PORT
+    # Connect to the serial port
+    serial_connection = Connection(args.port, args.baudrate, args.timeout)
 
-    serial_connection = pyax12.connection.Connection(_port=args.port, _baudrate=args.baudrate, _timeout=args.timeout)
+    # Switch ON the LED
+    serial_connection.write_data(args.dynamixel_id, pk.LED, 1)
 
-    # SWITCH ON THE LED
-
-    instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.LED, 1))
-    print('> ', instruction_packet.to_printable_string())
-
-    status_packet = serial_connection.send(instruction_packet)
-
-    if status_packet is not None:
-        print('< ', status_packet.to_printable_string())
-
-    # WAIT 2 SECONDS
-
+    # Wait 2 seconds
     time.sleep(2)
 
-    # SWITCH OFF THE LED
+    # Switch OFF the LED
+    serial_connection.write_data(args.dynamixel_id, pk.LED, 0)
 
-    instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.LED, 0))
-    print('> ', instruction_packet.to_printable_string())
+    # Close the serial connection
+    serial_connection.close()
 
-    status_packet = serial_connection.send(instruction_packet)
-
-    if status_packet is not None:
-        print('< ', status_packet.to_printable_string())
 
 if __name__ == '__main__':
     main()

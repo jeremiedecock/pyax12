@@ -33,7 +33,6 @@ controller after receiving an instruction packet).
 __all__ = ['StatusPacket']
 
 import pyax12.packet as pk
-from pyax12 import utils
 
 # EXCEPTION CLASSES ###########################################################
 
@@ -51,8 +50,13 @@ class OverloadError(StatusPacketError):
     applied load."""
     pass
 
-class ChecksumError(StatusPacketError):
+class InstructionChecksumError(StatusPacketError):
     """Exception raised if the checksum of the instruction packet is
+    incorrect."""
+    pass
+
+class StatusChecksumError(StatusPacketError):
+    """Exception raised if the checksum of the status packet is
     incorrect."""
     pass
 
@@ -86,6 +90,35 @@ class StatusPacket(pk.Packet):
     +----+----+--+------+-----+----------+---+-----------+---------+
     |0XFF|0XFF|ID|LENGTH|ERROR|PARAMETER1|...|PARAMETER N|CHECK SUM|
     +----+----+--+------+-----+----------+---+-----------+---------+
+
+    Read only properties:
+    dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD).
+    error -- the byte representing errors sent from the Dynamixel unit.
+    instruction_error -- a boolean which is set to True if an undefined
+                         instruction is sent or an action instruction is sent
+                         without a Reg_Write instruction.
+    overload_error -- a boolean which is set to True if the specified maximum
+                      torque can't control the applied load.
+    checksum_error -- a boolean which is set to True if the checksum of the
+                      instruction packet is incorrect.
+    range_error -- a boolean which is set to True if the instruction sent is
+                   out of the defined range.
+    overheating_error -- a boolean which is set to True if the internal
+                         temperature of the Dynamixel unit is above the
+                         operating temperature range as defined in the control
+                         table.
+    angle_limit_error -- a boolean which is set to True if the goal position is
+                         set outside of the range between "CW Angle Limit" and
+                         "CCW Angle Limit".
+    input_voltage_error -- a boolean which is set to True if the voltage is out
+                           of the operating voltage range as defined in the
+                           control table.
+    parameters -- a sequence of bytes used if there is additional information
+                  needed to be read other than the error itself. It must be
+                  compatible with the "bytes" type.
+    data -- a sequence of byte defining the packet's error and its additional
+            information.
+    checksum -- the packet checksum, used to prevent packet transmission error.
     """
 
     def __init__(self, packet):
@@ -102,58 +135,40 @@ class StatusPacket(pk.Packet):
                   "bytes" type.
         """
 
-        # Assert the argument is a sequence with at least 6 items
-        if len(packet) < 6:
-            msg = "Incomplete packet: ({})."
-            packet_str = utils.pretty_hex_str(packet)
-            raise ValueError(msg.format(packet_str))
+        # Check the argument and convert it to "bytes" if necessary.
+        # Assert "packet" items are in range (0, 0xff).
+        # "TypeError" and "ValueError" are sent by the "bytes" constructor if
+        # necessary.
+        # The statement "tuple(packet)" implicitely rejects integers (and all
+        # non-iterable objects) to compensate the fact that the bytes constructor
+        # doesn't reject them: bytes(6) is valid and returns b'\x00\x00\x00'.
+        self._bytes = bytes(tuple(packet))
 
-        # Check the argument and convert it to "bytes" if necessary
-        bytes_packet = bytes(packet)
+        # Assert the argument is a sequence with at least 6 items.
+        if len(self._bytes) < 6:
+            raise ValueError("Incomplete packet.")
 
-        self.dynamixel_id = bytes_packet[2]
-        self.error = bytes_packet[4]
-        self.parameters = tuple([byte for byte in bytes_packet[5:-1]])
+        # Check the header bytes.
+        # Should be tested before the length and checksum because if the header
+        # is wrong then the length and the checksum are wrong too (thus testing
+        # the header first gives a more relevant information when its value is
+        # wrong).
+        if bytes(self.header) != b'\xff\xff':
+            raise ValueError("Wrong header (should be b'\xff\xff').")
 
-        # Write error bits
-        self.instruction_error = bool(self.error & (1 << 6))
-        self.overload_error = bool(self.error & (1 << 5))
-        self.checksum_error = bool(self.error & (1 << 4))
-        self.range_error = bool(self.error & (1 << 3))
-        self.overheating_error = bool(self.error & (1 << 2))
-        self.angle_limit_error = bool(self.error & (1 << 1))
-        self.input_voltage_error = bool(self.error & (1 << 0))
+        # Check length (length = num_params + 2 = full_packet_length - 4).
+        # Should be tested before the checksum because if the length is wrong
+        # then the checksum is wrong too (thus testing the length first gives a
+        # more relevant information when its value is wrong).
+        if self.length != len(self._bytes) - 4:
+            raise ValueError('Wrong length byte.')
 
-        # Check the header bytes
-        header_bytes = bytes_packet[0:2]
-        if header_bytes != bytes((0xff, 0xff)):
-            msg = 'Wrong header: {} (should be in "ff ff")).'
-            header_str = utils.pretty_hex_str(header_bytes)
-            raise ValueError(msg.format(header_str))
+        # Verify the checksum.
+        computed_checksum = pk.compute_checksum(self._bytes[2:-1])
+        if computed_checksum != self.checksum:
+            raise StatusChecksumError('Wrong checksum.')
 
-        # Verify the checksum (it should be the first byte to check to
-        # avoid wrong error message in case of transmission error)
-        checked_bytes = tuple(bytes_packet[2:-1])
-        computed_checksum = pk.dynamixel_checksum(checked_bytes)
-        if computed_checksum != bytes_packet[-1]:
-            msg = 'Wrong checksum: {}.'
-            packet_str = utils.pretty_hex_str(bytes_packet)
-            raise ValueError(msg.format(packet_str))
-
-        # Check the ID byte
-        if not (0x00 <= self.dynamixel_id <= 0xfd):
-            msg = "Wrong dynamixel_id:"
-            msg += " {:#x} (should be in range(0x00, 0xfd))."
-            raise ValueError(msg.format(self.dynamixel_id))
-
-        # Check length (length = num_params + 2 = full_packet_length - 4)
-        measured_length = len(bytes_packet) - 4
-        if measured_length != bytes_packet[3]:
-            msg = 'Wrong length: {}.'
-            packet_str = utils.pretty_hex_str(bytes_packet)
-            raise ValueError(msg.format(packet_str))
-
-        # Check error bit flags
+        # Check error bit flags.
         if self.instruction_error:
             raise InstructionError()
 
@@ -161,7 +176,7 @@ class StatusPacket(pk.Packet):
             raise OverloadError()
 
         if self.checksum_error:
-            raise ChecksumError()
+            raise InstructionChecksumError()
 
         if self.range_error:
             raise RangeError()
@@ -175,5 +190,59 @@ class StatusPacket(pk.Packet):
         if self.input_voltage_error:
             raise InputVoltageError()
 
-        # Set self.data
-        self.data = (self.error, ) + self.parameters
+        # Check the ID byte
+        if not(0x00 <= self.dynamixel_id <= 0xfd):
+            msg = "Wrong dynamixel_id, a value in range (0, 0xFD) is required."
+            raise ValueError(msg)
+
+
+    # READ ONLY PROPERTIES
+
+    @property
+    def error(self):
+        """The byte representing errors sent from the Dynamixel unit."""
+        return self._bytes[4]
+
+    @property
+    def instruction_error(self):
+        """A boolean which is set to True if an undefined instruction is sent
+        or an action instruction is sent without a Reg_Write instruction."""
+        return bool(self.error & (1 << 6))
+
+    @property
+    def overload_error(self):
+        """A boolean which is set to True if the specified maximum torque can't
+        control the applied load."""
+        return bool(self.error & (1 << 5))
+
+    @property
+    def checksum_error(self):
+        """A boolean which is set to True if the checksum of the instruction
+        packet is incorrect."""
+        return bool(self.error & (1 << 4))
+
+    @property
+    def range_error(self):
+        """A boolean which is set to True if the instruction sent is out of the
+        defined range."""
+        return bool(self.error & (1 << 3))
+
+    @property
+    def overheating_error(self):
+        """A boolean which is set to True if the internal temperature of the
+        Dynamixel unit is above the operating temperature range as defined in
+        the control table."""
+        return bool(self.error & (1 << 2))
+
+    @property
+    def angle_limit_error(self):
+        """A boolean which is set to True if the goal position is set outside
+        of the range between "CW Angle Limit" and "CCW Angle Limit"."""
+        return bool(self.error & (1 << 1))
+
+    @property
+    def input_voltage_error(self):
+        """A boolean which is set to True if the voltage is out of the
+        operating voltage range as defined in the control table."""
+        return bool(self.error & (1 << 0))
+

@@ -25,26 +25,33 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import pyax12.packet as pk
-import pyax12.connection
-import pyax12.instruction_packet as ip
+"""
+A PyAX-12 demo.
+
+Control the position and the speed of the specified Dynamixel unit.
+"""
+
 import pyax12.utils as utils
 
 from pyax12.argparse_default import common_argument_parser
-
-import argparse
-import time
+from pyax12.connection import Connection
+from pyax12.packet import GOAL_POSITION
 
 import tkinter as tk
 
 def main():
+    """
+    A PyAX-12 demo.
+
+    Control the position and the speed of the specified Dynamixel unit.
+    """
 
     # Parse options
     parser = common_argument_parser(desc=main.__doc__)
     args = parser.parse_args()
 
     # Connect to the serial port
-    serial_connection = pyax12.connection.Connection(args.port, args.baudrate, args.timeout)
+    serial_connection = Connection(args.port, args.baudrate, args.timeout)
 
     # Tkinter GUI
     root = tk.Tk()
@@ -52,17 +59,24 @@ def main():
 
     ###
 
-    def scale_cb(ev=None):
-        position = position_scale.get()    # Get the scale value (integer or float)
+    def scale_cb(event=None):
+        """The tkinter scale callback: set the Dynamixel goal position to the
+        current scale value."""
+        position = position_scale.get() # Get the scale value, integer or float
         position_bytes = utils.int_to_little_endian_bytes(position)
 
-        speed = speed_scale.get()    # Get the scale value (integer or float)
+        speed = speed_scale.get()       # Get the scale value, integer or float
         speed_bytes = utils.int_to_little_endian_bytes(speed)
 
-        instruction_packet = ip.InstructionPacket(_id=args.dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(pk.GOAL_POSITION, position_bytes[0], position_bytes[1], speed_bytes[0], speed_bytes[1]))
-        status_packet = serial_connection.send(instruction_packet)
+        params = bytearray()
+        params.append(position_bytes[0])
+        params.append(position_bytes[1])
+        params.append(speed_bytes[0])
+        params.append(speed_bytes[1])
+        serial_connection.write_data(args.dynamixel_id, GOAL_POSITION, params)
 
-    servo_frame = tk.LabelFrame(root, text="Servo #" + str(args.dynamixel_id), padx=5, pady=5)
+    servo_frame_txt = "Servo #" + str(args.dynamixel_id)
+    servo_frame = tk.LabelFrame(root, text=servo_frame_txt, padx=5, pady=5)
     servo_frame.pack(fill=tk.Y, expand=1, padx=10, pady=10)
 
     # Position
@@ -72,7 +86,8 @@ def main():
     position_label = tk.Label(position_frame, text="Position")
     position_label.pack(side=tk.TOP)
 
-    position_scale = tk.Scale(position_frame, from_=0, to=1024, orient=tk.VERTICAL, command=scale_cb)  # Arguments "orient" and "command" are optional
+    position_scale = tk.Scale(position_frame, from_=0, to=1024,
+                              orient=tk.VERTICAL, command=scale_cb)
     position_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
 
     # Speed
@@ -82,7 +97,8 @@ def main():
     speed_label = tk.Label(speed_frame, text="Speed")
     speed_label.pack(side=tk.TOP)
 
-    speed_scale = tk.Scale(speed_frame, from_=0, to=1024, orient=tk.VERTICAL, command=scale_cb)  # Arguments "orient" and "command" are optional
+    speed_scale = tk.Scale(speed_frame, from_=0, to=1024,
+                           orient=tk.VERTICAL, command=scale_cb)
     speed_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
 
     position_scale.set(512)         # Set the scale value
@@ -91,6 +107,10 @@ def main():
     ###
 
     root.mainloop()
+
+    # Close the serial connection
+    serial_connection.close()
+
 
 if __name__ == '__main__':
     main()

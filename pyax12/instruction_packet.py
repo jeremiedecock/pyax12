@@ -32,7 +32,7 @@ commands).
 
 __all__ = ['InstructionPacket']
 
-from pyax12.packet import Packet
+import pyax12.packet as pk
 from pyax12 import utils
 
 # THE INSTRUCTION SET
@@ -55,19 +55,40 @@ INSTRUCTIONS = (PING, READ_DATA, WRITE_DATA, REG_WRITE, ACTION, RESET,
 MAX_NUM_PARAMS = 255 - 6 # TODO: what is the actual max value ?
 
 NUMBER_OF_PARAMETERS = {
-    PING:{'min': 0, 'max': 0},
-    READ_DATA:{'min': 2, 'max': 2},
-    WRITE_DATA:{'min': 2, 'max': MAX_NUM_PARAMS},
-    REG_WRITE:{'min': 2, 'max': MAX_NUM_PARAMS},
-    ACTION:{'min': 0, 'max': 0},
-    RESET:{'min': 0, 'max': 0},
-    SYNC_WRITE:{'min': 4, 'max': MAX_NUM_PARAMS}
+    PING:{
+        'min': 0,
+        'max': 0
+    },
+    READ_DATA:{
+        'min': 2,
+        'max': 2
+    },
+    WRITE_DATA:{
+        'min': 2,
+        'max': MAX_NUM_PARAMS
+    },
+    REG_WRITE:{
+        'min': 2,
+        'max': MAX_NUM_PARAMS
+    },
+    ACTION:{
+        'min': 0,
+        'max': 0
+    },
+    RESET:{
+        'min': 0,
+        'max': 0
+    },
+    SYNC_WRITE:{
+        'min': 4,
+        'max': MAX_NUM_PARAMS
+    }
 }
 
 
 # THE IMPLEMENTATION OF "INSTRUCTION PACKETS"
 
-class InstructionPacket(Packet):
+class InstructionPacket(pk.Packet):
     """The Instruction Packet is the packet sent by the main controller to the
     Dynamixel units to send commands.
 
@@ -77,72 +98,81 @@ class InstructionPacket(Packet):
     |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
     +----+----+--+------+-----------+----------+---+-----------+---------+
 
-    Instance variable:
+    Read only properties:
     dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
-                    0xFE is a broadcasting ID;
-    instruction -- the instruction for the Dynamixel actuator to perform;
+                    0xFE is a broadcasting ID.
+    instruction -- the instruction for the Dynamixel actuator to perform.
     parameters -- a tuple of bytes used if there is additional information
                   needed to be sent other than the instruction itself.
+    data -- a sequence of byte defining the packet's instruction and its
+            parameters.
+    checksum -- the packet checksum, used to prevent packet transmission error.
     """
 
-    def __init__(self, _id=None, _instruction=None, _parameters=()):
+    def __init__(self, dynamixel_id, instruction, parameters):
         """Create an instruction packet.
 
         Keyword arguments:
-        _id -- the the unique ID of the Dynamixel unit which have to execute
-               this instruction packet.
-        _instruction -- the instruction for the Dynamixel actuator to perform.
-        _parameters -- a sequence of bytes used if there is additional
-                       information needed to be sent other than the instruction
-                       itself.
+        dynamixel_id -- the the unique ID of the Dynamixel unit which have to
+                        execute this instruction packet.
+        instruction -- the instruction for the Dynamixel actuator to perform.
+        parameters -- a sequence of bytes used if there is additional
+                      information needed to be sent other than the instruction
+                      itself.
         """
 
-        # Check arguments type to make exception messages more explicit
-        if not isinstance(_id, int):
-            msg = "Wrong dynamixel_id type: {} (an integer is required)."
-            raise TypeError(msg.format(type(_id)))
+        # Add the header bytes.
+        self._bytes = bytearray((0xff, 0xff))
 
-        if not isinstance(_instruction, int):
-            msg = "Wrong instruction type: {} (an integer is required)."
-            raise TypeError(msg.format(type(_instruction)))
-
-        for parameter in _parameters:
-            if not isinstance(parameter, int):
-                msg = "Wrong parameter type: {} (an integer is required)."
-                raise TypeError(msg.format(type(parameter)))
-
-
-        # Check the ID byte
-        if 0x00 <= _id <= 0xfe:
-            self.dynamixel_id = _id
+        # Check and add the Dynamixel ID byte.
+        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
+        # if necessary.
+        if 0x00 <= dynamixel_id <= 0xfe:
+            self._bytes.append(dynamixel_id)
         else:
             msg = "Wrong dynamixel_id: {:#x} (should be in range(0x00, 0xfe))."
-            raise ValueError(msg.format(_id))
+            raise ValueError(msg.format(dynamixel_id))
 
-        # Check the instruction byte
-        if _instruction in INSTRUCTIONS:
-            self.instruction = _instruction
+        # Add the length byte.
+        self._bytes.append(len(parameters) + 2)
+
+        # Check and add the instruction byte.
+        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
+        # if necessary.
+        if instruction in INSTRUCTIONS:
+            self._bytes.append(instruction)
         else:
-            msg = "Wrong instruction: {:#x} (should be in ({}))."
-            instructions_str = utils.int_seq_to_hex_str(INSTRUCTIONS)
-            raise ValueError(msg.format(_instruction, instructions_str))
+            msg = "Wrong instruction, should be in ({})."
+            raise ValueError(msg.format(utils.pretty_hex_str(INSTRUCTIONS)))
 
-        # Check the number of parameters and parameters value
+        # Check and add the parameter bytes.
+        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
+        # or "bytearray.extend()" if necessary.
+        if isinstance(parameters, int):
+            parameters = bytes((parameters, )) # convert integers to a sequence
+        else:
+            parameters = bytes(parameters)
+
         nb_param_min = NUMBER_OF_PARAMETERS[self.instruction]['min']
         nb_param_max = NUMBER_OF_PARAMETERS[self.instruction]['max']
-        if nb_param_min <= len(_parameters) <= nb_param_max:
-            if all([0x00 <= param <= 0xff for param in _parameters]):
-                self.parameters = _parameters
-            else:
-                msg = "Wrong parameters value: ({})"
-                msg += " (an integer in range(0x00, 0xff) is required)."
-                params_str = utils.int_seq_to_hex_str(_parameters)
-                raise ValueError(msg.format(params_str))
+
+        if nb_param_min <= len(parameters) <= nb_param_max:
+            self._bytes.extend(parameters)
         else:
             msg = "Wrong number of parameters: {} parameters"
             msg += " (min expected={}; max expected={})."
-            nb_param = len(_parameters)
+            nb_param = len(parameters)
             raise ValueError(msg.format(nb_param, nb_param_min, nb_param_max))
 
-        self.data = (self.instruction, ) + self.parameters
+        # Add the checksum byte.
+        computed_checksum = pk.compute_checksum(self._bytes[2:])
+        self._bytes.append(computed_checksum)
+
+
+    # READ ONLY PROPERTIES
+
+    @property
+    def instruction(self):
+        """The instruction for the Dynamixel actuator to perform."""
+        return self._bytes[4]
 

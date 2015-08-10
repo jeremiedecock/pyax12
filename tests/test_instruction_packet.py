@@ -40,7 +40,7 @@ class TestInstructionPacket(unittest.TestCase):
     """
 
     def test_wrong_id_type_float(self):
-        """Check that ip.InstructionPacket fails when the "_id" argument's type
+        """Check that ip.InstructionPacket fails when the "dynamixel_id" argument's type
         is wrong (float)."""
 
         dynamixel_id = 1.0   # wrong id
@@ -52,7 +52,7 @@ class TestInstructionPacket(unittest.TestCase):
 
 
     def test_wrong_id_value_hi(self):
-        """Check that ip.InstructionPacket fails when the "_id" argument's
+        """Check that ip.InstructionPacket fails when the "dynamixel_id" argument's
         value is wrong (too high value)."""
 
         dynamixel_id = 1000  # wrong id
@@ -64,7 +64,7 @@ class TestInstructionPacket(unittest.TestCase):
 
 
     def test_wrong_id_value_negative(self):
-        """Check that ip.InstructionPacket fails when the "_id" argument's
+        """Check that ip.InstructionPacket fails when the "dynamixel_id" argument's
         value is wrong (negative value)."""
 
         dynamixel_id = -1    # wrong id
@@ -77,7 +77,7 @@ class TestInstructionPacket(unittest.TestCase):
     ###
 
     def test_wrong_instruction_type_float(self):
-        """Check that ip.InstructionPacket fails when the "_instruction"
+        """Check that ip.InstructionPacket fails when the "instruction"
         argument's type is wrong (float)."""
 
         dynamixel_id = 1
@@ -89,7 +89,7 @@ class TestInstructionPacket(unittest.TestCase):
 
 
     def test_wrong_instruction_value(self):
-        """Check that ip.InstructionPacket fails when the "_instruction"
+        """Check that ip.InstructionPacket fails when the "instruction"
         argument's value is wrong."""
 
         dynamixel_id = 1
@@ -102,7 +102,7 @@ class TestInstructionPacket(unittest.TestCase):
     ###
 
     def test_wrong_params_type_int(self):
-        """Check that ip.InstructionPacket fails when the "_parameters"
+        """Check that ip.InstructionPacket fails when the "parameters"
         argument's type is wrong (int)."""
 
         dynamixel_id = 1
@@ -114,7 +114,7 @@ class TestInstructionPacket(unittest.TestCase):
 
 
     def test_wrong_params_items_type_float(self):
-        """Check that ip.InstructionPacket fails when the "_parameters" items
+        """Check that ip.InstructionPacket fails when the "parameters" items
         argument's type is wrong (float)."""
 
         dynamixel_id = 1
@@ -126,7 +126,7 @@ class TestInstructionPacket(unittest.TestCase):
 
 
     def test_wrong_params_value(self):
-        """Check that ip.InstructionPacket fails when the "_parameters" items
+        """Check that ip.InstructionPacket fails when the "parameters" items
         argument's value is wrong (too high value)."""
 
         dynamixel_id = 1

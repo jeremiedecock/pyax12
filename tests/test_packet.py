@@ -38,68 +38,68 @@ class TestPacket(unittest.TestCase):
     Contains unit tests for the "packet" module.
     """
 
-    # Tests for the dynamixel_checksum function ###############################
+    # Tests for the compute_checksum function ###############################
 
     def test_checksum_func_incomplete(self):
-        """Check that the dynamixel_checksum function fails when the
+        """Check that the compute_checksum function fails when the
         "byte_seq" argument is incomplete (len(byte_seq) < 3)."""
 
         byte_seq = (0x01, 0x02)                      # incomplete packet
 
         with self.assertRaises(ValueError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_wrong_arg_type(self):
-        """Check that the dynamixel_checksum function fails when the
+        """Check that the compute_checksum function fails when the
         "byte_seq" argument has a wrong type."""
 
         # Check with None
         byte_seq = None                              # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with an integer
         byte_seq = 0                                 # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with an integer
         byte_seq = 1                                 # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with an integer
         byte_seq = 3                                 # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with a float
         byte_seq = 1.0                               # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with a string
         byte_seq = "hello"                           # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_good_arg_type(self):
-        """Check the "dynamixel_checksum" function using the example 2 of the
+        """Check the "compute_checksum" function using the example 2 of the
         Dynamixel user guide: "Reading the internal temperature of the
         Dynamixel actuator with an ID of 1" (p.20)."""
 
         # Check with a tuple
         byte_seq = (0x01, 0x04, 0x02, 0x2b, 0x01)
 
-        checksum_byte = pk.dynamixel_checksum(byte_seq)
+        checksum_byte = pk.compute_checksum(byte_seq)
         expected_checksum_byte = 0xcc
 
         self.assertEqual(checksum_byte, expected_checksum_byte)
@@ -107,7 +107,7 @@ class TestPacket(unittest.TestCase):
         # Check with a list
         byte_seq = [0x01, 0x04, 0x02, 0x2b, 0x01]
 
-        checksum_byte = pk.dynamixel_checksum(byte_seq)
+        checksum_byte = pk.compute_checksum(byte_seq)
         expected_checksum_byte = 0xcc
 
         self.assertEqual(checksum_byte, expected_checksum_byte)
@@ -115,7 +115,7 @@ class TestPacket(unittest.TestCase):
         # Check with a bytes string
         byte_seq = bytes((0x01, 0x04, 0x02, 0x2b, 0x01))
 
-        checksum_byte = pk.dynamixel_checksum(byte_seq)
+        checksum_byte = pk.compute_checksum(byte_seq)
         expected_checksum_byte = 0xcc
 
         self.assertEqual(checksum_byte, expected_checksum_byte)
@@ -123,63 +123,63 @@ class TestPacket(unittest.TestCase):
         # Check with a bytearray
         byte_seq = bytearray((0x01, 0x04, 0x02, 0x2b, 0x01))
 
-        checksum_byte = pk.dynamixel_checksum(byte_seq)
+        checksum_byte = pk.compute_checksum(byte_seq)
         expected_checksum_byte = 0xcc
 
         self.assertEqual(checksum_byte, expected_checksum_byte)
 
 
     def test_checksum_func_wrong_byte_type(self):
-        """Check that the dynamixel_checksum function fails when an item of the
+        """Check that the compute_checksum function fails when an item of the
         "byte_seq" argument has a wrong type (float)."""
 
         # Check with None
         byte_seq = (0x01, None, 0x02, 0x2b, 0x01)    # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with float
         byte_seq = (0x01, 1.0, 0x02, 0x2b, 0x01)     # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with string
         byte_seq = (0x01, "hi", 0x02, 0x2b, 0x01)    # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
         # Check with tuple
         byte_seq = (0x01, (), 0x02, 0x2b, 0x01)      # wrong type
 
         with self.assertRaises(TypeError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_wrong_byte_value_low(self):
-        """Check that the dynamixel_checksum function fails when an item of the
+        """Check that the compute_checksum function fails when an item of the
         "byte_seq" argument has a wrong value (too low value)."""
 
         byte_seq = (0x01, -1, 0x02, 0x2b, 0x01)      # wrong value
 
         with self.assertRaises(ValueError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_wrong_byte_value_hi(self):
-        """Check that the dynamixel_checksum function fails when an item of the
+        """Check that the compute_checksum function fails when an item of the
         "byte_seq" argument has a wrong value (too high value)."""
 
         byte_seq = (0x01, 0xffff, 0x02, 0x2b, 0x01)  # wrong value
 
         with self.assertRaises(ValueError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_wrong_id_value_hi(self):
-        """Check that the dynamixel_checksum function fails when the "id" byte
+        """Check that the compute_checksum function fails when the "id" byte
         of the "byte_seq" argument has a wrong value (too high value)."""
 
         byte_seq = (0xff,)             # wrong id
@@ -187,11 +187,11 @@ class TestPacket(unittest.TestCase):
         byte_seq += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
 
         with self.assertRaises(ValueError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_wrong_length_value_low(self):
-        """Check that the dynamixel_checksum function fails when the "length"
+        """Check that the compute_checksum function fails when the "length"
         byte of the "byte_seq" argument has a wrong value (too low value).
         """
 
@@ -200,11 +200,11 @@ class TestPacket(unittest.TestCase):
         byte_seq += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
 
         with self.assertRaises(ValueError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_wrong_length_value_hi(self):
-        """Check that the dynamixel_checksum function fails when the "length"
+        """Check that the compute_checksum function fails when the "length"
         byte of the "byte_seq" argument has a wrong value (too high value).
         """
 
@@ -213,11 +213,11 @@ class TestPacket(unittest.TestCase):
         byte_seq += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
 
         with self.assertRaises(ValueError):
-            pk.dynamixel_checksum(byte_seq)
+            pk.compute_checksum(byte_seq)
 
 
     def test_checksum_func_example1(self):
-        """Check the "dynamixel_checksum" function using the example 2 of the
+        """Check the "compute_checksum" function using the example 2 of the
         Dynamixel user guide: "Reading the internal temperature of the
         Dynamixel actuator with an ID of 1" (p.20)."""
 
@@ -225,7 +225,7 @@ class TestPacket(unittest.TestCase):
         byte_seq += (4,)               # length
         byte_seq += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
 
-        checksum_byte = pk.dynamixel_checksum(byte_seq)
+        checksum_byte = pk.compute_checksum(byte_seq)
         expected_checksum_byte = 0xcc
 
         self.assertEqual(checksum_byte, expected_checksum_byte)
@@ -234,7 +234,7 @@ class TestPacket(unittest.TestCase):
 
     def test_wrong_id_type(self):
         """Check that the instanciation of Packet fails when the argument
-        "id_byte" has a wrong type."""
+        "dynamixel_id" has a wrong type."""
 
         # Check with None
         dynamixel_id = None       # wrong id
@@ -267,7 +267,7 @@ class TestPacket(unittest.TestCase):
 
     def test_wrong_id_value_hi(self):
         """Check that the instanciation of Packet fails when the argument
-        "id_byte" has a wrong value (too high)."""
+        "dynamixel_id" has a wrong value (too high)."""
 
         dynamixel_id = 1000       # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
@@ -278,7 +278,7 @@ class TestPacket(unittest.TestCase):
 
     def test_wrong_id_value_negative(self):
         """Check that the instanciation of Packet fails when the argument
-        "id_byte" has a wrong value (negative value)."""
+        "dynamixel_id" has a wrong value (negative value)."""
 
         dynamixel_id = -1         # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
@@ -290,7 +290,7 @@ class TestPacket(unittest.TestCase):
 
     def test_wrong_data_type(self):
         """Check that the instanciation of Packet fails when the argument
-        "data_bytes" has a wrong type."""
+        "data" has a wrong type."""
 
         # Check with None
         dynamixel_id = 1
@@ -316,7 +316,7 @@ class TestPacket(unittest.TestCase):
 
     def test_good_data_type(self):
         """Check that the instanciation of Packet doesn't fail when the
-        argument "data_bytes" has a right type."""
+        argument "data" has a right type."""
 
         # Check with a tuple
         dynamixel_id = 1
@@ -365,7 +365,7 @@ class TestPacket(unittest.TestCase):
 
 
     def test_wrong_data_items_type(self):
-        """Check that the instanciation of Packet fails when the "data_bytes"
+        """Check that the instanciation of Packet fails when the "data"
         items type is wrong."""
 
         # Check with None
@@ -398,7 +398,7 @@ class TestPacket(unittest.TestCase):
 
 
     def test_wrong_data_items_value(self):
-        """Check that the instanciation of Packet fails when the "data_bytes"
+        """Check that the instanciation of Packet fails when the "data"
         items value is wrong (too high or too low)."""
 
         # Too high value

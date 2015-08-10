@@ -33,7 +33,7 @@ packet).
 """
 
 __all__ = ['Packet',
-           'dynamixel_checksum']
+           'compute_checksum']
 
 
 # GENERAL CONSTANTS
@@ -81,7 +81,7 @@ PUNCH = 0x30
 
 # CHECKSUM FUNCTION
 
-def dynamixel_checksum(byte_seq):
+def compute_checksum(byte_seq):
     """Compute and return the checksum of the "byte_seq" packet.
 
     The checksum is the value of the last byte of each packet. It is used
@@ -143,14 +143,18 @@ class Packet(object):
     |0XFF|0XFF|ID|LENGTH|DATA...|CHECK SUM|
     +----+----+--+------+-------+---------+
 
-    Instance variable:
+    Properties:
+    data -- a byte sequence containing the packet's data: the instruction to
+            perform or the status of the Dynamixel actuator.
     dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
                     0xFE is a broadcasting ID;
-    data -- a tuple containing the packet's data: the instruction to perform or
-            the status of the Dynamixel actuator.
+
+    Read only properties:
+    checksum -- the length of the packet.
+    length -- the packet checksum.
     """
 
-    def __init__(self, id_byte, data_bytes):
+    def __init__(self, dynamixel_id, data):
         """Create a raw packet.
 
         This constructor has been made for debugging purpose and is not intended
@@ -159,124 +163,43 @@ class Packet(object):
         classes to build Packet instances.
 
         Keyword arguments:
-        id_byte -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD), 0xFE
-                   is a broadcasting ID;
-        data_bytes -- a sequence of byte containing the packet's data: the
-                      instruction to perform or the status of the Dynamixel
-                      actuator.
-                      This "data" argument contains the fifth to the
-                      penultimate byte of the full built packet.
+        dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
+                        0xFE is a broadcasting ID.
+        data -- a sequence of byte containing the packet's data: the
+                instruction to perform or the status of the Dynamixel actuator.
+                This "data" argument contains the fifth to the penultimate byte
+                of the full built packet.
         """
 
-        self._dynamixel_id = None  # TODO ?
-        self._data = None          # TODO ?
-
-        self.dynamixel_id = id_byte
-        self.data = data_bytes
-
-
-    def get_dynamixel_id(self):
-        """The unique ID of a Dynamixel unit affected by this packet.
-
-        This byte either has a value between 0x00 and 0xFD to affect the
-        corresponding Dynamixel unit or it has the value 0xFE to affect all
-        connected units (0xFE is the "broadcasting" ID).
-        """
-
-        return self._dynamixel_id
-
-
-    def set_dynamixel_id(self, id_byte):
-        """Set the dynamixel_id property.
-
-        An integer in range (0, 0xFE) is required.
-        """
-
-        # Check the ID byte
-        if not isinstance(id_byte, int):
-            raise TypeError("Wrong dynamixel_id type, an integer is required.")
-
-        if 0x00 <= id_byte <= 0xfe:
-            self._dynamixel_id = id_byte
+        # Check the data bytes.
+        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
+        # or "bytearray.extend()" if necessary.
+        if isinstance(data, int):
+            data = bytes((data, )) # convert integers to a sequence
         else:
-            msg = "Wrong dynamixel_id, a value in range (0, 0xfe) is required."
-            raise ValueError(msg)
+            data = bytes(data)
 
+        # Add the header bytes.
+        self._bytes = bytearray((0xff, 0xff))
 
-    dynamixel_id = property(get_dynamixel_id, set_dynamixel_id,
-                            get_dynamixel_id.__doc__)
-
-
-    def get_data(self):
-        """A sequence of byte containing the packet's data: the instruction to
-        perform or the status of the Dynamixel actuator.
-
-        The data property contains the fifth to the penultimate byte of the
-        full built packet.
-        """
-
-        return self._data
-
-
-    def set_data(self, data_bytes):
-        """Set the data property.
-
-        A sequence of byte or an integer is required.
-        """
-
-        # Check the data bytes and convert it to "bytes" if necessary.
-        # This conversion assert "data_bytes" items are in range (0, 0xff).
-        # "TypeError" and "ValueError" are sent by the "bytes" constructor if
-        # necessary.
-        if isinstance(data_bytes, int):
-            data_bytes = bytes((data_bytes, ))
+        # Check and add the Dynamixel ID byte.
+        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
+        # if necessary.
+        if 0x00 <= dynamixel_id <= 0xfe:
+            self._bytes.append(dynamixel_id)
         else:
-            data_bytes = bytes(data_bytes)
+            msg = "Wrong dynamixel_id: {:#x} (should be in range(0x00, 0xfe))."
+            raise ValueError(msg.format(dynamixel_id))
 
-        self._data = data_bytes
+        # Add the length byte.
+        self._bytes.append(len(data) + 1)
 
+        # Add the data bytes.
+        self._bytes.extend(data)
 
-    data = property(get_data, set_data, get_data.__doc__)
-
-
-    @property
-    def length(self):
-        """Return the length of the packet.
-
-        This is not the actual length of the packet but the value of the fourth
-        byte (called "LENGTH") of each packet computed as follow:
-        length = data length + 1
-
-        In other words, for a given packet, this "length" is the number of
-        bytes after its fourth byte.
-        """
-
-        return len(self.data) + 1
-
-
-    @property
-    def checksum(self):
-        """Compute and return the packet checksum.
-
-        The checksum is the value of the last byte of each packet. It is used
-        to prevent transmission errors of packets. Checksums are computed as
-        follow:
-
-        Checksum = ~(dynamixel_id + length + data1 + ... + dataN)
-        where ~ represent the NOT logic operation.
-
-        If the computed value is larger than 255, the lower byte is defined as
-        the checksum value.
-        """
-
-        byte_array = bytearray()
-        byte_array.append(self.dynamixel_id)
-        byte_array.append(self.length)
-        byte_array.extend(self.data)
-
-        checksum = dynamixel_checksum(byte_array)
-
-        return checksum
+        # Add the checksum byte.
+        computed_checksum = compute_checksum(self._bytes[2:])
+        self._bytes.append(computed_checksum)
 
 
     def to_byte_array(self):
@@ -285,13 +208,7 @@ class Packet(object):
         Returns something like: bytearray(b'\xff\xff\xfe\x04\x03\x03\x01\xf6').
         """
 
-        byte_array = bytearray(PACKET_HEADER)
-        byte_array.append(self.dynamixel_id)
-        byte_array.append(self.length)
-        byte_array.extend(self.data)
-        byte_array.append(self.checksum)
-
-        return byte_array
+        return bytearray(self._bytes)
 
 
     def to_bytes(self):
@@ -301,7 +218,7 @@ class Packet(object):
         Returns something like: b'\xff\xff\xfe\x04\x03\x03\x01\xf6'.
         """
 
-        return bytes(self.to_byte_array())
+        return bytes(self._bytes)
 
 
     def to_integer_tuple(self):
@@ -310,7 +227,7 @@ class Packet(object):
         Returns something like: (255, 255, 254, 4, 3, 3, 1, 246).
         """
 
-        return tuple(self.to_byte_array())
+        return tuple(self._bytes)
 
 
     def to_printable_string(self):
@@ -319,8 +236,58 @@ class Packet(object):
         Returns something like: ff ff fe 04 03 03 01 f6.
         """
 
-        byte_array = self.to_byte_array()
-        packet_str = ' '.join(['%02x' % byte for byte in byte_array])
+        packet_str = ' '.join(['%02x' % byte for byte in self._bytes])
 
         return packet_str
 
+
+    # READ ONLY PROPERTIES
+
+    @property
+    def header(self):
+        """The header of the packet.
+
+        This pair of byte should always be equals to b'\xff\xff'.
+        """
+        return self._bytes[0:2]
+
+    @property
+    def dynamixel_id(self):
+        """The unique ID of a Dynamixel unit affected by this packet.
+
+        This byte either has a value between 0x00 and 0xFD to affect the
+        corresponding Dynamixel unit or it has the value 0xFE to affect all
+        connected units (0xFE is the "broadcasting" ID).
+        """
+        return self._bytes[2]
+
+    @property
+    def length(self):
+        """Return the "length" of the packet.
+
+        This is not the actual length of the full packet (self._bytes) but the
+        number of bytes after its fourth byte, i.e. "len(self._bytes[4:])" or in
+        other words "len(self._bytes) - 4".
+        
+        This value (called "LENGTH") defines the fourth byte of each packet.
+        """
+        return self._bytes[3]
+
+    @property
+    def parameters(self):
+        """A sequence of byte used if there is additional information needed
+        to be read (other than the error itself)."""
+        return self._bytes[5:-1]
+
+    @property
+    def data(self):
+        """A sequence of byte defining the packet's error and its additional
+        information.
+        
+        self.data == self.error + self.parameters"""
+        return self._bytes[4:-1]
+
+    @property
+    def checksum(self):
+        """The packet checksum, used to prevent packet transmission error."""
+        return self._bytes[-1]

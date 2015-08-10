@@ -28,11 +28,13 @@ __all__ = ['Connection']
 
 import serial
 import time
-from pyax12.status_packet import StatusPacket
+
+import pyax12.status_packet as sp
+import pyax12.instruction_packet as ip
 
 class Connection(object):
     """Create a serial connection with dynamixel actuators."""
-    
+
     def __init__(self, _port='/dev/ttyUSB0', _baudrate=57600, _timeout=0.1):
         """Create a serial connection with dynamixel actuators.
 
@@ -55,11 +57,11 @@ class Connection(object):
 
     def send(self, instruction_packet):
         """Send an instruction packet.
-        
+
         Keyword arguments:
         instruction_packet -- can be either a "Packet" instance or a "bytes"
-                  string containing the full instruction packet to be sent to
-                  Dynamixel units.
+                              string containing the full instruction packet to
+                              be sent to Dynamixel units.
         """
 
         if isinstance(instruction_packet, bytes):
@@ -80,74 +82,117 @@ class Connection(object):
         # "TTL" (otherwise status packets won't be readable).
 
         time.sleep(0.01) # TODO
-        num_bytes_in_read_buffer = self.serial_connection.inWaiting()
+        num_bytes_available = self.serial_connection.inWaiting()
 
-        byte_array_status = self.serial_connection.read(num_bytes_in_read_buffer) # TODO: not robust...
+        # TODO: not robust...
+        status_packet_bytes = self.serial_connection.read(num_bytes_available)
 
         # TODO: make the reading status more robust. See:
         # - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
         # - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
         # - PyPot: https://github.com/poppy-project/pypot/blob/master/pypot/dynamixel/io/abstract_io.py#L503
         status_packet = None
-        if len(byte_array_status) > 0:
-            status_packet = StatusPacket(byte_array_status)
+        if len(status_packet_bytes) > 0:
+            status_packet = sp.StatusPacket(status_packet_bytes)
 
         return status_packet
 
 
     def close(self):
         """Close the serial connection."""
+
+        # TODO: flush ?
         self.serial_connection.close()
 
 
     def flush(self):
-        """Close the serial connection."""
+        """Flush the connection buffers."""
 
         self.serial_connection.flushInput()
         #self.serial_connection.flushOutput()  # TODO ?
 
+
     ## HIGH LEVEL FUNCTIONS ####################################################
 
-    #def ping(self, dynamixel_id):
-    #    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(address, ) + value_tuple)
-    #
-    #    status_packet = serial_connection.send(instruction_packet)
-    #
-    #    if status_packet is not None:
-    #        pass
-    #        # TODO warning
+    def read_data(self, dynamixel_id, address, length):
+        """Read bytes form the control table of the specified Dynamixel unit.
+
+        Keyword arguments:
+        dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
+        address -- starting address of the location where the data is to be
+                   read.
+        length -- length of the data to be read.
+        """
+
+        instruction = ip.READ_DATA
+        params = (address, length)
+        instruction_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+    
+        status_packet = self.send(instruction_packet)
+    
+        data_bytes = None
+        if status_packet is not None:
+            # TODO: check status_packet.id == dynamixel_id ?
+            data_bytes = status_packet.parameters
+    
+        return data_bytes
 
 
-    #def read_control_table(self, dynamixel_id, address, length):
-    #    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.READ_DATA, _parameters=(address, length))
-    #
-    #    status_packet = serial_connection.send(instruction_packet)
-    #
-    #    value_tuple = None
-    #    if status_packet is not None:
-    #        value_tuple = status_packet.parameters
-    #
-    #    return value_tuple
+    def write_data(self, dynamixel_id, address, data):
+        """Write bytes to the control table of the specified Dynamixel unit.
+
+        Keyword arguments:
+        dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
+        address -- starting address of the location where the data is to be
+                   written.
+        data -- bytes of the data to be written (can be an integer, a sequence
+                of integer, a bytes or a bytearray).
+        """
+
+        bytes_address = bytes((address, ))
+
+        if isinstance(data, int):
+            bytes_to_write = bytes((data, ))
+        else:
+            bytes_to_write = bytes(data)
+
+        instruction = ip.WRITE_DATA
+        params = bytes_address + bytes_to_write
+        instruction_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+    
+        status_packet = self.send(instruction_packet)
 
 
-    #def write_control_table(self, dynamixel_id, address, bytes_to_write):
-    #    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(address, ) + value_tuple)
-    #
-    #    status_packet = serial_connection.send(instruction_packet)
-    #
-    #    if status_packet is not None:
-    #        pass
-    #        # TODO warning
+    def ping(self, dynamixel_id):
+        """Ping the specified Dynamixel unit.
+
+        Keyword arguments:
+        dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
+        """
+
+        instruction = ip.PING
+        params = ()
+        instruction_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+    
+        status_packet = self.send(instruction_packet)
+    
+        is_available = False
+        if status_packet is not None:
+            # TODO: check status_packet.id == dynamixel_id ?
+            is_available = True
+    
+        return is_available
 
 
     #def reset(self, dynamixel_id):
     #    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(address, ) + value_tuple)
     #
-    #    status_packet = serial_connection.send(instruction_packet)
+    #    status_packet = self.send(instruction_packet)
     #
     #    if status_packet is not None:
     #        pass
     #        # TODO warning
+
 
     ## HIGHEST LEVEL FUNCTIONS #################################################
 
@@ -155,14 +200,28 @@ class Connection(object):
     #    pass
 
 
-    #def scan(self, dynamixel_id_bytes=None):
-    #    available_ids = bytearray()
-    #
-    #    for dynamixel_id in dynamixel_id_bytes:
-    #        if 0 <= dynamixel_id <= 0xfe:
-    #            if self.ping(dynamixel_id):
-    #               available_ids.append(dynamixel_id)
-    #        else:
-    #            pass # TODO exception
-    #
-    #    return available_ids
+    #def print_control_table(self, dynamixel_id):
+    #    pass
+
+
+    def scan(self, dynamixel_id_bytes=None):
+        """Return the ID sequence of available Dynamixel units.
+
+        Keyword arguments:
+        dynamixel_id_bytes -- a sequence of unique ID of the Dynamixel units to
+                              be ping.
+        """
+
+        available_ids = bytearray()
+
+        if dynamixel_id_bytes is None:
+            dynamixel_id_bytes = bytes(range(0xfe)) # bytes in range (0, 0xfd)
+
+        for dynamixel_id in dynamixel_id_bytes:
+            if 0 <= dynamixel_id <= 0xfd:
+                if self.ping(dynamixel_id):
+                   available_ids.append(dynamixel_id)
+            else:
+                pass # TODO exception
+    
+        return available_ids

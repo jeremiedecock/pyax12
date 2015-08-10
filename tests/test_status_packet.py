@@ -34,7 +34,8 @@ from pyax12.status_packet import StatusPacket
 from pyax12.status_packet import StatusPacketError
 from pyax12.status_packet import InstructionError
 #from pyax12.status_packet import OverloadError
-from pyax12.status_packet import ChecksumError
+from pyax12.status_packet import InstructionChecksumError
+from pyax12.status_packet import StatusChecksumError
 from pyax12.status_packet import RangeError
 #from pyax12.status_packet import OverheatingError
 #from pyax12.status_packet import AngleLimitError
@@ -42,6 +43,8 @@ from pyax12.status_packet import RangeError
 
 from pyax12.packet import Packet
 from pyax12.connection import Connection
+
+import pyax12.packet as pk   # TODO
 
 import unittest
 
@@ -104,6 +107,18 @@ class TestStatusPacket(unittest.TestCase):
         with self.assertRaises(TypeError):
             StatusPacket(packet)
 
+        # Wrong type: int
+        packet = 0
+
+        with self.assertRaises(TypeError):
+            StatusPacket(packet)
+
+        # Wrong type: int
+        packet = 6
+
+        with self.assertRaises(TypeError):
+            StatusPacket(packet)
+
         # Wrong type: None
         packet = None
 
@@ -117,7 +132,7 @@ class TestStatusPacket(unittest.TestCase):
             StatusPacket(packet)
 
         # Wrong type: string
-        packet = "hello"
+        packet = "hello world"
 
         with self.assertRaises(TypeError):
             StatusPacket(packet)
@@ -128,7 +143,11 @@ class TestStatusPacket(unittest.TestCase):
         "packet" is too short: at least 6 bytes are required to make
         a valid packet (two for the header, one for the dynamixel ID, one for
         the packet "length", one for the error code, one for the checksum and
-        the rest for parameters)."""
+        the rest for parameters).
+        
+        Note that the length of packets have to be tested before the checksum
+        (thus the checksums in this test are wrong): this tests should raise a
+        "ValueError" but not a "StatusChecksumError"."""
 
         # Wrong packet: too short (at least 6 bytes are required)
         packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00))
@@ -180,7 +199,7 @@ class TestStatusPacket(unittest.TestCase):
         # Wrong packet: wrong "checksum" byte (the last byte)
         packet = bytes((0xff, 0xff, 0x01, 0x03, 0x00, 0x20, 0))
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(StatusChecksumError):
             StatusPacket(packet)
 
 
@@ -189,7 +208,15 @@ class TestStatusPacket(unittest.TestCase):
         "packet" has a wrong "id" byte (the third byte)."""
 
         # Wrong packet: wrong "id" byte (the third byte)
-        packet = bytes((0xff, 0xff, 0xff, 0x03, 0x00, 0x20, 0))
+        packet = bytes((0xff, 0xff, 0xff, 0x03, 0x00, 0x20, 0xdd))
+
+        with self.assertRaises(ValueError):
+            StatusPacket(packet)
+
+        # Wrong packet: wrong "id" byte (the third byte)
+        # The broadcast ID 0xFE is for instruction packets not for status
+        # packets.
+        packet = bytes((0xff, 0xff, 0xfe, 0x03, 0x00, 0x20, 0xde))
 
         with self.assertRaises(ValueError):
             StatusPacket(packet)
@@ -253,8 +280,8 @@ class TestStatusPacket(unittest.TestCase):
 
 
     def test_checksum_error(self):
-        """Check that the "ChecksumError" exception is raised when the
-        "checksum error" flag is ON in the StatusPacket's "error" byte.
+        """Check that the "InstructionChecksumError" exception is raised when
+        the "checksum error" flag is ON in the StatusPacket's "error" byte.
 
         This test requires to be connected to the Dynamixel number 1 using
         port "/dev/ttyUSB0" at 57600 baud (thus it only works on Unix systems
@@ -272,7 +299,7 @@ class TestStatusPacket(unittest.TestCase):
         packet = bytes((0xff, 0xff, 0x01, 0x04, 0x02, 0x2b, 0x01, 0))
 
         # Send the wrong instruction packet and get the response
-        with self.assertRaises(ChecksumError):
+        with self.assertRaises(InstructionChecksumError):
             serial_connection.send(packet)
 
 
