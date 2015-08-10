@@ -112,6 +112,9 @@ class TestStatusPacket(unittest.TestCase):
             StatusPacket(packet)
 
         # Wrong type: int
+        # Trap to avoid: bytes(6) return a sequence of 6 bytes (equal to 0)
+        # which could be seen as a valid packet. This error have to be properly
+        # detected.
         packet = 6
 
         with self.assertRaises(TypeError):

@@ -158,27 +158,24 @@ class TestPacket(unittest.TestCase):
             pk.compute_checksum(byte_seq)
 
 
-    def test_checksum_func_wrong_byte_value_low(self):
+    def test_checksum_func_wrong_byte_value(self):
         """Check that the compute_checksum function fails when an item of the
-        "byte_seq" argument has a wrong value (too low value)."""
+        "byte_seq" argument has a wrong value (too low or too high)."""
 
+        # Too low value
         byte_seq = (0x01, -1, 0x02, 0x2b, 0x01)      # wrong value
 
         with self.assertRaises(ValueError):
             pk.compute_checksum(byte_seq)
 
-
-    def test_checksum_func_wrong_byte_value_hi(self):
-        """Check that the compute_checksum function fails when an item of the
-        "byte_seq" argument has a wrong value (too high value)."""
-
+        # Too high value
         byte_seq = (0x01, 0xffff, 0x02, 0x2b, 0x01)  # wrong value
 
         with self.assertRaises(ValueError):
             pk.compute_checksum(byte_seq)
 
 
-    def test_checksum_func_wrong_id_value_hi(self):
+    def test_checksum_func_wrong_id_byte(self):
         """Check that the compute_checksum function fails when the "id" byte
         of the "byte_seq" argument has a wrong value (too high value)."""
 
@@ -190,11 +187,13 @@ class TestPacket(unittest.TestCase):
             pk.compute_checksum(byte_seq)
 
 
-    def test_checksum_func_wrong_length_value_low(self):
+    def test_checksum_func_wrong_length_byte(self):
         """Check that the compute_checksum function fails when the "length"
-        byte of the "byte_seq" argument has a wrong value (too low value).
+        byte of the "byte_seq" argument has a wrong value (too low or too
+        high).
         """
 
+        # Too low value
         byte_seq = (1,)                # id
         byte_seq += (1,)               # wrong length
         byte_seq += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
@@ -202,12 +201,7 @@ class TestPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             pk.compute_checksum(byte_seq)
 
-
-    def test_checksum_func_wrong_length_value_hi(self):
-        """Check that the compute_checksum function fails when the "length"
-        byte of the "byte_seq" argument has a wrong value (too high value).
-        """
-
+        # Too high value
         byte_seq = (1,)                # id
         byte_seq += (9,)               # wrong length
         byte_seq += (0x02, 0x2b, 0x01) # read the temperature of the dynamixel
@@ -265,22 +259,19 @@ class TestPacket(unittest.TestCase):
             pk.Packet(dynamixel_id, data)
 
 
-    def test_wrong_id_value_hi(self):
+    def test_wrong_id_value(self):
         """Check that the instanciation of Packet fails when the argument
-        "dynamixel_id" has a wrong value (too high)."""
+        "dynamixel_id" has a wrong value (too low or too high)."""
 
-        dynamixel_id = 1000       # wrong id
+        # Too low
+        dynamixel_id = -1         # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
 
         with self.assertRaises(ValueError):
             pk.Packet(dynamixel_id, data)
 
-
-    def test_wrong_id_value_negative(self):
-        """Check that the instanciation of Packet fails when the argument
-        "dynamixel_id" has a wrong value (negative value)."""
-
-        dynamixel_id = -1         # wrong id
+        # Too high
+        dynamixel_id = 1000       # wrong id
         data = (0x02, 0x2b, 0x01) # read internal temperature of the dynamixel
 
         with self.assertRaises(ValueError):
