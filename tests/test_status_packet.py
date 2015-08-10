@@ -44,8 +44,6 @@ from pyax12.status_packet import RangeError
 from pyax12.packet import Packet
 from pyax12.connection import Connection
 
-import pyax12.packet as pk   # TODO
-
 import unittest
 
 class TestStatusPacket(unittest.TestCase):
@@ -144,7 +142,7 @@ class TestStatusPacket(unittest.TestCase):
         a valid packet (two for the header, one for the dynamixel ID, one for
         the packet "length", one for the error code, one for the checksum and
         the rest for parameters).
-        
+
         Note that the length of packets have to be tested before the checksum
         (thus the checksums in this test are wrong): this tests should raise a
         "ValueError" but not a "StatusChecksumError"."""
