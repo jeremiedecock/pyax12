@@ -226,6 +226,8 @@ class TestPacket(unittest.TestCase):
 
     # Tests for the Packet class ##############################################
 
+    # Test the "dynamixel_id" argument
+
     def test_wrong_id_type(self):
         """Check that the instanciation of Packet fails when the argument
         "dynamixel_id" has a wrong type."""
@@ -277,7 +279,7 @@ class TestPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             pk.Packet(dynamixel_id, data)
 
-    ###
+    # Test the "data" argument
 
     def test_wrong_data_type(self):
         """Check that the instanciation of Packet fails when the argument
