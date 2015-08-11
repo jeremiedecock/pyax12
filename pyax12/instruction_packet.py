@@ -109,7 +109,7 @@ class InstructionPacket(pk.Packet):
     checksum -- the packet checksum, used to prevent packet transmission error.
     """
 
-    def __init__(self, dynamixel_id, instruction, parameters):
+    def __init__(self, dynamixel_id, instruction, parameters=None):
         """Create an instruction packet.
 
         Keyword arguments:

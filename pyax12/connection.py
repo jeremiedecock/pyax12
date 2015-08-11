@@ -70,8 +70,10 @@ class Connection(object):
         """
 
         if isinstance(instruction_packet, bytes):
+            # instruction_packet is a bytes instance
             instruction_packet_bytes = instruction_packet
         else:
+            # instruction_packet is a Packet instance
             instruction_packet_bytes = instruction_packet.to_bytes()
 
         self.flush()
@@ -137,8 +139,13 @@ class Connection(object):
 
         data_bytes = None
         if status_packet is not None:
-            # TODO: check status_packet.id == dynamixel_id ?
-            data_bytes = status_packet.parameters
+            if status_packet.dynamixel_id == dynamixel_id:
+                data_bytes = status_packet.parameters
+            else:
+                pass # TODO: exception ?
+        # TODO: manage the special case with dxl_id = 0xFE
+        # TODO: manage the special case where length cover multiples items
+        # TODO: manage the case where items coded on only one byte are returned
 
         return data_bytes
 
@@ -176,15 +183,17 @@ class Connection(object):
         """
 
         instruction = ip.PING
-        params = ()
-        inst_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+        inst_packet = ip.InstructionPacket(dynamixel_id, instruction)
 
         status_packet = self.send(inst_packet)
 
         is_available = False
         if status_packet is not None:
-            # TODO: check status_packet.id == dynamixel_id ?
-            is_available = True
+            if status_packet.dynamixel_id == dynamixel_id:
+                is_available = True
+            else:
+                pass # TODO: exception ?
+        # TODO: manage the special case with dxl_id = 0xFE
 
         return is_available
 
