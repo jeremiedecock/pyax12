@@ -39,11 +39,38 @@ class TestInstructionPacket(unittest.TestCase):
     Contains unit tests for the "InstructionPacket" class.
     """
 
-    def test_wrong_id_type_float(self):
-        """Check that ip.InstructionPacket fails when the "dynamixel_id"
-        argument's type is wrong (float)."""
+    # Test the "dynamixel_id" argument ########################################
 
-        dynamixel_id = 1.0   # wrong id
+    def test_wrong_id_type(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        argument "dynamixel_id" has a wrong type."""
+
+        # Check with None
+        dynamixel_id = None       # wrong id
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with float
+        dynamixel_id = 1.0        # wrong id
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with string
+        dynamixel_id = "hi"       # wrong id
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with tuple
+        dynamixel_id = ()         # wrong id
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, 0x01)
 
@@ -51,22 +78,19 @@ class TestInstructionPacket(unittest.TestCase):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
 
-    def test_wrong_id_value_hi(self):
-        """Check that ip.InstructionPacket fails when the "dynamixel_id"
-        argument's value is wrong (too high value)."""
+    def test_wrong_id_value(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        argument "dynamixel_id" has a wrong value (too low or too high)."""
 
-        dynamixel_id = 1000  # wrong id
+        # Too high
+        dynamixel_id = 0xff  # wrong id
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, 0x01)
 
         with self.assertRaises(ValueError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
-
-    def test_wrong_id_value_negative(self):
-        """Check that ip.InstructionPacket fails when the "dynamixel_id"
-        argument's value is wrong (negative value)."""
-
+        # Too low
         dynamixel_id = -1    # wrong id
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, 0x01)
@@ -74,12 +98,35 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
-    ###
 
-    def test_wrong_instruction_type_float(self):
-        """Check that ip.InstructionPacket fails when the "instruction"
-        argument's type is wrong (float)."""
+#    # TODO: should it be considered as an actual error or can it be neglected?
+#    def test_wrong_id_value_sync_write(self):
+#        """Check that the instanciation of InstructionPacket fails when the
+#        argument "dynamixel_id" has a wrong value (the SYNC_WRITE
+#        instruction expects the broadcast id)."""
+#
+#        dynamixel_id = 1                  # wrong id (must be 0xfe)
+#        instruction = ip.SYNC_WRITE
+#        params = (pk.LED, 1, 1, 1)
+#
+#        with self.assertRaises(ValueError):
+#            ip.InstructionPacket(dynamixel_id, instruction, params)
 
+    # Test the "instruction" argument #########################################
+
+    def test_wrong_instruction_type(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        argument "instruction" has a wrong type."""
+
+        # Check with None
+        dynamixel_id = 1
+        instruction = None   # wrong instruction
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with float
         dynamixel_id = 1
         instruction = 1.0    # wrong instruction
         params = (pk.PRESENT_TEMPERATURE, 0x01)
@@ -87,10 +134,26 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(TypeError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
+        # Check with string
+        dynamixel_id = 1
+        instruction = "hi"   # wrong instruction
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with tuple
+        dynamixel_id = 1
+        instruction = ()     # wrong instruction
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
 
     def test_wrong_instruction_value(self):
-        """Check that ip.InstructionPacket fails when the "instruction"
-        argument's value is wrong."""
+        """Check that the instanciation of InstructionPacket fails when the
+        argument "instruction" has a wrong value."""
 
         dynamixel_id = 1
         instruction = 1000   # wrong instruction
@@ -99,24 +162,109 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
-    ###
+    # Test the "parameters" argument ##########################################
 
-    def test_wrong_params_type_int(self):
-        """Check that ip.InstructionPacket fails when the "parameters"
-        argument's type is wrong (int)."""
+    def test_wrong_params_type(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        argument "parameters" has a wrong type."""
 
+        # Check with a float.
         dynamixel_id = 1
         instruction = ip.READ_DATA
-        params = 0x00                                 # wrong value
+        params = 1.0                                  # wrong type
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with a string.
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = "hello world"                        # wrong type
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with an integer.
+        # There is no instruction which take only one parameter (some take 0
+        # parameters, some take 2 or more parameters but none take 1
+        # parameter).
+        dynamixel_id = 1
+        instruction = ip.PING
+        params = 1
 
         with self.assertRaises(TypeError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
 
-    def test_wrong_params_items_type_float(self):
-        """Check that ip.InstructionPacket fails when the "parameters" items
-        argument's type is wrong (float)."""
+    def test_good_params_type(self):
+        """Check that the instanciation of InstructionPacket doesn't fail when
+        the argument "parameters" has a right type."""
 
+        # Check with None (some instructions like "PING" doesn't take any
+        # parameter)
+        dynamixel_id = 1
+        instruction = ip.PING
+        params = None                                 # wrong type
+
+        try:
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a tuple
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, 0x01)
+
+        try:
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a list
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = [pk.PRESENT_TEMPERATURE, 0x01]
+
+        try:
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a bytes string
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = bytes((pk.PRESENT_TEMPERATURE, 0x01))
+
+        try:
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+        # Check with a bytearray
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = bytearray((pk.PRESENT_TEMPERATURE, 0x01))
+
+        try:
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+        except (TypeError, ValueError):
+            self.fail("Encountered an unexpected exception.")
+
+
+    def test_wrong_params_items_type(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        "parameters" items type is wrong."""
+
+        # Check with None
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, None)      # wrong value
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Check with float
         dynamixel_id = 1
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, 1.0)       # wrong value
@@ -124,11 +272,28 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(TypeError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
+        # Check with string
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, "hi")      # wrong value
 
-    def test_wrong_params_value(self):
-        """Check that ip.InstructionPacket fails when the "parameters" items
-        argument's value is wrong (too high value)."""
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
 
+        # Check with tuple
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, ())        # wrong value
+
+        with self.assertRaises(TypeError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+
+    def test_wrong_params_items_value(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        "parameters" items type is value."""
+
+        # Too high value
         dynamixel_id = 1
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, 0xffff)     # wrong value
@@ -136,12 +301,21 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
-    ###
+        # Too low value
+        dynamixel_id = 1
+        instruction = ip.READ_DATA
+        params = (pk.PRESENT_TEMPERATURE, -1)         # wrong value
 
-    def test_wrong_num_params_ping_hi(self):
-        """Check that ip.InstructionPacket fails when the number of paramaters
-        is wrong (greater than 0 for the PING instruction)."""
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
 
+
+    def test_wrong_num_params_ping(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (greater than 0 for the PING
+        instruction)."""
+
+        # Too high
         dynamixel_id = 1
         instruction = ip.PING
         params = (0x00, )                             # wrong nb of params
@@ -150,10 +324,11 @@ class TestInstructionPacket(unittest.TestCase):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
 
-    def test_wrong_num_params_hi(self):
-        """Check that ip.InstructionPacket fails when the number of paramaters
-        is wrong (too high)."""
+    def test_wrong_num_params_read(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (for the READ_DATA instruction)."""
 
+        # Too high
         dynamixel_id = 1
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, 0x01, 0x00) # wrong nb of params
@@ -161,11 +336,7 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
-
-    def test_wrong_num_params_low(self):
-        """Check that ip.InstructionPacket fails when the number of paramaters
-        is wrong (too low)."""
-
+        # Too low
         dynamixel_id = 1
         instruction = ip.READ_DATA
         params = (pk.PRESENT_TEMPERATURE, )           # wrong nb of params
@@ -173,7 +344,90 @@ class TestInstructionPacket(unittest.TestCase):
         with self.assertRaises(ValueError):
             ip.InstructionPacket(dynamixel_id, instruction, params)
 
-    ###
+
+    def test_wrong_num_params_write(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (for the WRITE_DATA instruction)."""
+
+        # Too low
+        dynamixel_id = 1
+        instruction = ip.WRITE_DATA
+        params = (pk.LED, )                           # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+
+    def test_wrong_num_params_reg_write(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (for the REG_WRITE instruction)."""
+
+        # Too low
+        dynamixel_id = 1
+        instruction = ip.REG_WRITE
+        params = (pk.LED, )                           # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+
+    def test_wrong_num_params_action(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (greater than 0 for the ACTION
+        instruction)."""
+
+        # Too high
+        dynamixel_id = 1
+        instruction = ip.ACTION
+        params = (0x00, )                             # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+
+    def test_wrong_num_params_reset(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (greater than 0 for the RESET
+        instruction)."""
+
+        # Too high
+        dynamixel_id = 1
+        instruction = ip.RESET
+        params = (0x00, )                             # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+
+    def test_wrong_num_params_sync_write(self):
+        """Check that the instanciation of InstructionPacket fails when the
+        number of paramaters is wrong (for the SYNC_WRITE instruction)."""
+
+        # Too low (1)
+        dynamixel_id = 0xfe
+        instruction = ip.SYNC_WRITE
+        params = (pk.LED, )                           # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Too low (2)
+        dynamixel_id = 0xfe
+        instruction = ip.SYNC_WRITE
+        params = (pk.LED, 1)                          # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        # Too low (3)
+        dynamixel_id = 0xfe
+        instruction = ip.SYNC_WRITE
+        params = (pk.LED, 1, 1)                       # wrong nb of params
+
+        with self.assertRaises(ValueError):
+            ip.InstructionPacket(dynamixel_id, instruction, params)
+
+    # Full examples ###########################################################
 
     def test_example1(self):
         """Check the example 1 from the Dynamixel user guide: "Setting the ID
