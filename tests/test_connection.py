@@ -41,7 +41,7 @@ class TestConnection(unittest.TestCase):
 
     def test_init_wrong_port_type(self):
         """Check that the pyax12.connection.Connection initialization fails
-        when the "port" argument's type is wrong (bool)."""
+        when the "port" argument's type is wrong."""
 
         port = False           # wrong type (expected: str)
         baudrate = 57600
@@ -67,7 +67,7 @@ class TestConnection(unittest.TestCase):
 
     ###
 
-#    def test_init_wrong_baudrate_type_float(self):
+#    def test_init_wrong_baudrate_type(self):
 #        """Check that the pyax12.connection.Connection initialization fails
 #        when the "baudrate" argument's type is wrong (float)."""
 #
@@ -81,10 +81,11 @@ class TestConnection(unittest.TestCase):
 
     ###
 
-#    def test_init_wrong_baudrate_value_negative(self):
+#    def test_init_wrong_baudrate_value(self):
 #        """Check that the pyax12.connection.Connection initialization fails
-#        when the "baudrate" argument's value is wrong (negative value)."""
+#        when the "baudrate" argument's value is wrong."""
 #
+#        # negative
 #        port = None
 #        baudrate = -1       # wrong value
 #        timeout = 0.1
@@ -92,12 +93,8 @@ class TestConnection(unittest.TestCase):
 #        with self.assertRaises(serial.serialutil.SerialException):
 #            serial_connection = Connection(port, baudrate, timeout)
 #            serial_connection.close()
-
-
-#    def test_init_wrong_baudrate_value_zero(self):
-#        """Check that the pyax12.connection.Connection initialization fails
-#        when the "baudrate" argument's value is wrong (zero)."""
 #
+#        # zero
 #        port = None
 #        baudrate = 0        # wrong value
 #        timeout = 0.1
@@ -122,10 +119,11 @@ class TestConnection(unittest.TestCase):
 
     ###
 
-#    def test_init_wrong_timeout_value_negative(self):
+#    def test_init_wrong_timeout_value(self):
 #        """Check that the pyax12.connection.Connection initialization fails
-#        when the "timeout" argument's value is wrong (negative value)."""
+#        when the "timeout" argument's value is wrong."""
 #
+#        # negative
 #        port = None
 #        baudrate = -1
 #        timeout = 0.1       # wrong value
@@ -133,12 +131,8 @@ class TestConnection(unittest.TestCase):
 #        with self.assertRaises(serial.serialutil.SerialException):
 #            serial_connection = Connection(port, baudrate, timeout)
 #            serial_connection.close()
-
-
-#    def test_init_wrong_timeout_value_zero(self):
-#        """Check that the pyax12.connection.Connection initialization fails
-#        when the "timeout" argument's value is wrong (zero)."""
 #
+#        # zero
 #        port = None
 #        baudrate = 0
 #        timeout = 0.1       # wrong value
