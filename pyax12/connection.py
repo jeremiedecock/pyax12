@@ -24,6 +24,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""
+This module contain the "Connection" class communicate with Dynamixel units.
+"""
+
 __all__ = ['Connection']
 
 import serial
@@ -40,7 +44,8 @@ class Connection(object):
 
         Instance variable:
         serial_connection -- the serial connection object returned by pyserial;
-        port -- the serial device to connect with (e.g. '/dev/ttyUSB0' for Unix users);
+        port -- the serial device to connect with (e.g. '/dev/ttyUSB0' for Unix
+                users);
         baudrate -- the baudrate speed (e.g. 57600);
         timeout -- the timeout value for the connection.
         """
@@ -76,7 +81,7 @@ class Connection(object):
         self.serial_connection.write(instruction_packet_bytes)
 
         # Receive the reply (status packet) ###############
-        
+
         # WARNING:
         # If you use the USB2Dynamixel device, make sure its switch is set on
         # "TTL" (otherwise status packets won't be readable).
@@ -126,15 +131,15 @@ class Connection(object):
 
         instruction = ip.READ_DATA
         params = (address, length)
-        instruction_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
-    
-        status_packet = self.send(instruction_packet)
-    
+        inst_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        status_packet = self.send(inst_packet)
+
         data_bytes = None
         if status_packet is not None:
             # TODO: check status_packet.id == dynamixel_id ?
             data_bytes = status_packet.parameters
-    
+
         return data_bytes
 
 
@@ -158,9 +163,9 @@ class Connection(object):
 
         instruction = ip.WRITE_DATA
         params = bytes_address + bytes_to_write
-        instruction_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
-    
-        status_packet = self.send(instruction_packet)
+        inst_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        self.send(inst_packet)
 
 
     def ping(self, dynamixel_id):
@@ -172,20 +177,19 @@ class Connection(object):
 
         instruction = ip.PING
         params = ()
-        instruction_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
-    
-        status_packet = self.send(instruction_packet)
-    
+        inst_packet = ip.InstructionPacket(dynamixel_id, instruction, params)
+
+        status_packet = self.send(inst_packet)
+
         is_available = False
         if status_packet is not None:
             # TODO: check status_packet.id == dynamixel_id ?
             is_available = True
-    
+
         return is_available
 
 
     #def reset(self, dynamixel_id):
-    #    instruction_packet = ip.InstructionPacket(_id=dynamixel_id, _instruction=ip.WRITE_DATA, _parameters=(address, ) + value_tuple)
     #
     #    status_packet = self.send(instruction_packet)
     #
@@ -220,8 +224,8 @@ class Connection(object):
         for dynamixel_id in dynamixel_id_bytes:
             if 0 <= dynamixel_id <= 0xfd:
                 if self.ping(dynamixel_id):
-                   available_ids.append(dynamixel_id)
+                    available_ids.append(dynamixel_id)
             else:
                 pass # TODO exception
-    
+
         return available_ids
