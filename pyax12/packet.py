@@ -106,7 +106,7 @@ def compute_checksum(byte_seq):
     # necessary.
     # The statement "tuple(byte_seq)" implicitely rejects integers (and all
     # non-iterable objects) to compensate the fact that the bytes constructor
-    # doesn't reject them: bytes(3) is valid and returns b'\x00\x00\x00'
+    # doesn't reject them: bytes(3) is valid and returns b'\x00\x00\x00'.
     byte_seq = bytes(tuple(byte_seq))
 
     # Check the argument's length
@@ -172,8 +172,8 @@ class Packet(object):
         """
 
         # Check the data bytes.
-        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
-        # or "bytearray.extend()" if necessary.
+        # "TypeError" and "ValueError" are raised by the "bytes" constructor if
+        # necessary.
         if isinstance(data, int):
             data = bytes((data, )) # convert integers to a sequence
         else:
