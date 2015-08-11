@@ -33,8 +33,11 @@ __all__ = ['Connection']
 import serial
 import time
 
+import pyax12.packet as pk
 import pyax12.status_packet as sp
 import pyax12.instruction_packet as ip
+
+from pyax12 import utils
 
 class Connection(object):
     """Create a serial connection with dynamixel actuators."""
@@ -144,8 +147,6 @@ class Connection(object):
             else:
                 pass # TODO: exception ?
         # TODO: manage the special case with dxl_id = 0xFE
-        # TODO: manage the special case where length cover multiples items
-        # TODO: manage the case where items coded on only one byte are returned
 
         return data_bytes
 
@@ -178,6 +179,8 @@ class Connection(object):
     def ping(self, dynamixel_id):
         """Ping the specified Dynamixel unit.
 
+        Returns "True" if the specified unit is available, "False" otherwise.
+
         Keyword arguments:
         dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
         """
@@ -209,12 +212,51 @@ class Connection(object):
 
     ## HIGHEST LEVEL FUNCTIONS #################################################
 
-    #def dump_control_table(self, dynamixel_id):
-    #    pass
+    def dump_control_table(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, 0, 50)
+        return byte_seq
 
 
-    #def print_control_table(self, dynamixel_id):
-    #    pass
+    def print_control_table(self, dynamixel_id):
+        byte_seq = self.dump_control_table(dynamixel_id)
+        print(utils.pretty_hex_str(byte_seq, ' '))
+
+
+    def pretty_print_control_table(self, dynamixel_id):
+        print("{:.<24}{}".format("model_number", self.get_model_number(dynamixel_id)))
+        print("{:.<24}{}".format("firmware_version", self.get_firmware_version(dynamixel_id)))
+        print("{:.<24}{}".format("id", self.get_id(dynamixel_id)))
+        print("{:.<24}{}".format("baud_rate", self.get_baud_rate(dynamixel_id)))
+        print("{:.<24}{}".format("return_delay_time", self.get_return_delay_time(dynamixel_id)))
+        print("{:.<24}{}".format("cw_angle_limit", self.get_cw_angle_limit(dynamixel_id)))
+        print("{:.<24}{}".format("ccw_angle_limit", self.get_ccw_angle_limit(dynamixel_id)))
+        print("{:.<24}{}".format("max_temperature", self.get_max_temperature(dynamixel_id)))
+        print("{:.<24}{}".format("min_voltage", self.get_min_voltage(dynamixel_id)))
+        print("{:.<24}{}".format("max_voltage", self.get_max_voltage(dynamixel_id)))
+        print("{:.<24}{}".format("max_torque", self.get_max_torque(dynamixel_id)))
+        print("{:.<24}{}".format("status_return_level", self.get_status_return_level(dynamixel_id)))
+        print("{:.<24}{}".format("alarm_led", self.get_alarm_led(dynamixel_id)))
+        print("{:.<24}{}".format("alarm_shutdown", self.get_alarm_shutdown(dynamixel_id)))
+        print("{:.<24}{}".format("down_calibration", self.get_down_calibration(dynamixel_id)))
+        print("{:.<24}{}".format("up_calibration", self.get_up_calibration(dynamixel_id)))
+        print("{:.<24}{}".format("torque_enable", self.get_torque_enable(dynamixel_id)))
+        print("{:.<24}{}".format("led", self.get_led(dynamixel_id)))
+        print("{:.<24}{}".format("cw_compliance_margin", self.get_cw_compliance_margin(dynamixel_id)))
+        print("{:.<24}{}".format("ccw_compliance_margin", self.get_ccw_compliance_margin(dynamixel_id)))
+        print("{:.<24}{}".format("cw_compliance_slope", self.get_cw_compliance_slope(dynamixel_id)))
+        print("{:.<24}{}".format("ccw_compliance_slope", self.get_ccw_compliance_slope(dynamixel_id)))
+        print("{:.<24}{}".format("goal_position", self.get_goal_position(dynamixel_id)))
+        print("{:.<24}{}".format("moving_speed", self.get_moving_speed(dynamixel_id)))
+        print("{:.<24}{}".format("torque_limit", self.get_torque_limit(dynamixel_id)))
+        print("{:.<24}{}".format("present_position", self.get_present_position(dynamixel_id)))
+        print("{:.<24}{}".format("present_speed", self.get_present_speed(dynamixel_id)))
+        print("{:.<24}{}".format("present_load", self.get_present_load(dynamixel_id)))
+        print("{:.<24}{}".format("present_voltage", self.get_present_voltage(dynamixel_id)))
+        print("{:.<24}{}".format("present_temperature", self.get_present_temperature(dynamixel_id)))
+        print("{:.<24}{}".format("registred_instruction", self.get_registred_instruction(dynamixel_id)))
+        print("{:.<24}{}".format("moving", self.get_moving(dynamixel_id)))
+        print("{:.<24}{}".format("lock", self.get_lock(dynamixel_id)))
+        print("{:.<24}{}".format("punch", self.get_punch(dynamixel_id)))
 
 
     def scan(self, dynamixel_id_bytes=None):
@@ -238,3 +280,174 @@ class Connection(object):
                 pass # TODO exception
 
         return available_ids
+
+
+    def get_model_number(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.MODEL_NUMBER, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_firmware_version(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.VERSION_OF_FIRMWARE, 1)
+        return byte_seq[0]
+
+
+    def get_id(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.ID, 1)
+        return byte_seq[0]
+
+
+    def get_baud_rate(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.BAUD_RATE, 1)
+        return byte_seq[0]
+
+
+    def get_return_delay_time(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.RETURN_DELAY_TIME, 1)
+        return byte_seq[0]
+
+
+    def get_cw_angle_limit(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.CW_ANGLE_LIMIT, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_ccw_angle_limit(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.CCW_ANGLE_LIMIT, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_max_temperature(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.HIGHEST_LIMIT_TEMPERATURE, 1)
+        return byte_seq[0]
+
+
+    def get_min_voltage(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.LOWEST_LIMIT_VOLTAGE, 1)
+        return byte_seq[0]
+
+
+    def get_max_voltage(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.HIGHEST_LIMIT_VOLTAGE, 1)
+        return byte_seq[0]
+
+
+    def get_max_torque(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.MAX_TORQUE, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_status_return_level(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.STATUS_RETURN_LEVEL, 1)
+        return byte_seq[0]
+
+
+    def get_alarm_led(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        return byte_seq[0]
+
+
+    def get_alarm_shutdown(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        return byte_seq[0]
+
+
+    def get_down_calibration(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.DOWN_CALIBRATION, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_up_calibration(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.UP_CALIBRATION, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_torque_enable(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.TORQUE_ENABLE, 1)
+        return byte_seq[0]
+
+
+    def get_led(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.LED, 1)
+        return byte_seq[0]
+
+
+    def get_cw_compliance_margin(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.CW_COMPLIENCE_MARGIN, 1)
+        return byte_seq[0]
+
+
+    def get_ccw_compliance_margin(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.CCW_COMPLIENCE_MARGIN, 1)
+        return byte_seq[0]
+
+
+    def get_cw_compliance_slope(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.CW_COMPLIENCE_SLOPE, 1)
+        return byte_seq[0]
+
+
+    def get_ccw_compliance_slope(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.CCW_COMPLIENCE_SLOPE, 1)
+        return byte_seq[0]
+
+
+    def get_goal_position(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.GOAL_POSITION, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_moving_speed(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.MOVING_SPEED, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_torque_limit(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.TORQUE_LIMIT, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_present_position(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.PRESENT_POSITION, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_present_speed(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.PRESENT_SPEED, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_present_load(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.PRESENT_LOAD, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
+
+    def get_present_voltage(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.PRESENT_VOLTAGE, 1)
+        return byte_seq[0]
+
+
+    def get_present_temperature(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.PRESENT_TEMPERATURE, 1)
+        return byte_seq[0]
+
+
+    def get_registred_instruction(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.REGISTRED_INSTRUCTION, 1)
+        return byte_seq[0]
+
+
+    def get_moving(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.MOVING, 1)
+        return byte_seq[0]
+
+
+    def get_lock(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.LOCK, 1)
+        return byte_seq[0]
+
+
+    def get_punch(self, dynamixel_id):
+        byte_seq = self.read_data(dynamixel_id, pk.PUNCH, 2)
+        return utils.little_endian_bytes_to_int(byte_seq)
+
