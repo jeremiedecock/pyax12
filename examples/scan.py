@@ -28,7 +28,7 @@
 """
 A PyAX-12 demo.
 
-Returns the ID list of available Dynamixel units.
+Prints the ID list of available Dynamixel units.
 """
 
 import pyax12.packet as pk
@@ -42,7 +42,7 @@ def main():
     """
     A PyAX-12 demo.
 
-    Returns the ID list of available Dynamixel units.
+    Prints the ID list of available Dynamixel units.
     """
 
     # Parse options
