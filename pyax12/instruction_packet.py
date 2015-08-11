@@ -121,6 +121,18 @@ class InstructionPacket(pk.Packet):
                       itself.
         """
 
+        # Check the parameters byte.
+        # "TypeError" and "ValueError" are raised by the "bytes" constructor if
+        # necessary.
+        # The statement "tuple(parameters)" implicitely rejects integers (and
+        # all non-iterable objects) to compensate the fact that the bytes
+        # constructor doesn't reject them: bytes(3) is valid and returns
+        # b'\x00\x00\x00'.
+        if parameters is None:
+            parameters = bytes()
+        else:
+            parameters = bytes(tuple(parameters))
+
         # Add the header bytes.
         self._bytes = bytearray((0xff, 0xff))
 
@@ -130,8 +142,12 @@ class InstructionPacket(pk.Packet):
         if 0x00 <= dynamixel_id <= 0xfe:
             self._bytes.append(dynamixel_id)
         else:
-            msg = "Wrong dynamixel_id: {:#x} (should be in range(0x00, 0xfe))."
-            raise ValueError(msg.format(dynamixel_id))
+            if isinstance(dynamixel_id, int):
+                msg = "Wrong dynamixel_id value,"
+                msg += " an integer in range(0x00, 0xfe) is required."
+                raise ValueError(msg)
+            else:
+                raise TypeError("Wrong dynamixel_id type (integer required).")
 
         # Add the length byte.
         self._bytes.append(len(parameters) + 2)
@@ -142,17 +158,14 @@ class InstructionPacket(pk.Packet):
         if instruction in INSTRUCTIONS:
             self._bytes.append(instruction)
         else:
-            msg = "Wrong instruction, should be in ({})."
-            raise ValueError(msg.format(utils.pretty_hex_str(INSTRUCTIONS)))
+            if isinstance(instruction, int):
+                msg = "Wrong instruction, should be in ({})."
+                instructions_str = utils.pretty_hex_str(INSTRUCTIONS)
+                raise ValueError(msg.format(instructions_str))
+            else:
+                raise TypeError("Wrong instruction type (integer required).")
 
         # Check and add the parameter bytes.
-        # "TypeError" and "ValueError" are raised by the "bytearray.append()"
-        # or "bytearray.extend()" if necessary.
-        if isinstance(parameters, int):
-            parameters = bytes((parameters, )) # convert integers to a sequence
-        else:
-            parameters = bytes(parameters)
-
         nb_param_min = NUMBER_OF_PARAMETERS[self.instruction]['min']
         nb_param_max = NUMBER_OF_PARAMETERS[self.instruction]['max']
 
