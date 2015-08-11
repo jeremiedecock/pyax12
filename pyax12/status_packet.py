@@ -140,8 +140,9 @@ class StatusPacket(pk.Packet):
         # "TypeError" and "ValueError" are sent by the "bytes" constructor if
         # necessary.
         # The statement "tuple(packet)" implicitely rejects integers (and all
-        # non-iterable objects) to compensate the fact that the bytes constructor
-        # doesn't reject them: bytes(6) is valid and returns b'\x00\x00\x00'.
+        # non-iterable objects) to compensate the fact that the bytes
+        # constructor doesn't reject them: bytes(6) is valid and returns
+        # b'\x00\x00\x00'.
         self._bytes = bytes(tuple(packet))
 
         # Assert the argument is a sequence with at least 6 items.
