@@ -268,7 +268,7 @@ class Packet(object):
         This is not the actual length of the full packet (self._bytes) but the
         number of bytes after its fourth byte, i.e. "len(self._bytes[4:])" or in
         other words "len(self._bytes) - 4".
-        
+
         This value (called "LENGTH") defines the fourth byte of each packet.
         """
         return self._bytes[3]
@@ -283,7 +283,7 @@ class Packet(object):
     def data(self):
         """A sequence of byte defining the packet's error and its additional
         information.
-        
+
         self.data == self.error + self.parameters"""
         return self._bytes[4:-1]
 
