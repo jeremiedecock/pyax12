@@ -1,6 +1,14 @@
 include AUTHORS
 include LICENSE
-include README.rst
-include VERSION
 include debian-dist.sh
+include *.txt
+include *.rst
+include *.md
+recursive-include docs *
 recursive-include examples *.py
+recursive-include tests *
+recursive-exclude docs *.pyc
+recursive-exclude docs *.pyo
+recursive-exclude tests *.pyc
+recursive-exclude tests *.pyo
+prune docs/_build
