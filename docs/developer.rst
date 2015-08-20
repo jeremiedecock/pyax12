@@ -16,7 +16,11 @@ Contribute
 
 TODO
 
-TODO unittests
+TODO unittests, pylint, pep8, ...
+
+- PEP8_ "Python's good practices"
+- PEP257_ "Docstring Conventions"
+- PEP287_ "reStructuredText Docstring Format"
 
 
 Changes
@@ -27,3 +31,7 @@ Changes
 
 
 .. _available on GitHub: https://github.com/jeremiedecock/pyax12
+.. _PEP8: https://www.python.org/dev/peps/pep-0008/#documentation-strings
+.. _PEP257: https://www.python.org/dev/peps/pep-0257/
+.. _PEP287: https://www.python.org/dev/peps/pep-0287/
+
