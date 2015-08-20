@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAME=pyax12
-VERSION=$(cat VERSION)
+VERSION=$(grep "__version__" pyax12/__init__.py | cut --delimiter="'" -f2)
 DIST_DIR=dist
 
 rm -rf debian
@@ -12,7 +12,7 @@ cp -r pyax12 debian/usr/local/lib/python3.0/dist-packages
 chmod 644    $(find debian/usr/local/lib -type f)
 
 mkdir -p      "debian/usr/share/doc/$NAME/"
-cp COPYING    "debian/usr/share/doc/$NAME/copyright"
+cp LICENSE    "debian/usr/share/doc/$NAME/copyright"
 chmod 644     "debian/usr/share/doc/$NAME/copyright"
 
 mkdir -p debian/DEBIAN
