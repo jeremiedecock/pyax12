@@ -86,18 +86,18 @@ def compute_checksum(byte_seq):
 
     The checksum is the value of the last byte of each packet. It is used
     to prevent transmission errors of packets. Checksums are computed as
-    follow:
+    follow::
 
-    Checksum = ~(dynamixel_id + length + data1 + ... + dataN)
+        Checksum = ~(dynamixel_id + length + data1 + ... + dataN)
+
     where ~ represent the NOT logic operation.
 
     If the computed value is larger than 255, the lower byte is defined as
     the checksum value.
 
-    Keyword arguments:
-    byte_seq -- a byte sequence containing the packet's bytes involved in the
-                computation of the checksum (i.e. from the third to the
-                penultimate byte of the "full packet" considered).
+    :param bytes byte_seq: a byte sequence containing the packet's bytes
+        involved in the computation of the checksum (i.e. from the third to the
+        penultimate byte of the "full packet" considered).
     """
 
     # Check the argument and convert it to "bytes" if necessary.
@@ -142,17 +142,20 @@ class Packet(object):
     +----+----+--+------+-------+---------+
     |0XFF|0XFF|ID|LENGTH|DATA...|CHECK SUM|
     +----+----+--+------+-------+---------+
-
-    Properties:
-    data -- a byte sequence containing the packet's data: the instruction to
-            perform or the status of the Dynamixel actuator.
-    dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
-                    0xFE is a broadcasting ID;
-
-    Read only properties:
-    checksum -- the length of the packet.
-    length -- the packet checksum.
     """
+
+#    Properties:
+#
+#    :var data: a byte sequence containing the packet's data: the instruction to
+#        perform or the status of the Dynamixel actuator.
+#    :var dynamixel_id: the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
+#        0xFE is a broadcasting ID;
+#
+#    Read only properties:
+#
+#    :var checksum: the length of the packet.
+#    :var length: the packet checksum.
+#    """
 
     def __init__(self, dynamixel_id, data):
         """Create a raw packet.
@@ -162,13 +165,12 @@ class Packet(object):
         Instead, it is recommanded to use InstructionPacket or StatusPacket
         classes to build Packet instances.
 
-        Keyword arguments:
-        dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
-                        0xFE is a broadcasting ID.
-        data -- a sequence of byte containing the packet's data: the
-                instruction to perform or the status of the Dynamixel actuator.
-                This "data" argument contains the fifth to the penultimate byte
-                of the full built packet.
+        :param int dynamixel_id: the unique ID of a Dynamixel unit (from 0x00
+            to 0xFD), 0xFE is a broadcasting ID.
+        :param bytes data: a sequence of byte containing the packet's data: the
+            instruction to perform or the status of the Dynamixel actuator.
+            This "data" argument contains the fifth to the penultimate byte of
+            the full built packet.
         """
 
         # Check the data bytes.
@@ -203,19 +205,23 @@ class Packet(object):
 
 
     def to_byte_array(self):
-        """Return the packet as a bytearray (a mutable sequence of bytes).
+        r"""Return the packet as a bytearray (a mutable sequence of bytes).
 
-        Returns something like: bytearray(b'\xff\xff\xfe\x04\x03\x03\x01\xf6').
+        Returns something like::
+
+            bytearray(b'\xff\xff\xfe\x04\x03\x03\x01\xf6')
         """
 
         return bytearray(self._bytes)
 
 
     def to_bytes(self):
-        """Return the packet as a bytes string (an immutable sequence of
+        r"""Return the packet as a bytes string (an immutable sequence of
         bytes).
 
-        Returns something like: b'\xff\xff\xfe\x04\x03\x03\x01\xf6'.
+        Returns something like::
+        
+            b'\xff\xff\xfe\x04\x03\x03\x01\xf6'
         """
 
         return bytes(self._bytes)
@@ -224,7 +230,9 @@ class Packet(object):
     def to_integer_tuple(self):
         """Return the packet as a tuple of integers.
 
-        Returns something like: (255, 255, 254, 4, 3, 3, 1, 246).
+        Returns something like::
+        
+            (255, 255, 254, 4, 3, 3, 1, 246)
         """
 
         return tuple(self._bytes)
@@ -233,7 +241,9 @@ class Packet(object):
     def to_printable_string(self):
         """Return the packet as a string of hexadecimal values.
 
-        Returns something like: ff ff fe 04 03 03 01 f6.
+        Returns something like::
+
+            ff ff fe 04 03 03 01 f6
         """
 
         packet_str = ' '.join(['%02x' % byte for byte in self._bytes])
@@ -245,7 +255,7 @@ class Packet(object):
 
     @property
     def header(self):
-        """The header of the packet.
+        r"""The header of the packet.
 
         This pair of byte should always be equals to b'\xff\xff'.
         """
@@ -253,7 +263,7 @@ class Packet(object):
 
     @property
     def dynamixel_id(self):
-        """The unique ID of a Dynamixel unit affected by this packet.
+        r"""The unique ID of a Dynamixel unit affected by this packet.
 
         This byte either has a value between 0x00 and 0xFD to affect the
         corresponding Dynamixel unit or it has the value 0xFE to affect all
@@ -276,15 +286,17 @@ class Packet(object):
     @property
     def parameters(self):
         """A sequence of byte used if there is additional information needed
-        to be read (other than the error itself)."""
+        to be read (other than the error itself).
+        """
         return self._bytes[5:-1]
 
     @property
     def data(self):
         """A sequence of byte defining the packet's error and its additional
-        information.
+        information::
 
-        self.data == self.error + self.parameters"""
+            self.data == self.error + self.parameters
+        """
         return self._bytes[4:-1]
 
     @property
