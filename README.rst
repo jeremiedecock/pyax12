@@ -37,4 +37,6 @@ Dynamixel IDs defined in PyAX-12 fits with your hardware.
 License
 -------
 
-PyAX-12 is distributed under the `MIT License <http://opensource.org/licenses/MIT>`__.
+The ``PyAX-12`` library is provided under the terms and conditions of the
+`MIT License <http://opensource.org/licenses/MIT>`__.
+
