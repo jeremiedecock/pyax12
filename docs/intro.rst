@@ -57,7 +57,11 @@ actuators are referenced in the following (non comprehensive) list:
 
 - PyPot_ by Inria (FLOWERS team)
 - PyDynamixel_ by Richard Clark
+- Pydyn_ by Fabien Benureau, Olivier Mangin, Pierre Rouanet, Matthieu Lapeyre and Haylee Fogg
 
+
+.. _Dynamixel AX-12+ actuators: http://www.robotis.com/xe/dynamixel_en
 .. _PyPot: https://github.com/poppy-project/pypot
+.. _Pydyn: https://github.com/poppy-project/pypot
 .. _PyDynamixel: https://github.com/richard-clark/PyDynamixel
 .. _Python-serial: http://pyserial.sourceforge.net
