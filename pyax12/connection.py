@@ -30,6 +30,7 @@ This module contain the `Connection` class communicate with Dynamixel units.
 
 __all__ = ['Connection']
 
+import math
 import serial
 import time
 
@@ -447,3 +448,17 @@ class Connection(object):
         byte_seq = self.read_data(dynamixel_id, pk.PUNCH, 2)
         return utils.little_endian_bytes_to_int(byte_seq)
 
+    ###
+
+    def goto(self, dynamixel_id, position, speed=None, degrees=False):
+        # TODO: check ranges
+
+        if degrees:
+            position = math.ceil(position / 300. * 1023.)
+
+        params = utils.int_to_little_endian_bytes(position)
+
+        if speed is not None:
+            params += utils.int_to_little_endian_bytes(speed)
+
+        self.write_data(dynamixel_id, pk.GOAL_POSITION, params)
