@@ -124,19 +124,19 @@ Move the first Dynamixel unit to 0° then go to 300° then go back to 150°
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
     # Goto to 0°
-    serial_connection.goto(dynamixel_id=1, position=0)
+    serial_connection.goto(1, 0, degrees=True)
 
     # Wait 2 seconds
     time.sleep(2)
 
     # Go back to 300°
-    serial_connection.goto(dynamixel_id=1, position=300)
+    serial_connection.goto(1, 300, degrees=True)
 
     # Wait 2 seconds
     time.sleep(2)
 
     # Go back to 150°
-    serial_connection.goto(dynamixel_id=1, position=150)
+    serial_connection.goto(1, 150, degrees=True)
 
     # Close the serial connection
     serial_connection.close()
