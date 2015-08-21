@@ -6,17 +6,16 @@ Introduction
 PyAX-12 is an open source lightweight Python library to control
 `Dynamixel AX-12+ actuators`_.
 
-`Watch a demo <https://youtu.be/sXrEGmjz-S4>`__ on youtube.
+|Watch a demo on youtube|_
 
 .. contents::
    :local:
 
 
-Features
---------
-
-- lightweight
-- TODO...
+.. Features
+.. --------
+.. - lightweight
+.. - TODO...
 
 
 Dependencies
@@ -29,21 +28,119 @@ Dependencies
 Installation
 ------------
 
-You can install, upgrade, uninstall PyAX-12 with these commands::
+.. You can install, upgrade, uninstall PyAX-12 with these commands::
+.. 
+..     $ pip install pyax12
+..     $ pip install --upgrade pyax12
+..     $ pip uninstall pyax12
+.. 
+.. There's also a package for Debian/Ubuntu::
+.. 
+..     $ sudo apt-get install pyax12
 
-    $ pip install pyax12
-    $ pip install --upgrade pyax12
-    $ pip uninstall pyax12
+PyAX-12 can be installed with Python Distutils by entering the following
+command in a terminal::
 
-There's also a package for Debian/Ubuntu::
-
-    $ sudo apt-get install pyax12
+    python setup.py install
 
 
 Example usage
 -------------
 
-TODO...
+Many examples are available in the examples_ directory.
+
+The `port` and `baudrate` values should be adapted depending on your
+configuration.
+
+For Linux users the `port` value should be something like "/dev/ttyS0" or
+"/dev/ttyUSB0".
+
+For Windows users the `port` value should be something like "COM1", "COM2", ...
+
+Ping a Dynamixel
+~~~~~~~~~~~~~~~~
+
+::
+
+    from pyax12.connection import Connection
+
+    # Connect to the serial port
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
+
+    # Ping the third dynamixel unit
+    is_available = serial_connection.ping(3)
+
+    print(is_available)
+
+    # Close the serial connection
+    serial_connection.close()
+
+
+Scan (search available Dynamixel units)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    from pyax12.connection import Connection
+
+    # Connect to the serial port
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
+
+    # Ping the dynamixel unit(s)
+    ids_available = serial_connection.scan()
+
+    for dynamixel_id in ids_available:
+        print(dynamixel_id)
+
+    # Close the serial connection
+    serial_connection.close()
+
+
+Print the control table of the third Dynamixel unit
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    from pyax12.connection import Connection
+
+    # Connect to the serial port
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
+
+    # Print the control table of the specified Dynamixel unit
+    serial_connection.pretty_print_control_table(3)
+
+    # Close the serial connection
+    serial_connection.close()
+
+
+Move the first Dynamixel unit to 0° then go to 300° then go back to 150°
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    from pyax12.connection import Connection
+
+    # Connect to the serial port
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
+
+    # Goto to 0°
+    serial_connection.goto(dynamixel_id=1, position=0)
+
+    # Wait 2 seconds
+    time.sleep(2)
+
+    # Go back to 300°
+    serial_connection.goto(dynamixel_id=1, position=300)
+
+    # Wait 2 seconds
+    time.sleep(2)
+
+    # Go back to 150°
+    serial_connection.goto(dynamixel_id=1, position=150)
+
+    # Close the serial connection
+    serial_connection.close()
+
 
 
 .. _related-libraries:
@@ -58,10 +155,23 @@ actuators are referenced in the following (non comprehensive) list:
 - PyPot_ by Inria (FLOWERS team)
 - PyDynamixel_ by Richard Clark
 - Pydyn_ by Fabien Benureau and Olivier Mangin (Inria FLOWER team)
+- Dynamixel_ by Ian Danforth
+- dynamixel_hr_ by Romain Reignier
+- python_dynamixels_ by Jesse Merritt
+- ax12_ by Thiago Hersan
 
 
 .. _Dynamixel AX-12+ actuators: http://www.robotis.com/xe/dynamixel_en
+.. _examples: https://github.com/jeremiedecock/pyax12/tree/master/examples
+
 .. _PyPot: https://github.com/poppy-project/pypot
 .. _Pydyn: https://github.com/humm/pydyn
 .. _PyDynamixel: https://github.com/richard-clark/PyDynamixel
 .. _Python-serial: http://pyserial.sourceforge.net
+.. _Dynamixel : https://pypi.python.org/pypi/dynamixel/1.0.1
+.. _dynamixel_hr : https://github.com/HumaRobotics/dynamixel_hr
+.. _python_dynamixels : https://github.com/jes1510/python_dynamixels
+.. _ax12 : https://github.com/thiagohersan/memememe/tree/master/Python/ax12
+
+.. |Watch a demo on youtube| image:: http://download.tuxfamily.org/jdhp/image/pyax12_demo_youtube.jpeg
+.. _Watch a demo on youtube: https://youtu.be/sXrEGmjz-S4
