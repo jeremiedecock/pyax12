@@ -26,6 +26,12 @@ command in a terminal::
     python setup.py install
 
 
+Documentation
+-------------
+
+The full documentation of the project is available on the following page:
+http://pyax-12.rtfd.org/
+
 Example usage
 -------------
 
