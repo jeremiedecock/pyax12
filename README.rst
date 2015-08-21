@@ -29,8 +29,10 @@ command in a terminal::
 Documentation
 -------------
 
-The full documentation of the project is available on the following page:
-http://pyax-12.rtfd.org/
+PyAX-12 documentation is available on the following page:
+
+    http://pyax-12.rtfd.org/
+
 
 Example usage
 -------------
@@ -138,6 +140,14 @@ If you use the USB2Dynamixel device, make sure its switch is set on
 
 Also, please check whether the serial port, the baudrate and the
 Dynamixel IDs defined in PyAX-12 fits with your hardware.
+
+
+Bug reports
+-----------
+
+To search for bugs or report them, please use the PyAX-12 Bug Tracker at:
+
+    https://github.com/jeremiedecock/pyax12/issues
 
 
 .. _related-libraries:
