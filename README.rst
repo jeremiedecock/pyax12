@@ -9,7 +9,7 @@ Description
 PyAX-12 is an open source lightweight Python library to control
 `Dynamixel AX-12+ <http://www.robotis.com/xe/dynamixel_en>`__ actuators.
 
-`Watch a demo <https://youtu.be/sXrEGmjz-S4>`__ on youtube.
+|Watch a demo|_ on youtube.
 
 Dependencies
 ------------
@@ -40,3 +40,5 @@ License
 The ``PyAX-12`` library is provided under the terms and conditions of the
 `MIT License <http://opensource.org/licenses/MIT>`__.
 
+.. |Watch a demo| image:: http://download.tuxfamily.org/jdhp/image/pyax12_demo_youtube.jpeg
+.. _Watch a demo: https://youtu.be/sXrEGmjz-S4
