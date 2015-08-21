@@ -31,8 +31,6 @@ A PyAX-12 demo.
 Prints the ID list of available Dynamixel units.
 """
 
-import pyax12.packet as pk
-
 from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 

@@ -31,8 +31,6 @@ A PyAX-12 demo.
 Print the control table of the specified Dynamixel unit.
 """
 
-import pyax12.packet as pk
-
 from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 

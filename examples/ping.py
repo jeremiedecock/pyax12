@@ -32,8 +32,6 @@ Ping the specified Dynamixel unit.
 Returns "True" if the specified unit is available, "False" otherwise.
 """
 
-import pyax12.packet as pk
-
 from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 
