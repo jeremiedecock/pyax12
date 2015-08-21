@@ -31,11 +31,8 @@ A PyAX-12 demo.
 Control the position and the speed of the specified Dynamixel unit.
 """
 
-import pyax12.utils as utils
-
 from pyax12.argparse_default import common_argument_parser
 from pyax12.connection import Connection
-from pyax12.packet import GOAL_POSITION
 
 import tkinter as tk
 
@@ -63,17 +60,9 @@ def main():
         """The tkinter scale callback: set the Dynamixel goal position to the
         current scale value."""
         position = position_scale.get() # Get the scale value, integer or float
-        position_bytes = utils.int_to_little_endian_bytes(position)
-
         speed = speed_scale.get()       # Get the scale value, integer or float
-        speed_bytes = utils.int_to_little_endian_bytes(speed)
 
-        params = bytearray()
-        params.append(position_bytes[0])
-        params.append(position_bytes[1])
-        params.append(speed_bytes[0])
-        params.append(speed_bytes[1])
-        serial_connection.write_data(args.dynamixel_id, GOAL_POSITION, params)
+        serial_connection.goto(args.dynamixel_id, position, speed)
 
     servo_frame_txt = "Servo #" + str(args.dynamixel_id)
     servo_frame = tk.LabelFrame(root, text=servo_frame_txt, padx=5, pady=5)
@@ -86,7 +75,7 @@ def main():
     position_label = tk.Label(position_frame, text="Position")
     position_label.pack(side=tk.TOP)
 
-    position_scale = tk.Scale(position_frame, from_=0, to=1024,
+    position_scale = tk.Scale(position_frame, from_=0, to=1023,
                               orient=tk.VERTICAL, command=scale_cb)
     position_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
 
@@ -97,7 +86,7 @@ def main():
     speed_label = tk.Label(speed_frame, text="Speed")
     speed_label.pack(side=tk.TOP)
 
-    speed_scale = tk.Scale(speed_frame, from_=0, to=1024,
+    speed_scale = tk.Scale(speed_frame, from_=0, to=1023,
                            orient=tk.VERTICAL, command=scale_cb)
     speed_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
 
