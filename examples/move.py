@@ -57,24 +57,22 @@ def main():
     ###
 
     # Goto to 0°
-    params = (0x00, 0x00, 0x00, 0x02)
-    serial_connection.write_data(args.dynamixel_id, pk.GOAL_POSITION, params)
+    serial_connection.goto(args.dynamixel_id, 0, degrees=True)
 
     # Wait 2 seconds
-    time.sleep(2)
+    time.sleep(1)
 
     # Go back to 300°
-    params = (0xff, 0x03, 0x00, 0x02)
-    serial_connection.write_data(args.dynamixel_id, pk.GOAL_POSITION, params)
+    serial_connection.goto(args.dynamixel_id, 300, degrees=True)
 
     # Wait 2 seconds
     time.sleep(2)
 
     # Go back to 150°
-    params = (0xff, 0x01, 0x00, 0x02)
-    serial_connection.write_data(args.dynamixel_id, pk.GOAL_POSITION, params)
+    serial_connection.goto(args.dynamixel_id, 150, degrees=True)
 
     ###
+
 
     # Close the serial connection
     serial_connection.close()
