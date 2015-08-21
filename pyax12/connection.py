@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 """
-This module contain the "Connection" class communicate with Dynamixel units.
+This module contain the `Connection` class communicate with Dynamixel units.
 """
 
 __all__ = ['Connection']
@@ -42,20 +42,18 @@ from pyax12 import utils
 class Connection(object):
     """Create a serial connection with dynamixel actuators."""
 
-    def __init__(self, _port='/dev/ttyUSB0', _baudrate=57600, _timeout=0.1):
+    def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1):
         """Create a serial connection with dynamixel actuators.
 
-        Instance variable:
-        serial_connection -- the serial connection object returned by pyserial;
-        port -- the serial device to connect with (e.g. '/dev/ttyUSB0' for Unix
-                users);
-        baudrate -- the baudrate speed (e.g. 57600);
-        timeout -- the timeout value for the connection.
+        :param str port: the serial device to connect with (e.g. '/dev/ttyUSB0'
+            for Unix users or 'COM1' for windows users).
+        :param int baudrate: the baudrate speed (e.g. 57600).
+        :param float timeout: the timeout value for the connection.
         """
 
-        self.port = _port
-        self.baudrate = _baudrate
-        self.timeout = _timeout
+        self.port = port
+        self.baudrate = baudrate
+        self.timeout = timeout
         self.serial_connection = serial.Serial(port=self.port,
                                                baudrate=self.baudrate,
                                                timeout=self.timeout,
@@ -66,10 +64,9 @@ class Connection(object):
     def send(self, instruction_packet):
         """Send an instruction packet.
 
-        Keyword arguments:
-        instruction_packet -- can be either a "Packet" instance or a "bytes"
-                              string containing the full instruction packet to
-                              be sent to Dynamixel units.
+        :param instruction_packet: can be either a `Packet` instance or a
+            "bytes" string containing the full instruction packet to be sent to
+            Dynamixel units.
         """
 
         if isinstance(instruction_packet, bytes):
@@ -127,11 +124,11 @@ class Connection(object):
     def read_data(self, dynamixel_id, address, length):
         """Read bytes form the control table of the specified Dynamixel unit.
 
-        Keyword arguments:
-        dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
-        address -- starting address of the location where the data is to be
-                   read.
-        length -- length of the data to be read.
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :param int address: the starting address of the location where the data
+            is to be read.
+        :param int length: the length of the data to be read.
         """
 
         instruction = ip.READ_DATA
@@ -154,12 +151,12 @@ class Connection(object):
     def write_data(self, dynamixel_id, address, data):
         """Write bytes to the control table of the specified Dynamixel unit.
 
-        Keyword arguments:
-        dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
-        address -- starting address of the location where the data is to be
-                   written.
-        data -- bytes of the data to be written (can be an integer, a sequence
-                of integer, a bytes or a bytearray).
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :param int address: the starting address of the location where the data
+            is to be written.
+        :param bytes data: the bytes of the data to be written (it can be an
+            integer, a sequence of integer, a bytes or a bytearray).
         """
 
         bytes_address = bytes((address, ))
@@ -179,10 +176,10 @@ class Connection(object):
     def ping(self, dynamixel_id):
         """Ping the specified Dynamixel unit.
 
-        Returns "True" if the specified unit is available, "False" otherwise.
-
-        Keyword arguments:
-        dynamixel_id -- the unique ID of a Dynamixel unit (in range (0, 0xfe)).
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :returns: ``True`` if the specified unit is available, ``False``
+            otherwise.
         """
 
         instruction = ip.PING
@@ -262,9 +259,8 @@ class Connection(object):
     def scan(self, dynamixel_id_bytes=None):
         """Return the ID sequence of available Dynamixel units.
 
-        Keyword arguments:
-        dynamixel_id_bytes -- a sequence of unique ID of the Dynamixel units to
-                              be ping.
+        :param bytes dynamixel_id_bytes: a sequence of unique ID of the
+            Dynamixel units to be pinged.
         """
 
         available_ids = bytearray()

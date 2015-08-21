@@ -25,8 +25,8 @@
 # THE SOFTWARE.
 
 """
-This module contain the "StatusPacket" class which implements
-"status packet" (the response packets from the Dynamixel units to the main
+This module contain the `StatusPacket` class which implements
+"status packets" (the response packets from the Dynamixel units to the main
 controller after receiving an instruction packet).
 """
 
@@ -37,7 +37,7 @@ import pyax12.packet as pk
 # EXCEPTION CLASSES ###########################################################
 
 class StatusPacketError(Exception):
-    """Base class for exceptions in the status_packet module."""
+    """Base class for exceptions in the `status_packet` module."""
     pass
 
 class InstructionError(StatusPacketError):
@@ -82,57 +82,27 @@ class InputVoltageError(StatusPacketError):
 # STATUS PACKET CLASS #########################################################
 
 class StatusPacket(pk.Packet):
-    """The Status Packet is the response packet from the Dynamixel units to the
-    main controller after receiving an instruction packet.
+    """The "status packet" is the response packet from the Dynamixel units to
+    the main controller after receiving an "instruction packet".
 
-    The structure of the status packet is as the following:
+    The structure of the status packet is as the following::
 
-    +----+----+--+------+-----+----------+---+-----------+---------+
-    |0XFF|0XFF|ID|LENGTH|ERROR|PARAMETER1|...|PARAMETER N|CHECK SUM|
-    +----+----+--+------+-----+----------+---+-----------+---------+
-
-    Read only properties:
-    dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD).
-    error -- the byte representing errors sent from the Dynamixel unit.
-    instruction_error -- a boolean which is set to True if an undefined
-                         instruction is sent or an action instruction is sent
-                         without a Reg_Write instruction.
-    overload_error -- a boolean which is set to True if the specified maximum
-                      torque can't control the applied load.
-    checksum_error -- a boolean which is set to True if the checksum of the
-                      instruction packet is incorrect.
-    range_error -- a boolean which is set to True if the instruction sent is
-                   out of the defined range.
-    overheating_error -- a boolean which is set to True if the internal
-                         temperature of the Dynamixel unit is above the
-                         operating temperature range as defined in the control
-                         table.
-    angle_limit_error -- a boolean which is set to True if the goal position is
-                         set outside of the range between "CW Angle Limit" and
-                         "CCW Angle Limit".
-    input_voltage_error -- a boolean which is set to True if the voltage is out
-                           of the operating voltage range as defined in the
-                           control table.
-    parameters -- a sequence of bytes used if there is additional information
-                  needed to be read other than the error itself. It must be
-                  compatible with the "bytes" type.
-    data -- a sequence of byte defining the packet's error and its additional
-            information.
-    checksum -- the packet checksum, used to prevent packet transmission error.
+        +----+----+--+------+-----+----------+---+-----------+---------+
+        |0XFF|0XFF|ID|LENGTH|ERROR|PARAMETER1|...|PARAMETER N|CHECK SUM|
+        +----+----+--+------+-----+----------+---+-----------+---------+
     """
 
     def __init__(self, packet):
-        """Create a status packet.
+        """Create a "status packet".
 
         StatusPacket is not intended to be instancied by users (except maybe
         for testing and debugging prupose). Under normal conditions of use,
-        StatusPacket's instances are automatically created by the "Connection"
-        class.
+        `StatusPacket`'s instances are automatically created by the
+        `Connection` class.
 
-        Keyword arguments:
-        packet -- a sequence of bytes containing the full status packet
-                  returned by Dynamixel units. It must be compatible with the
-                  "bytes" type.
+        :param bytes packet: a sequence of bytes containing the full status
+            packet returned by Dynamixel units. It must be compatible with the
+            "bytes" type.
         """
 
         # Check the argument and convert it to "bytes" if necessary.
@@ -201,49 +171,73 @@ class StatusPacket(pk.Packet):
 
     @property
     def error(self):
-        """The byte representing errors sent from the Dynamixel unit."""
+        """The byte representing errors sent from the Dynamixel unit.
+
+        This member is a read-only property.
+        """
         return self._bytes[4]
 
     @property
     def instruction_error(self):
         """A boolean which is set to True if an undefined instruction is sent
-        or an action instruction is sent without a Reg_Write instruction."""
+        or an action instruction is sent without a Reg_Write instruction.
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 6))
 
     @property
     def overload_error(self):
         """A boolean which is set to True if the specified maximum torque can't
-        control the applied load."""
+        control the applied load.
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 5))
 
     @property
     def checksum_error(self):
         """A boolean which is set to True if the checksum of the instruction
-        packet is incorrect."""
+        packet is incorrect.
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 4))
 
     @property
     def range_error(self):
         """A boolean which is set to True if the instruction sent is out of the
-        defined range."""
+        defined range.
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 3))
 
     @property
     def overheating_error(self):
         """A boolean which is set to True if the internal temperature of the
         Dynamixel unit is above the operating temperature range as defined in
-        the control table."""
+        the control table.
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 2))
 
     @property
     def angle_limit_error(self):
         """A boolean which is set to True if the goal position is set outside
-        of the range between "CW Angle Limit" and "CCW Angle Limit"."""
+        of the range between "CW Angle Limit" and "CCW Angle Limit".
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 1))
 
     @property
     def input_voltage_error(self):
         """A boolean which is set to True if the voltage is out of the
-        operating voltage range as defined in the control table."""
+        operating voltage range as defined in the control table.
+
+        This member is a read-only property.
+        """
         return bool(self.error & (1 << 0))
 

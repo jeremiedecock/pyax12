@@ -35,19 +35,58 @@ import argparse
 import pyax12.packet as pk
 
 
-def common_argument_parser(desc, id_arg=True):
-    """Return a preconfigured "argparse" parser instance.
+ID_HELP_STR = ("The unique ID of a Dynamixel unit to work with "
+               "(254 is a broadcasting ID)")
 
-    The "dynamixel_id" argument is ignored if "id_arg" is False."""
+BAUDRATE_HELP_STR = "The baudrate speed (e.g. 57600)"
+
+TIMEOUT_HELP_STR = "The timeout value for the connection"
+
+PORT_HELP_STR = ("The serial device to connect with "
+                 "(e.g. '/dev/ttyUSB0' for Unix users "
+                 "or 'COM1' for Windows users)")
+
+
+def common_argument_parser(desc, id_arg=True):
+    """Return a preconfigured `argparse` parser instance.
+
+    :param str desc: the global description of the program (printed with -h or
+        --help).
+    :param bool id_arg: argparse ignores the `dynamixel_id` option if `id_arg`
+        is False (`dynamixel_id` is not relevant for some programs e.g.
+        examples/scan.py).
+    """
 
     # Parse options
     parser = argparse.ArgumentParser(description=desc)
 
     if id_arg:
-        parser.add_argument("--dynamixel_id", "-i", help="The unique ID of a Dynamixel unit to work with (254 is a broadcasting ID)", metavar="INTEGER", type=int, default=pk.BROADCAST_ID)
-    parser.add_argument("--baudrate", "-b", help="The baudrate speed (e.g. 57600)", metavar="INTEGER", type=int, default=57600)
-    parser.add_argument("--timeout", "-t", help="The timeout value for the connection", metavar="FLOAT", type=float, default=0.1)
-    parser.add_argument("--port", "-p", help="The serial device to connect with (e.g. '/dev/ttyUSB0' for Unix users or 'COM1' for Windows users)", metavar="STRING", default="/dev/ttyUSB0")
+        parser.add_argument("--dynamixel_id",
+                            "-i",
+                            help=ID_HELP_STR,
+                            metavar="INTEGER",
+                            type=int,
+                            default=pk.BROADCAST_ID)
+
+    parser.add_argument("--baudrate",
+                        "-b",
+                        help=BAUDRATE_HELP_STR,
+                        metavar="INTEGER",
+                        type=int,
+                        default=57600)
+
+    parser.add_argument("--timeout",
+                        "-t",
+                        help=TIMEOUT_HELP_STR,
+                        metavar="FLOAT",
+                        type=float,
+                        default=0.1)
+
+    parser.add_argument("--port",
+                        "-p",
+                        help=PORT_HELP_STR,
+                        metavar="STRING",
+                        default="/dev/ttyUSB0")
 
     return parser
 

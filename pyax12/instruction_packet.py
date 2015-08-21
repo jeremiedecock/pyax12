@@ -25,8 +25,8 @@
 # THE SOFTWARE.
 
 """
-This module contain the "InstructionPacket" class which implements "instruction
-packet" (the packets sent by the controller to the Dynamixel actuators to send
+This module contain the `InstructionPacket` class which implements "instruction
+packets" (the packets sent by the controller to the Dynamixel actuators to send
 commands).
 """
 
@@ -89,36 +89,26 @@ NUMBER_OF_PARAMETERS = {
 # THE IMPLEMENTATION OF "INSTRUCTION PACKETS"
 
 class InstructionPacket(pk.Packet):
-    """The Instruction Packet is the packet sent by the main controller to the
-    Dynamixel units to send commands.
+    """The "instruction packet" is the packet sent by the main controller to
+    the Dynamixel units to send commands.
 
-    The structure of the Instruction Packet is as the following:
+    The structure of the instruction packet is as the following::
 
-    +----+----+--+------+-----------+----------+---+-----------+---------+
-    |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
-    +----+----+--+------+-----------+----------+---+-----------+---------+
-
-    Read only properties:
-    dynamixel_id -- the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
-                    0xFE is a broadcasting ID.
-    instruction -- the instruction for the Dynamixel actuator to perform.
-    parameters -- a tuple of bytes used if there is additional information
-                  needed to be sent other than the instruction itself.
-    data -- a sequence of byte defining the packet's instruction and its
-            parameters.
-    checksum -- the packet checksum, used to prevent packet transmission error.
+        +----+----+--+------+-----------+----------+---+-----------+---------+
+        |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
+        +----+----+--+------+-----------+----------+---+-----------+---------+
     """
 
     def __init__(self, dynamixel_id, instruction, parameters=None):
-        """Create an instruction packet.
+        """Create an "instruction packet".
 
-        Keyword arguments:
-        dynamixel_id -- the the unique ID of the Dynamixel unit which have to
-                        execute this instruction packet.
-        instruction -- the instruction for the Dynamixel actuator to perform.
-        parameters -- a sequence of bytes used if there is additional
-                      information needed to be sent other than the instruction
-                      itself.
+        :param int dynamixel_id: the the unique ID of the Dynamixel unit which
+            have to execute this instruction packet.
+        :param int instruction: the instruction for the Dynamixel actuator to
+            perform.
+        :param bytes parameters: a sequence of bytes used if there is
+            additional information needed to be sent other than the instruction
+            itself.
         """
 
         # Check the parameters byte.
@@ -143,8 +133,8 @@ class InstructionPacket(pk.Packet):
             self._bytes.append(dynamixel_id)
         else:
             if isinstance(dynamixel_id, int):
-                msg = "Wrong dynamixel_id value,"
-                msg += " an integer in range(0x00, 0xfe) is required."
+                msg = ("Wrong dynamixel_id value, "
+                       "an integer in range(0x00, 0xfe) is required.")
                 raise ValueError(msg)
             else:
                 raise TypeError("Wrong dynamixel_id type (integer required).")
@@ -172,8 +162,8 @@ class InstructionPacket(pk.Packet):
         if nb_param_min <= len(parameters) <= nb_param_max:
             self._bytes.extend(parameters)
         else:
-            msg = "Wrong number of parameters: {} parameters"
-            msg += " (min expected={}; max expected={})."
+            msg = ("Wrong number of parameters: {} parameters "
+                   "(min expected={}; max expected={}).")
             nb_param = len(parameters)
             raise ValueError(msg.format(nb_param, nb_param_min, nb_param_max))
 
@@ -186,6 +176,9 @@ class InstructionPacket(pk.Packet):
 
     @property
     def instruction(self):
-        """The instruction for the Dynamixel actuator to perform."""
+        """The instruction for the Dynamixel actuator to perform.
+
+        This member is a read-only property.
+        """
         return self._bytes[4]
 

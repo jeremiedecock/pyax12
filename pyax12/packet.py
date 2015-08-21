@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 
 """
-This module contain the general "Packet" class which implements the either
+This module contains the general `Packet` class which implements the either
 "instruction packet" (the packets sent by the controller to the Dynamixel
 actuators to send commands) or "status packet" (the response packets from
 the Dynamixel units to the main controller after receiving an instruction
@@ -82,7 +82,7 @@ PUNCH = 0x30
 # CHECKSUM FUNCTION
 
 def compute_checksum(byte_seq):
-    """Compute and return the checksum of the "byte_seq" packet.
+    """Compute and return the checksum of the `byte_seq` packet.
 
     The checksum is the value of the last byte of each packet. It is used
     to prevent transmission errors of packets. Checksums are computed as
@@ -92,8 +92,8 @@ def compute_checksum(byte_seq):
 
     where ~ represent the NOT logic operation.
 
-    If the computed value is larger than 255, the lower byte is defined as
-    the checksum value.
+    If the computed value is larger than 255, then only its lower byte is
+    defined as the checksum value.
 
     :param bytes byte_seq: a byte sequence containing the packet's bytes
         involved in the computation of the checksum (i.e. from the third to the
@@ -130,46 +130,33 @@ def compute_checksum(byte_seq):
 # THE IMPLEMENTATION OF "PACKETS"
 
 class Packet(object):
-    """The general raw "Packet" class.
+    """The general raw `Packet` class.
 
     It implements the either "instruction packet" (the packets sent by the
     controller to the Dynamixel actuators to send commands) or "status packet"
     (the response packets from the Dynamixel units to the main controller after
     receiving an instruction packet).
 
-    The structure of a general Packet is as the following:
+    The structure of a general `Packet` is as the following::
 
-    +----+----+--+------+-------+---------+
-    |0XFF|0XFF|ID|LENGTH|DATA...|CHECK SUM|
-    +----+----+--+------+-------+---------+
+        +----+----+--+------+-------+---------+
+        |0xFF|0xFF|ID|LENGTH|DATA...|CHECK SUM|
+        +----+----+--+------+-------+---------+
     """
-
-#    Properties:
-#
-#    :var data: a byte sequence containing the packet's data: the instruction to
-#        perform or the status of the Dynamixel actuator.
-#    :var dynamixel_id: the unique ID of a Dynamixel unit (from 0x00 to 0xFD),
-#        0xFE is a broadcasting ID;
-#
-#    Read only properties:
-#
-#    :var checksum: the length of the packet.
-#    :var length: the packet checksum.
-#    """
 
     def __init__(self, dynamixel_id, data):
         """Create a raw packet.
 
         This constructor has been made for debugging purpose and is not intended
         to be used widely to create packets.
-        Instead, it is recommanded to use InstructionPacket or StatusPacket
-        classes to build Packet instances.
+        Instead, it is recommanded to use `InstructionPacket` or `StatusPacket`
+        classes to build `Packet` instances.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit (from 0x00
             to 0xFD), 0xFE is a broadcasting ID.
         :param bytes data: a sequence of byte containing the packet's data: the
             instruction to perform or the status of the Dynamixel actuator.
-            This "data" argument contains the fifth to the penultimate byte of
+            This `data` argument contains the fifth to the penultimate byte of
             the full built packet.
         """
 
@@ -207,7 +194,7 @@ class Packet(object):
     def to_byte_array(self):
         r"""Return the packet as a bytearray (a mutable sequence of bytes).
 
-        Returns something like::
+        This function returns something like::
 
             bytearray(b'\xff\xff\xfe\x04\x03\x03\x01\xf6')
         """
@@ -219,7 +206,7 @@ class Packet(object):
         r"""Return the packet as a bytes string (an immutable sequence of
         bytes).
 
-        Returns something like::
+        This function returns something like::
         
             b'\xff\xff\xfe\x04\x03\x03\x01\xf6'
         """
@@ -230,7 +217,7 @@ class Packet(object):
     def to_integer_tuple(self):
         """Return the packet as a tuple of integers.
 
-        Returns something like::
+        This function returns something like::
         
             (255, 255, 254, 4, 3, 3, 1, 246)
         """
@@ -241,7 +228,7 @@ class Packet(object):
     def to_printable_string(self):
         """Return the packet as a string of hexadecimal values.
 
-        Returns something like::
+        This function returns something like::
 
             ff ff fe 04 03 03 01 f6
         """
@@ -257,29 +244,43 @@ class Packet(object):
     def header(self):
         r"""The header of the packet.
 
-        This pair of byte should always be equals to b'\xff\xff'.
+        This pair of byte should always be equals to ``b'\xff\xff'``.
+
+        This member is a read-only property.
         """
         return self._bytes[0:2]
 
     @property
     def dynamixel_id(self):
-        r"""The unique ID of a Dynamixel unit affected by this packet.
+        r"""The unique ID of a Dynamixel unit concerned with this packet.
 
-        This byte either has a value between 0x00 and 0xFD to affect the
-        corresponding Dynamixel unit or it has the value 0xFE to affect all
-        connected units (0xFE is the "broadcasting" ID).
+        This byte either:
+        
+        - has a value between 0x00 and 0xFD to affect the corresponding
+          Dynamixel unit
+        - or has the value 0xFE to affect all connected units (0xFE is the
+          "broadcasting" ID).
+
+        This member is a read-only property.
         """
         return self._bytes[2]
 
     @property
     def length(self):
-        """Return the "length" of the packet.
+        """The so called "length" of the packet.
 
-        This is not the actual length of the full packet (self._bytes) but the
-        number of bytes after its fourth byte, i.e. "len(self._bytes[4:])" or in
-        other words "len(self._bytes) - 4".
+        This is not the actual length of the full packet (`self._bytes`) but
+        its number of bytes after its fourth byte, i.e.::
+        
+            len(self._bytes[4:])
+        
+        or in other words::
+        
+            len(self._bytes) - 4
 
-        This value (called "LENGTH") defines the fourth byte of each packet.
+        This value (so called "LENGTH") defines the fourth byte of each packet.
+
+        This member is a read-only property.
         """
         return self._bytes[3]
 
@@ -287,19 +288,31 @@ class Packet(object):
     def parameters(self):
         """A sequence of byte used if there is additional information needed
         to be read (other than the error itself).
+
+        This member is a read-only property.
         """
         return self._bytes[5:-1]
 
     @property
     def data(self):
-        """A sequence of byte defining the packet's error and its additional
-        information::
+        """A sequence of byte containing the packet's data, i.e. from the fifth
+        to the penultimate byte of the "full packet".
 
-            self.data == self.error + self.parameters
+        It contains either:
+
+        - the instruction to perform and its parameters if the packet is an
+          "instruction packet";
+        - or the status of the Dynamixel actuator (the "error" and "parameters"
+          fields) if the packet is a "status packet".
+
+        This member is a read-only property.
         """
         return self._bytes[4:-1]
 
     @property
     def checksum(self):
-        """The packet checksum, used to prevent packet transmission error."""
+        """The packet checksum, used to prevent packet transmission error.
+
+        This member is a read-only property.
+        """
         return self._bytes[-1]
