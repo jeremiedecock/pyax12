@@ -14,13 +14,18 @@ conditions of the :ref:`MIT license <license>`. Fork away!
 Contribute
 ~~~~~~~~~~
 
-TODO
+PyAX-12 is written for Python 3.x. Python 2.x is *not* supported.
 
-TODO unittests, pylint, pep8, ...
+All contributions should at least comply with the following PEPs_:
 
 - PEP8_ "Python's good practices"
 - PEP257_ "Docstring Conventions"
 - PEP287_ "reStructuredText Docstring Format"
+
+All contribution should be properly documented and tested with unittest_
+and/or doctest_.
+
+pylint_ and `pep8 <https://github.com/PyCQA/pep8>`__ should also be used to check the quality of each module.
 
 
 Changes
@@ -31,7 +36,11 @@ Changes
 
 
 .. _available on GitHub: https://github.com/jeremiedecock/pyax12
-.. _PEP8: https://www.python.org/dev/peps/pep-0008/#documentation-strings
+.. _PEP8: https://www.python.org/dev/peps/pep-0008/
 .. _PEP257: https://www.python.org/dev/peps/pep-0257/
 .. _PEP287: https://www.python.org/dev/peps/pep-0287/
+.. _PEPs: https://www.python.org/dev/peps/
+.. _unittest: https://docs.python.org/3/library/unittest.html
+.. _doctest: https://docs.python.org/3/library/doctest.html
+.. _pylint: http://www.pylint.org/
 
