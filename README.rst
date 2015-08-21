@@ -1,3 +1,8 @@
+.. image:: https://readthedocs.org/projects/pyax-12/badge/?version=latest
+    :target: https://readthedocs.org/projects/pyax-12/?badge=latest
+    :alt: Documentation Status
+
+=========================================================
 `PyAX-12 <http://www.jdhp.org/projects_en.html#pyax12>`__
 =========================================================
 
