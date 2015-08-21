@@ -26,8 +26,7 @@
 # THE SOFTWARE.
 
 from distutils.core import setup
-import os
-import shutil
+import pyax12.__version__ as VERSION
 
 # See :  http://pypi.python.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = ['Development Status :: 4 - Beta',
@@ -46,27 +45,9 @@ def get_long_description():
         desc = fd.read()
     return desc
 
-def get_version():
-    version = __import__('pyax12').__version__
-    return version
-
-
-# Prepare scripts ###########
-
-# The list of scripts we want to export in the distrib ({'src': 'dest', ...}).
-SCRIPTS = {}
-
-for source, dest in SCRIPTS.iteritems():
-    try:
-        os.mkdir(os.path.dirname(dest))
-    except OSError:
-        pass # TODO
-
-    try:
-        shutil.copyfile(source, dest)
-    except IOError:
-        pass # TODO
-
+#def get_version():
+#    version = __import__('pyax12').__version__
+#    return version
 
 # Don't use unicode strings in setup arguments or bdist_rpm will fail.
 setup(author='Jeremie DECOCK',
@@ -83,4 +64,4 @@ setup(author='Jeremie DECOCK',
       requires=['pyserial'],
       scripts=SCRIPTS.values(),
       url='http://www.jdhp.org/',
-      version=get_version())
+      version=VERSION)
