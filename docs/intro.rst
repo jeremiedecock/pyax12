@@ -113,8 +113,8 @@ Print the control table of the third Dynamixel unit
     serial_connection.close()
 
 
-Move the first Dynamixel unit to 0° then go to 300° then go back to 150°
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150°
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ::
 

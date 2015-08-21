@@ -28,8 +28,8 @@
 """
 A PyAX-12 demo.
 
-Move the specified Dynamixel unit to 0° (0) then go to 300° (1024) then go back
-to 150° (512).
+Move the specified Dynamixel unit to 0° (0) then go to 300° (1024) and finally
+go back to 150° (512).
 """
 
 import pyax12.packet as pk
