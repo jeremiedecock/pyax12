@@ -142,23 +142,21 @@ class Packet(object):
         +----+----+--+------+-------+---------+
         |0xFF|0xFF|ID|LENGTH|DATA...|CHECK SUM|
         +----+----+--+------+-------+---------+
+
+    This class has been made for debugging purpose and is not intended to be
+    used widely to create packets.
+    Instead, it is recommanded to use `InstructionPacket` or `StatusPacket`
+    classes to build `Packet` instances.
+
+    :param int dynamixel_id: the unique ID of a Dynamixel unit (from 0x00
+        to 0xFD), 0xFE is a broadcasting ID.
+    :param bytes data: a sequence of byte containing the packet's data: the
+        instruction to perform or the status of the Dynamixel actuator.
+        This `data` argument contains the fifth to the penultimate byte of
+        the full built packet.
     """
 
     def __init__(self, dynamixel_id, data):
-        """Create a raw packet.
-
-        This constructor has been made for debugging purpose and is not intended
-        to be used widely to create packets.
-        Instead, it is recommanded to use `InstructionPacket` or `StatusPacket`
-        classes to build `Packet` instances.
-
-        :param int dynamixel_id: the unique ID of a Dynamixel unit (from 0x00
-            to 0xFD), 0xFE is a broadcasting ID.
-        :param bytes data: a sequence of byte containing the packet's data: the
-            instruction to perform or the status of the Dynamixel actuator.
-            This `data` argument contains the fifth to the penultimate byte of
-            the full built packet.
-        """
 
         # Check the data bytes.
         # "TypeError" and "ValueError" are raised by the "bytes" constructor if
@@ -207,7 +205,7 @@ class Packet(object):
         bytes).
 
         This function returns something like::
-        
+
             b'\xff\xff\xfe\x04\x03\x03\x01\xf6'
         """
 
@@ -218,7 +216,7 @@ class Packet(object):
         """Return the packet as a tuple of integers.
 
         This function returns something like::
-        
+
             (255, 255, 254, 4, 3, 3, 1, 246)
         """
 
@@ -255,7 +253,7 @@ class Packet(object):
         r"""The unique ID of a Dynamixel unit concerned with this packet.
 
         This byte either:
-        
+
         - has a value between 0x00 and 0xFD to affect the corresponding
           Dynamixel unit
         - or has the value 0xFE to affect all connected units (0xFE is the
@@ -271,11 +269,11 @@ class Packet(object):
 
         This is not the actual length of the full packet (`self._bytes`) but
         its number of bytes after its fourth byte, i.e.::
-        
+
             len(self._bytes[4:])
-        
+
         or in other words::
-        
+
             len(self._bytes) - 4
 
         This value (so called "LENGTH") defines the fourth byte of each packet.

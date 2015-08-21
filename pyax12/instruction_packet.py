@@ -97,19 +97,17 @@ class InstructionPacket(pk.Packet):
         +----+----+--+------+-----------+----------+---+-----------+---------+
         |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
         +----+----+--+------+-----------+----------+---+-----------+---------+
+
+    :param int dynamixel_id: the the unique ID of the Dynamixel unit which
+        have to execute this instruction packet.
+    :param int instruction: the instruction for the Dynamixel actuator to
+        perform.
+    :param bytes parameters: a sequence of bytes used if there is
+        additional information needed to be sent other than the instruction
+        itself.
     """
 
     def __init__(self, dynamixel_id, instruction, parameters=None):
-        """Create an "instruction packet".
-
-        :param int dynamixel_id: the the unique ID of the Dynamixel unit which
-            have to execute this instruction packet.
-        :param int instruction: the instruction for the Dynamixel actuator to
-            perform.
-        :param bytes parameters: a sequence of bytes used if there is
-            additional information needed to be sent other than the instruction
-            itself.
-        """
 
         # Check the parameters byte.
         # "TypeError" and "ValueError" are raised by the "bytes" constructor if

@@ -41,16 +41,15 @@ import pyax12.instruction_packet as ip
 from pyax12 import utils
 
 class Connection(object):
-    """Create a serial connection with dynamixel actuators."""
+    """Create a serial connection with dynamixel actuators.
+
+    :param str port: the serial device to connect with (e.g. '/dev/ttyUSB0'
+        for Unix users or 'COM1' for windows users).
+    :param int baudrate: the baudrate speed (e.g. 57600).
+    :param float timeout: the timeout value for the connection.
+    """
 
     def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1):
-        """Create a serial connection with dynamixel actuators.
-
-        :param str port: the serial device to connect with (e.g. '/dev/ttyUSB0'
-            for Unix users or 'COM1' for windows users).
-        :param int baudrate: the baudrate speed (e.g. 57600).
-        :param float timeout: the timeout value for the connection.
-        """
 
         self.port = port
         self.baudrate = baudrate

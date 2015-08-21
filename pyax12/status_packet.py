@@ -90,20 +90,18 @@ class StatusPacket(pk.Packet):
         +----+----+--+------+-----+----------+---+-----------+---------+
         |0XFF|0XFF|ID|LENGTH|ERROR|PARAMETER1|...|PARAMETER N|CHECK SUM|
         +----+----+--+------+-----+----------+---+-----------+---------+
+
+    StatusPacket is not intended to be instancied by users (except maybe
+    for testing and debugging prupose). Under normal conditions of use,
+    `StatusPacket`'s instances are automatically created by the
+    `Connection` class.
+
+    :param bytes packet: a sequence of bytes containing the full status
+        packet returned by Dynamixel units. It must be compatible with the
+        "bytes" type.
     """
 
     def __init__(self, packet):
-        """Create a "status packet".
-
-        StatusPacket is not intended to be instancied by users (except maybe
-        for testing and debugging prupose). Under normal conditions of use,
-        `StatusPacket`'s instances are automatically created by the
-        `Connection` class.
-
-        :param bytes packet: a sequence of bytes containing the full status
-            packet returned by Dynamixel units. It must be compatible with the
-            "bytes" type.
-        """
 
         # Check the argument and convert it to "bytes" if necessary.
         # Assert "packet" items are in range (0, 0xff).
