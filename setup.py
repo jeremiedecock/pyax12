@@ -25,16 +25,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from distutils.core import setup
-import pyax12.__version__ as VERSION
+from pyax12 import __version__ as VERSION
+
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 # See :  http://pypi.python.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Intended Audience :: Developers',
                'License :: OSI Approved :: MIT License',
-               'Operating System :: POSIX :: Linux',
-               'Programming Language :: Python :: 3.0',
-               'Topic :: System :: Hardware :: Hardware Drivers']
+               'Operating System :: POSIX :: OS Independent',
+               'Programming Language :: Python :: 3',
+               'Topic :: Software Development :: Libraries :: Application Frameworks']
 
 PACKAGES = ['pyax12']
 
@@ -44,10 +48,6 @@ def get_long_description():
     with open(README_FILE, 'r') as fd:
         desc = fd.read()
     return desc
-
-#def get_version():
-#    version = __import__('pyax12').__version__
-#    return version
 
 # Don't use unicode strings in setup arguments or bdist_rpm will fail.
 setup(author='Jeremie DECOCK',
