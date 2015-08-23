@@ -28,7 +28,7 @@ Install
 PyAX-12 can be installed with Python Distutils by entering the following
 command in a terminal::
 
-    python setup.py install
+    python3 setup.py install
 
 
 Documentation
