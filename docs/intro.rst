@@ -28,20 +28,19 @@ Dependencies
 Installation
 ------------
 
-.. You can install, upgrade, uninstall PyAX-12 with these commands::
-.. 
-..     $ pip install pyax12
-..     $ pip install --upgrade pyax12
-..     $ pip uninstall pyax12
-.. 
+You can install, upgrade, uninstall PyAX-12 with these commands::
+
+    pip install pyax12
+    pip install --upgrade pyax12
+    pip uninstall pyax12
+
+Or, if you have downloaded the PyAX-12 source code::
+
+    python3 setup.py install
+
 .. There's also a package for Debian/Ubuntu::
 .. 
-..     $ sudo apt-get install pyax12
-
-PyAX-12 can be installed with Python Distutils by entering the following
-command in a terminal::
-
-    python setup.py install
+..     sudo apt-get install pyax12
 
 
 Example usage
