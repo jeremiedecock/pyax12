@@ -25,22 +25,50 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from pyax12 import __version__ as VERSION
-
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
+
+from pyax12 import __version__ as VERSION
 
 # See :  http://pypi.python.org/pypi?%3Aaction=list_classifiers
 CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Intended Audience :: Developers',
                'License :: OSI Approved :: MIT License',
-               'Operating System :: POSIX :: OS Independent',
+               'Natural Language :: English',
+               'Operating System :: OS Independent',
                'Programming Language :: Python :: 3',
                'Topic :: Software Development :: Libraries :: Application Frameworks']
 
+
+# You can either specify manually the list of packages to include in the
+# distribution or use "setuptools.find_packages()" to include them
+# automatically with a recursive search (from the root directory of the
+# project).
+#PACKAGES = find_packages()
 PACKAGES = ['pyax12']
+
+
+# The following list contains all dependencies that Python will try to
+# install with this project
+INSTALL_REQUIRES = ['pyserial >= 2.6']
+#INSTALL_REQUIRES = []
+
+
+SCRIPTS = ["examples/pyax12demo"]
+
+
+# Entry point can be used to create plugins or to automatically generate
+# system commands to call specific functions.
+# Syntax: "name_of_the_command_to_make = package.module:function".
+ENTRY_POINTS = {}
+#ENTRY_POINTS = {
+#  'console_scripts': [
+#      'pyax12gui = pyax12.gui:run',
+#  ],
+#}
+
 
 README_FILE = 'README.rst'
 
@@ -49,19 +77,29 @@ def get_long_description():
         desc = fd.read()
     return desc
 
-# Don't use unicode strings in setup arguments or bdist_rpm will fail.
+
 setup(author='Jeremie DECOCK',
       author_email='jd.jdhp@gmail.com',
-      classifiers=CLASSIFIERS,
-      description='A library to control dynamixel AX-12+ servos with python',
-      license='MIT license',
-      long_description=get_long_description(),
       maintainer='Jeremie DECOCK',
       maintainer_email='jd.jdhp@gmail.com',
+
       name='pyax12',
-      packages=PACKAGES,
-      platforms=['Linux'],
-      requires=['pyserial'],
-      scripts=SCRIPTS.values(),
+      description='A library to control dynamixel AX-12+ servos with python',
+      long_description=get_long_description(),
       url='http://www.jdhp.org/',
+      download_url='http://www.jdhp.org/',# Where the package can be downloaded
+
+      classifiers=CLASSIFIERS,
+      #license='MIT license',    # Useless if license is already in CLASSIFIERS
+
+      packages=PACKAGES,
+      include_package_data=True, # Use the MANIFEST.in file
+
+      install_requires=INSTALL_REQUIRES,
+      #platforms=['Linux'],
+      #requires=['pyserial'],
+
+      scripts=SCRIPTS,
+      entry_points=ENTRY_POINTS,
+
       version=VERSION)
