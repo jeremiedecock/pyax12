@@ -1,7 +1,8 @@
 #!/bin/sh
 
 NAME=pyax12
-VERSION=$(grep "__version__" pyax12/__init__.py | cut --delimiter="'" -f2)
+#VERSION=$(grep "__version__" pyax12/__init__.py | cut --delimiter="'" -f2)
+VERSION=$(python -c "print(__import__('pyax12').__version__)")
 DIST_DIR=dist
 
 rm -rf debian
