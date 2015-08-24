@@ -1,6 +1,9 @@
 dist/
 doc/dynamixel/
 __pycache__/
+build/
+dist/
+pyax12.egg-info/
 *.swp
 *.pyc
 *.pyo
