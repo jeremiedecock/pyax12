@@ -8,7 +8,6 @@
 
 Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
-.. contents::
 
 * Web site: http://www.jdhp.org/projects_en.html#pyax12
 * Online documentation: http://pyax-12.readthedocs.org
