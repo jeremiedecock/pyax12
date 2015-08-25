@@ -60,13 +60,23 @@ PyAX-12 documentation is available on the following page:
 Example usage
 =============
 
-In the following examples, the `port` and `baudrate` values should be adapted
-depending on your configuration:
+.. Please check whether the serial port, the baudrate and the
+.. Dynamixel IDs defined in the following examples fits with your hardware.
 
-- for Linux users the `port` value should be something like "/dev/ttyS0" or
-  "/dev/ttyUSB0".
+In the following examples, the `dynamixel_id`, `port` and `baudrate` values
+should be adapted depending on your configuration:
+
+- for Linux users the `port` value should be something like
+  
+  - "/dev/ttyS0", "/dev/ttyS1", ... if you use an actual serial port
+  - "/dev/ttyUSB0", "/dev/ttyUSB1", ... if you use an `USB to serial` adapter
+    (like the USB2Dynamixel_ adapter)
+
 - for Windows users the `port` value should be something like "COM1", "COM2",
   ...
+
+If you use the USB2Dynamixel_ device, make sure its switch is set on
+"TTL".
 
 Some other examples are available in the examples_ directory.
 
@@ -80,8 +90,10 @@ Ping a Dynamixel
     # Connect to the serial port
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
+    dynamixel_id = 3
+
     # Ping the third dynamixel unit
-    is_available = serial_connection.ping(3)
+    is_available = serial_connection.ping(dynamixel_id)
 
     print(is_available)
 
@@ -117,8 +129,10 @@ Print the control table of the third Dynamixel unit
     # Connect to the serial port
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
+    dynamixel_id = 3
+
     # Print the control table of the specified Dynamixel unit
-    serial_connection.pretty_print_control_table(3)
+    serial_connection.pretty_print_control_table(dynamixel_id)
 
     # Close the serial connection
     serial_connection.close()
@@ -133,33 +147,25 @@ Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150
     # Connect to the serial port
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
+    dynamixel_id = 1
+
     # Goto to 0°
-    serial_connection.goto(1, 0, degrees=True)
+    serial_connection.goto(dynamixel_id, 0, degrees=True)
 
     # Wait 2 seconds
     time.sleep(2)
 
     # Go back to 300°
-    serial_connection.goto(1, 300, degrees=True)
+    serial_connection.goto(dynamixel_id, 300, degrees=True)
 
     # Wait 2 seconds
     time.sleep(2)
 
     # Go back to 150°
-    serial_connection.goto(1, 150, degrees=True)
+    serial_connection.goto(dynamixel_id, 150, degrees=True)
 
     # Close the serial connection
     serial_connection.close()
-
-
-Warning
-=======
-
-If you use the USB2Dynamixel device, make sure its switch is set on
-"TTL" (otherwise status packets won't be readable).
-
-Also, please check whether the serial port, the baudrate and the
-Dynamixel IDs defined in PyAX-12 fits with your hardware.
 
 
 Bug reports
@@ -197,6 +203,7 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 
 .. _Dynamixel AX-12+ actuators: http://www.robotis.com/xe/dynamixel_en
 .. _examples: https://github.com/jeremiedecock/pyax12/tree/master/examples
+.. _USB2Dynamixel: http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm
 
 .. _PyPot: https://github.com/poppy-project/pypot
 .. _Pydyn: https://github.com/humm/pydyn
