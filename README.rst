@@ -62,6 +62,7 @@ Example usage
 
 In the following examples, the `port` and `baudrate` values should be adapted
 depending on your configuration:
+
 - for Linux users the `port` value should be something like "/dev/ttyS0" or
   "/dev/ttyUSB0".
 - for Windows users the `port` value should be something like "COM1", "COM2",
