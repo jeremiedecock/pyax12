@@ -63,8 +63,8 @@ Example usage
 .. Please check whether the serial port, the baudrate and the
 .. Dynamixel IDs defined in the following examples fits with your hardware.
 
-In the following examples, the `dynamixel_id`, `port` and `baudrate` values
-should be adapted depending on your configuration:
+In the following examples, the ``dynamixel_id``, ``port`` and ``baudrate``
+values should be adapted depending on your configuration:
 
 - for Linux users the `port` value should be something like
   
