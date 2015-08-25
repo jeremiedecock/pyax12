@@ -60,15 +60,14 @@ PyAX-12 documentation is available on the following page:
 Example usage
 =============
 
-Many examples are available in the examples_ directory.
+In the following examples, the `port` and `baudrate` values should be adapted
+depending on your configuration:
+- for Linux users the `port` value should be something like "/dev/ttyS0" or
+  "/dev/ttyUSB0".
+- for Windows users the `port` value should be something like "COM1", "COM2",
+  ...
 
-The `port` and `baudrate` values should be adapted depending on your
-configuration.
-
-For Linux users the `port` value should be something like "/dev/ttyS0" or
-"/dev/ttyUSB0".
-
-For Windows users the `port` value should be something like "COM1", "COM2", ...
+Some other examples are available in the examples_ directory.
 
 Ping a Dynamixel
 ----------------
