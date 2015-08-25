@@ -39,7 +39,17 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Natural Language :: English',
                'Operating System :: OS Independent',
                'Programming Language :: Python :: 3',
+               'Programming Language :: Python :: 3.0',
+               'Programming Language :: Python :: 3.1',
+               'Programming Language :: Python :: 3.2',
+               'Programming Language :: Python :: 3.3',
+               'Programming Language :: Python :: 3.4',
+               'Topic :: Software Development :: Libraries',
+               'Topic :: Software Development :: Libraries :: Python Modules',
                'Topic :: Software Development :: Libraries :: Application Frameworks']
+
+
+KEYWORDS = 'dynamixel ax12 ax-12 servo actuator library robotics'
 
 
 # You can either specify manually the list of packages to include in the
@@ -90,7 +100,8 @@ setup(author='Jeremie DECOCK',
       download_url='http://www.jdhp.org/',# Where the package can be downloaded
 
       classifiers=CLASSIFIERS,
-      #license='MIT license',    # Useless if license is already in CLASSIFIERS
+      #license='MIT',            # Useless if license is already in CLASSIFIERS
+      keywords=KEYWORDS,
 
       packages=PACKAGES,
       include_package_data=True, # Use the MANIFEST.in file

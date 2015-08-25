@@ -8,22 +8,32 @@
 
 Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
+.. contents::
+
+* Web site: http://www.jdhp.org/projects_en.html#pyax12
+* Online documentation: http://pyax-12.readthedocs.org
+* Source code and issue tracker: https://github.com/jeremiedecock/pyax12
+* PyAX-12 on PyPI: https://pypi.python.org/pypi/pyax12
+
+
 Description
------------
+===========
 
 PyAX-12 is an open source lightweight Python library to control
 `Dynamixel AX-12+ <http://www.robotis.com/xe/dynamixel_en>`__ actuators.
 
 |Watch a demo on youtube|_
 
+
 Dependencies
-------------
+============
 
 -  Python >= 3.0
 -  `Python-serial <http://pyserial.sourceforge.net>`__
 
+
 Install
--------
+=======
 
 You can install, upgrade, uninstall PyAX-12 with these commands::
 
@@ -41,7 +51,7 @@ Or, if you have downloaded the PyAX-12 source code::
 
 
 Documentation
--------------
+=============
 
 PyAX-12 documentation is available on the following page:
 
@@ -49,7 +59,7 @@ PyAX-12 documentation is available on the following page:
 
 
 Example usage
--------------
+=============
 
 Many examples are available in the examples_ directory.
 
@@ -62,7 +72,7 @@ For Linux users the `port` value should be something like "/dev/ttyS0" or
 For Windows users the `port` value should be something like "COM1", "COM2", ...
 
 Ping a Dynamixel
-~~~~~~~~~~~~~~~~
+----------------
 
 ::
 
@@ -79,9 +89,8 @@ Ping a Dynamixel
     # Close the serial connection
     serial_connection.close()
 
-
 Scan (search available Dynamixel units)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------
 
 ::
 
@@ -99,9 +108,8 @@ Scan (search available Dynamixel units)
     # Close the serial connection
     serial_connection.close()
 
-
 Print the control table of the third Dynamixel unit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------------
 
 ::
 
@@ -116,9 +124,8 @@ Print the control table of the third Dynamixel unit
     # Close the serial connection
     serial_connection.close()
 
-
 Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150°
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------------------------------------
 
 ::
 
@@ -147,7 +154,7 @@ Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150
 
 
 Warning
--------
+=======
 
 If you use the USB2Dynamixel device, make sure its switch is set on
 "TTL" (otherwise status packets won't be readable).
@@ -157,7 +164,7 @@ Dynamixel IDs defined in PyAX-12 fits with your hardware.
 
 
 Bug reports
------------
+===========
 
 To search for bugs or report them, please use the PyAX-12 Bug Tracker at:
 
@@ -167,7 +174,7 @@ To search for bugs or report them, please use the PyAX-12 Bug Tracker at:
 .. _related-libraries:
 
 Related libraries
------------------
+=================
 
 Other libraries to control
 `Dynamixel AX-12+ <http://www.robotis.com/xe/dynamixel_en>`__
@@ -183,7 +190,7 @@ actuators are referenced in the following (non comprehensive) list:
 
 
 License
--------
+=======
 
 The ``PyAX-12`` library is provided under the terms and conditions of the
 `MIT License <http://opensource.org/licenses/MIT>`__.
