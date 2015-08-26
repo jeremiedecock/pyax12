@@ -47,6 +47,16 @@
     - [x] packet.py
     - [x] status_packet.py
     - [x] utils.py
+- [ ] Update the CHANGES.rst file.
+
+## Version 0.5
+
+- [ ] Write a test suite to launch all unit tests.
+- [ ] Add some examples.
+- [ ] Improve the README file:
+    - [ ] Description;
+    - [ ] Installation procedure: see http://www.pylint.org/ (and add more
+      details in the Troubleshooting/FAQ sections)
 - [ ] Clean all modules with pep8.
     - [ ] argparse_default.py
     - [ ] connection.py
@@ -61,15 +71,9 @@
     - [ ] packet.py
     - [ ] status_packet.py
     - [ ] utils.py
-
-## Version 0.5
-
-- [ ] Write a test suite to launch all unit tests.
-- [ ] Add some examples.
-- [ ] Improve the README file:
-    - [ ] Description;
-    - [ ] Installation procedure: see http://www.pylint.org/ (and add more
-      details in the Troubleshooting/FAQ sections)
+- [ ] Get a table with border in sphinx (to write clean packet data frame in
+  the documentation), i.e. something like this:
+  https://docs.python.org/3/library/itertools.html
 
 ## Version 1.0
 
