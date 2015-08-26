@@ -25,6 +25,8 @@ Contribute
 
 PyAX-12 is written for Python 3.x. Python 2.x is *not* supported.
 
+The `TODO.md`_ file contains the TODO list.
+
 All contributions should at least comply with the following PEPs_:
 
 - PEP8_ "Python's good practices"
@@ -34,8 +36,8 @@ All contributions should at least comply with the following PEPs_:
 All contribution should be properly documented and tested with unittest_
 and/or doctest_.
 
-pylint_ and `pep8 <https://github.com/PyCQA/pep8>`__ should also be used to
-check the quality of each module.
+pylint_, `pep8 <https://github.com/PyCQA/pep8>`__ and pyflakes_ should also be
+used to check the quality of each module.
 
 
 Changes
@@ -53,4 +55,6 @@ Changes
 .. _unittest: https://docs.python.org/3/library/unittest.html
 .. _doctest: https://docs.python.org/3/library/doctest.html
 .. _pylint: http://www.pylint.org/
+.. _pyflakes: https://pypi.python.org/pypi/pyflakes
+.. _TODO.md: https://github.com/jeremiedecock/pyax12/blob/master/TODO.md
 
