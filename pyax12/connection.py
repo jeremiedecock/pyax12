@@ -49,7 +49,9 @@ class Connection(object):
     :param float timeout: the timeout value for the connection.
     """
 
-    def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1):
+    def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1, waiting_time=0.02):
+
+        self.waiting_time = waiting_time
 
         self.port = port
         self.baudrate = baudrate
@@ -88,7 +90,7 @@ class Connection(object):
         # If you use the USB2Dynamixel device, make sure its switch is set on
         # "TTL" (otherwise status packets won't be readable).
 
-        time.sleep(0.01) # TODO
+        time.sleep(self.waiting_time)
         num_bytes_available = self.serial_connection.inWaiting()
 
         # TODO: not robust...

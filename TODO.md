@@ -40,6 +40,7 @@
 - [x] Add a demonstration video in the README file.
 - [ ] Write "high level" functions in Connection: Connection.dump(),
   Connection.scan(), Connection.reset(), ...
+- [x] Fix issue #1: https://github.com/jeremiedecock/pyax12/issues/1
 - [ ] Test arguments in all functions (type, value, ...)
     - [x] argparse_default.py
     - [ ] connection.py
@@ -47,6 +48,10 @@
     - [x] packet.py
     - [x] status_packet.py
     - [x] utils.py
+- [ ] Add the following warning in the documentation: the baudrate value given
+  to the Connection class should be the same than the one in dynamixel units
+  (and also the same than the one of the COM port used for Windows).
+- [ ] How to avoid the "--pre" option when installing on Linux with pip ?
 - [ ] Update the CHANGES.rst file.
 
 ## Version 0.5
@@ -77,6 +82,11 @@
 
 ## Version 1.0
 
+- [ ] Check how famous open source Python projects write:
+    - [ ] setup.py
+    - [ ] MANIFEST.in
+    - [ ] sphinx documentation
+    - [ ] docstrings (e.g. Sphinx style, Google/Numpy "Napoleon" sytle, ...)
 - [ ] Fix remaining "TODO" tags.
 - [ ] Improve the reliability of "Connection.send()".
 - [ ] Fix missing data and tests:
@@ -122,10 +132,19 @@
 - [ ] Implement the `with` context manager in the Connection class (to
   automatically close serial connections).
 - [ ] Check the "debian-dist.sh" script and build/publish a Debian packet.
+- [ ] On Windows, how to automatically update the PATH variable (for
+  C:\PYTHON34\Scripts) from pip or from a .bat ?
+- [ ] Say somewhere in the documentation that (by default), with pip, the
+  package is installed in C:\PYTHON34\libs\site-packages\
 - [ ] Add a RPM package.
-- [ ] Check the PyAX-12 installation (with pip) and examples on Windows
-  XP/Vista/8/10.
-- [ ] Check the PyAX-12 installation (with pip) and examples on MacOSX.
+- [ ] Check the PyAX-12 installation (with pip and dedicated packages) and
+  examples:
+    - [ ] on Windows XP/Vista/8/10;
+    - [ ] on MacOSX;
+    - [ ] on Ubuntu/Fedora/SuSE/Arch/Mint/...;
+    - [ ] on Raspbian/...;
+    - [ ] with Python 3.0/3.1/3.2/3.3;
+    - [ ] with PySerial 2.5/2.4/...
 - [ ] Write functions "Packet.print_info()" and "Connection.print_info()" to
   print "human readable" informations (e.g. "position=...°\nspeed=..." ;
   "baudrate=...\nport=...\n...") ?
