@@ -38,7 +38,7 @@ It hasn't been tested (yet) on MacOSX and BSD systems.
 
 `Python-serial`_ is required to install PyAX-12.
 
-.. note::
+Note:
 
     If you use ``pip`` to install PyAX-12, Python-serial will be automatically
     downloaded and installed (see the following install_ section).
@@ -46,8 +46,8 @@ It hasn't been tested (yet) on MacOSX and BSD systems.
 
 .. _install:
 
-Install
-=======
+Installation
+============
 
 Gnu/Linux
 ---------
@@ -70,7 +70,7 @@ Or, if you have downloaded the PyAX-12 source code::
 Windows
 -------
 
-.. note::
+Note:
 
     The following installation procedure has been tested to work with Python
     3.4 under Windows 7.
@@ -142,6 +142,7 @@ Ping a Dynamixel
     # Close the serial connection
     serial_connection.close()
 
+
 Scan (search available Dynamixel units)
 ---------------------------------------
 
@@ -161,6 +162,7 @@ Scan (search available Dynamixel units)
     # Close the serial connection
     serial_connection.close()
 
+
 Print the control table of the third Dynamixel unit
 ---------------------------------------------------
 
@@ -178,6 +180,7 @@ Print the control table of the third Dynamixel unit
 
     # Close the serial connection
     serial_connection.close()
+
 
 Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150°
 -------------------------------------------------------------------------------
