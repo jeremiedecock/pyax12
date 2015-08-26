@@ -7,25 +7,52 @@
 
 ## Version 0.4
 
-- [ ] Check/fix the setup.py file.
+- [x] Check/fix the setup.py file.
 - [x] Publish PyAX-12 on PyPI.
 - [x] Check the PyAX-12 installation (with pip) and examples on Windows 7.
+- [x] Put an argparse default instance in "argparse_default.py".
 - [ ] Write unit tests.
+    - [x] argparse_default.py
+    - [ ] connection.py
+    - [ ] instruction_packet.py
+    - [x] packet.py
+    - [x] status_packet.py
+    - [x] utils.py
 - [ ] Improve docstrings.
+    - [x] argparse_default.py
+    - [ ] connection.py
+    - [x] instruction_packet.py
+    - [x] packet.py
+    - [x] status_packet.py
+    - [x] utils.py
+- [ ] Check how docstrings are printed with the "help()" function (is it
+  readable ?).
 - [ ] Clean all modules with pylint.
-- [ ] Use exceptions instead warnings.
-- [ ] Create a user documentation with Sphinx.
-- [ ] Publish the documentation on readthedocs.org
+    - [x] argparse_default.py
+    - [ ] connection.py
+    - [x] instruction_packet.py
+    - [x] packet.py
+    - [x] status_packet.py
+    - [x] utils.py
+- [x] Use exceptions instead warnings.
+- [x] Create a user documentation with Sphinx.
+- [x] Publish the documentation on readthedocs.org
 - [ ] Write "high level" functions in Connection: Connection.dump(),
   Connection.scan(), Connection.reset(), ...
 - [ ] Test arguments in all functions (type, value, ...)
+    - [x] argparse_default.py
+    - [ ] connection.py
+    - [x] instruction_packet.py
+    - [x] packet.py
+    - [x] status_packet.py
+    - [x] utils.py
 
 ## Version 0.5
 
 - [ ] Write a test suite to launch all unit tests.
 - [ ] Add some examples.
-- [ ] Improve the README file.
-    - [ ] Description.
+- [ ] Improve the README file:
+    - [ ] Description;
     - [ ] Installation procedure.
 - [x] Add a demonstration video in the README file.
 
@@ -50,6 +77,21 @@
     - [ ] Range (p.18)
     - [ ] Instruction set labels (p.19)
     - [ ] UART p.30 and 31
+- [ ] Use the following services and add webbadges ?
+    - [ ] https://travis-ci.org/
+    - [ ] https://coveralls.io/
+    - [ ] https://landscape.io/
+    - [ ] https://ci.appveyor.com/
+    - [ ] ...
+- [ ] Clone the git repository in the following forges ?
+    - [ ] https://git.framasoft.org/
+    - [ ] https://bitbucket.org/
+    - [ ] https://about.gitlab.com/gitlab-com/ (https://about.gitlab.com)
+          "(Gitorious was acquired by GitLab B.V., who announced service
+          through gitorious.org will be discontinued on 1 June 2015 and
+          encouraged Gitorious users to make use of its import tools to migrate
+          projects to Gitlab)"
+    - [ ] http://savannah.nongnu.org/
 - [ ] Complete the sphinx documentation to contain all the "Dynamixel User
   Manual" (the documentation should help users to connect dynamixels,
   understand how it works, ...).
