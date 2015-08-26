@@ -11,6 +11,15 @@ The source code is currently `available on GitHub`_ under the terms and
 conditions of the :ref:`MIT license <license>`. Fork away!
 
 
+Bug reports
+~~~~~~~~~~~
+
+To search for bugs or report them, please use the PyAX-12 Bug Tracker at:
+
+    https://github.com/jeremiedecock/pyax12/issues
+
+
+
 Contribute
 ~~~~~~~~~~
 
@@ -25,7 +34,8 @@ All contributions should at least comply with the following PEPs_:
 All contribution should be properly documented and tested with unittest_
 and/or doctest_.
 
-pylint_ and `pep8 <https://github.com/PyCQA/pep8>`__ should also be used to check the quality of each module.
+pylint_ and `pep8 <https://github.com/PyCQA/pep8>`__ should also be used to
+check the quality of each module.
 
 
 Changes
