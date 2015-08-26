@@ -36,7 +36,7 @@ Indices and tables
 Credits
 =======
 
-Created by Jérémie Decock.
+Created by `Jérémie Decock`_.
 
 
 .. _license:
@@ -49,5 +49,6 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 
     .. include:: ../LICENSE
 
+.. _Jérémie Decock: http://www.jdhp.org
 .. _Dynamixel AX-12+ actuators: http://www.robotis.com/xe/dynamixel_en
 .. _MIT license: http://opensource.org/licenses/MIT
