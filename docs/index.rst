@@ -44,7 +44,7 @@ Created by `Jérémie Decock`_.
 License
 =======
 
-The ``PyAX-12`` library is provided under the terms and conditions of the
+The PyAX-12 library is provided under the terms and conditions of the
 `MIT license`_:
 
     .. include:: ../LICENSE
