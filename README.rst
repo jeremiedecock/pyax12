@@ -11,7 +11,8 @@ Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
 * Web site: http://www.jdhp.org/projects_en.html#pyax12
 * Online documentation: http://pyax-12.readthedocs.org
-* Source code and issue tracker: https://github.com/jeremiedecock/pyax12/issues
+* Source code: https://github.com/jeremiedecock/pyax12
+* Issue tracker: https://github.com/jeremiedecock/pyax12/issues
 * PyAX-12 on PyPI: https://pypi.python.org/pypi/pyax12
 
 
@@ -28,13 +29,31 @@ Dependencies
 ============
 
 -  Python >= 3.0
--  `Python-serial <http://pyserial.sourceforge.net>`__
+-  `Python-serial`_
 
+PyAX-12 is tested to work with Python 3.4 under Gnu/Linux Debian 8 and Windows
+7.
+It should also work with Python 3.X under recent Gnu/Linux and Windows systems.
+It hasn't been tested (yet) on MacOSX and BSD systems.
+
+`Python-serial`_ is required to install PyAX-12.
+
+.. note::
+
+    If you use ``pip`` to install PyAX-12, Python-serial will be automatically
+    downloaded and installed (see the following install_ section).
+
+
+.. _install:
 
 Install
 =======
 
-You can install, upgrade, uninstall PyAX-12 with these commands::
+Gnu/Linux
+---------
+
+You can install, upgrade, uninstall PyAX-12 with these commands (in a
+terminal)::
 
     pip install pyax12
     pip install --upgrade pyax12
@@ -48,13 +67,36 @@ Or, if you have downloaded the PyAX-12 source code::
 .. 
 ..     sudo apt-get install pyax12
 
+Windows
+-------
+
+.. note::
+
+    The following installation procedure has been tested to work with Python
+    3.4 under Windows 7.
+    It should also work with recent Windows systems.
+
+You can install, upgrade, uninstall PyAX-12 with these commands (in a
+`command prompt`_)::
+
+    py -m pip install pyax12
+    py -m pip install --upgrade pyax12
+    py -m pip uninstall pyax12
+
+Or, if you have downloaded the PyAX-12 source code::
+
+    py setup.py install
+
 
 Documentation
 =============
 
-PyAX-12 documentation is available on the following page:
+.. PyAX-12 documentation is available on the following page:
+.. 
+..     http://pyax-12.rtfd.org/
 
-    http://pyax-12.rtfd.org/
+- Online Documentation: http://pyax-12.readthedocs.org
+- API Documentation: http://pyax-12.readthedocs.org/en/latest/api.html
 
 
 Example usage
@@ -72,7 +114,7 @@ values should be adapted depending on your configuration:
   - "/dev/ttyUSB0", "/dev/ttyUSB1", ... if you use an `USB to serial` adapter
     (like the USB2Dynamixel_ adapter)
 
-- for Windows users the `port` value should be something like "COM1", "COM2",
+- for Windows users the `port` value should be something like "COM2", "COM3",
   ...
 
 If you use the USB2Dynamixel_ device, make sure its switch is set on
@@ -204,6 +246,8 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 .. _Dynamixel AX-12+ actuators: http://www.robotis.com/xe/dynamixel_en
 .. _examples: https://github.com/jeremiedecock/pyax12/tree/master/examples
 .. _USB2Dynamixel: http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm
+.. _Python-serial: http://pyserial.sourceforge.net
+.. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
 
 .. _PyPot: https://github.com/poppy-project/pypot
 .. _Pydyn: https://github.com/humm/pydyn
