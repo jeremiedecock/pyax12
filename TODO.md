@@ -37,6 +37,7 @@
 - [x] Use exceptions instead warnings.
 - [x] Create a user documentation with Sphinx.
 - [x] Publish the documentation on readthedocs.org
+- [x] Add a demonstration video in the README file.
 - [ ] Write "high level" functions in Connection: Connection.dump(),
   Connection.scan(), Connection.reset(), ...
 - [ ] Test arguments in all functions (type, value, ...)
@@ -46,6 +47,20 @@
     - [x] packet.py
     - [x] status_packet.py
     - [x] utils.py
+- [ ] Clean all modules with pep8.
+    - [ ] argparse_default.py
+    - [ ] connection.py
+    - [ ] instruction_packet.py
+    - [ ] packet.py
+    - [ ] status_packet.py
+    - [ ] utils.py
+- [ ] Clean all modules with pyflakes.
+    - [ ] argparse_default.py
+    - [ ] connection.py
+    - [ ] instruction_packet.py
+    - [ ] packet.py
+    - [ ] status_packet.py
+    - [ ] utils.py
 
 ## Version 0.5
 
@@ -53,16 +68,13 @@
 - [ ] Add some examples.
 - [ ] Improve the README file:
     - [ ] Description;
-    - [ ] Installation procedure.
-- [x] Add a demonstration video in the README file.
-
-## Version 0.6
-
-- [ ] Fix remaining "TODO" tags.
-- [ ] Improve the reliability of Connection.send()
+    - [ ] Installation procedure: see http://www.pylint.org/ (and add more
+      details in the Troubleshooting/FAQ sections)
 
 ## Version 1.0
 
+- [ ] Fix remaining "TODO" tags.
+- [ ] Improve the reliability of "Connection.send()".
 - [ ] Fix missing data and tests:
     - [ ] Error table (Dynamixel User Manual p.11)
     - [ ] Access RD/WD (p.12)
@@ -116,13 +128,17 @@
 - [ ] Some unit tests "requires to be connected to the Dynamixel number 1 using
   port "/dev/ttyUSB0" (thus it works on Unix systems only) at 57600 baud." ->
   fix it... (especially in test_status_packet)
-
-## Misc
-
-- [ ] Write a MSI installer for Windows.
-- [ ] Create a "pyax12gui" repository: a set of graphic tools (tkinter) on top
-  of PyAX-12 to handle Dynamixels servos.
 - [ ] Write a tutorial to explain how to use PyAX-12 on a RaspberryPi using
   GPIOs (i.e. without the usbdynamixel adapter) and without the CM-5 (i.e. using
   a batteries, a LiPo or a DC lab power supply instead).
+  - See: www.instructables.com/id/How-to-drive-Dynamixel-AX-12A-servos-with-a-Raspbe/?ALLSTEPS
+  - See: www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
+- [ ] Annoucements: raspberrypi.org, linuxfr, ...
+
+## Misc
+
+- [ ] Conform to google.github.io/styleguide/pyguide.html ?
+- [ ] Write a MSI installer for Windows.
+- [ ] Create a "pyax12gui" repository: a set of graphic tools (tkinter) on top
+  of PyAX-12 to handle Dynamixels servos.
 
