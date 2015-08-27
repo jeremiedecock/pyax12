@@ -86,7 +86,10 @@ def main():
     speed_label = tk.Label(speed_frame, text="Speed")
     speed_label.pack(side=tk.TOP)
 
-    speed_scale = tk.Scale(speed_frame, from_=0, to=1023,
+    # Warning about the Dynamixel speed value: 0 is a special value.
+    # If speed=0 then the velocity is the largest possible for the applied
+    # voltage (cf. p.17).
+    speed_scale = tk.Scale(speed_frame, from_=1, to=1023,
                            orient=tk.VERTICAL, command=scale_cb)
     speed_scale.pack(fill=tk.Y, expand=1, side=tk.BOTTOM)
 
