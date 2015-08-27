@@ -82,6 +82,10 @@
 
 ## Version 1.0
 
+- [ ] Make Connection.send() method more robust? See:
+    - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
+    - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
+    - PyPot: https://github.com/poppy-project/pypot/blob/master/pypot/dynamixel/io/abstract_io.py#L503
 - [ ] Check how famous open source Python projects write:
     - [ ] setup.py
     - [ ] MANIFEST.in
