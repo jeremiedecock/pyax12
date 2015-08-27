@@ -85,7 +85,7 @@ class StatusPacket(pk.Packet):
     """The "status packet" is the response packet from the Dynamixel units to
     the main controller after receiving an "instruction packet".
 
-    The structure of the status packet is as the following::
+    The structure of the status packet is as the following:
 
     +-----+-----+---+-------+------+-----------+----+------------+----------+
     |0XFF |0XFF |ID |LENGTH |ERROR |PARAMETER1 |... |PARAMETER N |CHECK SUM |

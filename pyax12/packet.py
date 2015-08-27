@@ -137,7 +137,7 @@ class Packet(object):
     (the response packets from the Dynamixel units to the main controller after
     receiving an instruction packet).
 
-    The structure of a general `Packet` is as the following::
+    The structure of a general `Packet` is as the following:
 
     +----+----+--+------+-------+---------+
     |0xFF|0xFF|ID|LENGTH|DATA...|CHECK SUM|

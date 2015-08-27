@@ -92,7 +92,7 @@ class InstructionPacket(pk.Packet):
     """The "instruction packet" is the packet sent by the main controller to
     the Dynamixel units to send commands.
 
-    The structure of the instruction packet is as the following::
+    The structure of the instruction packet is as the following:
 
     +----+----+--+------+-----------+----------+---+-----------+---------+
     |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
