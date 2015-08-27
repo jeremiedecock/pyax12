@@ -170,6 +170,7 @@ Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150
 ::
 
     from pyax12.connection import Connection
+    import time
 
     # Connect to the serial port
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
