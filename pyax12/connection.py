@@ -129,7 +129,7 @@ class Connection(object):
         """Read bytes form the control table of the specified Dynamixel unit.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
-            in range (0, 0xFE).
+            in range (0, 0xFD).
         :param int address: the starting address of the location where the data
             is to be read.
         :param int length: the length of the data to be read.
@@ -147,7 +147,7 @@ class Connection(object):
                 data_bytes = status_packet.parameters
             else:
                 pass # TODO: exception ?
-        # TODO: manage the special case with dxl_id = 0xFE
+        # TODO: exception if dxl_id = 0xFE
 
         return data_bytes
 
@@ -181,7 +181,7 @@ class Connection(object):
         """Ping the specified Dynamixel unit.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
-            in range (0, 0xFE).
+            in range (0, 0xFD).
         :returns: ``True`` if the specified unit is available, ``False``
             otherwise.
         """
@@ -197,7 +197,7 @@ class Connection(object):
                 is_available = True
             else:
                 pass # TODO: exception ?
-        # TODO: manage the special case with dxl_id = 0xFE
+        # TODO: exception if dxl_id = 0xFE
 
         return is_available
 
@@ -214,16 +214,43 @@ class Connection(object):
     ## HIGHEST LEVEL FUNCTIONS #################################################
 
     def dump_control_table(self, dynamixel_id):
+        """Dump the *control table* of the specified Dynamixel unit.
+
+        This function can be used to backup the current configuration of the
+        given Dynamixel unit.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        :returns: the sequence of all bytes in currently the *control table*.
+        """
+
         byte_seq = self.read_data(dynamixel_id, 0, 50)
         return byte_seq
 
 
     def print_control_table(self, dynamixel_id):
+        """Print the *control table* of the specified Dynamixel unit in an
+        "raw" format.
+
+        To get the same output in a more easily human readable format, use the
+        `pretty_print_control_table` function.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+
         byte_seq = self.dump_control_table(dynamixel_id)
         print(utils.pretty_hex_str(byte_seq, ' '))
 
 
     def pretty_print_control_table(self, dynamixel_id):
+        """Print the *control table* of the specified Dynamixel unit in an
+        easily human readable format.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+
         print("{:.<24}{}".format("model_number", self.get_model_number(dynamixel_id)))
         print("{:.<24}{}".format("firmware_version", self.get_firmware_version(dynamixel_id)))
         print("{:.<24}{}".format("id", self.get_id(dynamixel_id)))
@@ -454,6 +481,28 @@ class Connection(object):
     ###
 
     def goto(self, dynamixel_id, position, speed=None, degrees=False):
+        """Set the *goal position* and *moving speed* for the specified
+        Dynamixel unit.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :param int position: the new goal position. If `degrees` is ``True``,
+            `position` corresponds to the goal rotation angle *in degrees* with
+            respect to the original position and must be in range (0, 300).
+            Otherwise, `position` is a unit free rotation angle to the origin,
+            defined in range (0, 1023) i.e. (0, 0x3FF) in hexadecimal notation.
+        :param int speed: the new moving speed. It must be in range (0, 1023)
+            i.e. (0, 0x3FF) in hexadecimal notation. This parameter is
+            optional; if `speed` is not specified, the *moving speed* present
+            in the Dynamixel control table is kept and used to reach the goal
+            position.
+        :param bool degrees: defines the `position` unit. If `degrees` is
+            ``True``, `position` corresponds to the goal rotation angle *in
+            degrees* with respect to the original position and must be in range
+            (0, 300). Otherwise, `position` is a unit free rotation angle to
+            the origin, defined in range (0, 1023) i.e. (0, 0x3FF) in
+            hexadecimal notation.
+        """
         # TODO: check ranges
 
         if degrees:
@@ -465,3 +514,4 @@ class Connection(object):
             params += utils.int_to_little_endian_bytes(speed)
 
         self.write_data(dynamixel_id, pk.GOAL_POSITION, params)
+
