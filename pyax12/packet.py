@@ -139,9 +139,9 @@ class Packet(object):
 
     The structure of a general `Packet` is as the following::
 
-        +----+----+--+------+-------+---------+
-        |0xFF|0xFF|ID|LENGTH|DATA...|CHECK SUM|
-        +----+----+--+------+-------+---------+
+    +----+----+--+------+-------+---------+
+    |0xFF|0xFF|ID|LENGTH|DATA...|CHECK SUM|
+    +----+----+--+------+-------+---------+
 
     This class has been made for debugging purpose and is not intended to be
     used widely to create packets.

@@ -94,9 +94,9 @@ class InstructionPacket(pk.Packet):
 
     The structure of the instruction packet is as the following::
 
-        +----+----+--+------+-----------+----------+---+-----------+---------+
-        |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
-        +----+----+--+------+-----------+----------+---+-----------+---------+
+    +----+----+--+------+-----------+----------+---+-----------+---------+
+    |0XFF|0XFF|ID|LENGTH|INSTRUCTION|PARAMETER1|...|PARAMETER N|CHECK SUM|
+    +----+----+--+------+-----------+----------+---+-----------+---------+
 
     :param int dynamixel_id: the the unique ID of the Dynamixel unit which
         have to execute this instruction packet.
