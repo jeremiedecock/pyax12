@@ -47,6 +47,8 @@ class Connection(object):
         for Unix users or 'COM1' for windows users).
     :param int baudrate: the baudrate speed (e.g. 57600).
     :param float timeout: the timeout value for the connection.
+    :param float waiting_time: the waiting time (in seconds) between sending
+        the instruction packet and the receiving the status packet.
     """
 
     def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1, waiting_time=0.02):
