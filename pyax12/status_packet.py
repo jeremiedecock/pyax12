@@ -87,11 +87,9 @@ class StatusPacket(pk.Packet):
 
     The structure of the status packet is as the following::
 
-    +----+----+--+------+-----+----------+---+-----------+---------+
-    |0XFF|0XFF|ID|LENGTH|ERROR|PARAMETER1|...|PARAMETER N|CHECK SUM|
-    +----+----+--+------+-----+----------+---+-----------+---------+
-    |                                                              |
-    +---------+--+------+-----+----------+---+-----------+---------+
+    +-----+-----+---+-------+------+-----------+----+------------+----------+
+    |0XFF |0XFF |ID |LENGTH |ERROR |PARAMETER1 |... |PARAMETER N |CHECK SUM |
+    +-----+-----+---+-------+------+-----------+----+------------+----------+
 
     StatusPacket is not intended to be instancied by users (except maybe
     for testing and debugging prupose). Under normal conditions of use,
