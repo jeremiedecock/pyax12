@@ -280,6 +280,12 @@ class Connection(object):
         min_voltage_str = "%sV" % self.get_min_voltage(dxl_id)
         max_voltage_str = "%sV" % self.get_max_voltage(dxl_id)
 
+        max_torque = self.get_max_torque(dxl_id)
+        if max_torque == 0:
+            max_torque_str = "0 (free run mode)"
+        else:
+            max_torque_str = max_torque
+
         torque_enable_str = "yes" if self.is_torque_enable(dxl_id) else "no"
         led_str = "on" if self.is_led_enabled(dxl_id) else "off"
 
@@ -311,7 +317,7 @@ class Connection(object):
             ("max_temperature", max_temperature_str),
             ("min_voltage", min_voltage_str),
             ("max_voltage", max_voltage_str),
-            ("max_torque", self.get_max_torque(dxl_id)),
+            ("max_torque", max_torque_str),
             ("status_return_level", self.get_status_return_level(dxl_id)),
             ("alarm_led", self.get_alarm_led(dxl_id)),
             ("alarm_shutdown", self.get_alarm_shutdown(dxl_id)),
@@ -532,7 +538,7 @@ class Connection(object):
 
         This value, written in EEPROM, is copied to the *torque limit* bytes
         (in RAM) when the power is turned ON. Thus, *max torque* is just an
-        initialization value for the actual *max torque*.
+        initialization value for the actual *torque limit*.
 
         If this value is equal to ``0``, the Dynamixel unit is configured in
         *free run mode*.
@@ -724,14 +730,30 @@ class Connection(object):
         return utils.little_endian_bytes_to_int(byte_seq)
 
 
+    # TODO: test this function
     def get_present_load(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the magnitude of the load applied to the specified Dynamixel
+        unit.
+
+        If the returned value is negative, the load is applied to the clock
+        wise direction.
+
+        If the returned value is positive, the load is applied to the counter
+        clock wise direction.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
         """
-        byte_seq = self.read_data(dynamixel_id, pk.PRESENT_LOAD, 2)
-        return utils.little_endian_bytes_to_int(byte_seq)
+        byte_seq = bytearray(self.read_data(dynamixel_id, pk.PRESENT_LOAD, 2))
+
+        load_direction = -1 if (byte_seq[1] & (1 << 2)) == 0 else 1
+
+        byte_seq[1] = 0b00000011 & byte_seq[1]
+
+        abs_load = utils.little_endian_bytes_to_int(byte_seq)
+        load = load_direction * abs_load
+
+        return load
 
 
     def get_present_voltage(self, dynamixel_id):
