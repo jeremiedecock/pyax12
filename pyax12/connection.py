@@ -255,6 +255,13 @@ class Connection(object):
 
         ####
 
+        def angle_to_str(dxl_angle):
+            angle_degrees = dxl_angle_to_degrees(dxl_angle)
+            angle_str = "{} ({}°)".format(dxl_angle, angle_degrees)
+            return angle_str
+
+        ####
+
         model_number = self.get_model_number(dxl_id)
         if model_number == 12:
             model_number_str = "AX-12+" 
@@ -266,6 +273,9 @@ class Connection(object):
         baud_rate_str = "%s bps" % self.get_baud_rate(dxl_id)
         return_delay_time_str = "%s µs" % self.get_return_delay_time(dxl_id)
 
+        cw_angle_limit_str = angle_to_str(self.get_cw_angle_limit(dxl_id))
+        ccw_angle_limit_str = angle_to_str(self.get_ccw_angle_limit(dxl_id))
+
         max_temperature_str = "%s°C" % self.get_max_temperature(dxl_id)
         min_voltage_str = "%sV" % self.get_min_voltage(dxl_id)
         max_voltage_str = "%sV" % self.get_max_voltage(dxl_id)
@@ -273,8 +283,8 @@ class Connection(object):
         torque_enable_str = "yes" if self.is_torque_enable(dxl_id) else "no"
         led_str = "on" if self.is_led_enabled(dxl_id) else "off"
 
-        position_str = str(self.get_present_position(dxl_id))
-        position_str += " (%i°)" % self.get_present_position(dxl_id, True)
+        goal_position_str = angle_to_str(self.get_goal_position(dxl_id))
+        position_str = angle_to_str(self.get_present_position(dxl_id))
 
         voltage_str = "%sV" % self.get_present_voltage(dxl_id)
         temperature_str = "%s°C" % self.get_present_temperature(dxl_id)
@@ -296,8 +306,8 @@ class Connection(object):
             ("id", dxl_id),
             ("baud_rate", baud_rate_str),
             ("return_delay_time", return_delay_time_str),
-            ("cw_angle_limit", self.get_cw_angle_limit(dxl_id)),
-            ("ccw_angle_limit", self.get_ccw_angle_limit(dxl_id)),
+            ("cw_angle_limit", cw_angle_limit_str),
+            ("ccw_angle_limit", ccw_angle_limit_str),
             ("max_temperature", max_temperature_str),
             ("min_voltage", min_voltage_str),
             ("max_voltage", max_voltage_str),
@@ -307,13 +317,13 @@ class Connection(object):
             ("alarm_shutdown", self.get_alarm_shutdown(dxl_id)),
             ("down_calibration", self.get_down_calibration(dxl_id)),
             ("up_calibration", self.get_up_calibration(dxl_id)),
-            ("torque_enable", torque_enable_str),
+            ("torque_enabled", torque_enable_str),
             ("led", led_str),
             ("cw_compliance_margin", self.get_cw_compliance_margin(dxl_id)),
             ("ccw_compliance_margin", self.get_ccw_compliance_margin(dxl_id)),
             ("cw_compliance_slope", self.get_cw_compliance_slope(dxl_id)),
             ("ccw_compliance_slope", self.get_ccw_compliance_slope(dxl_id)),
-            ("goal_position", self.get_goal_position(dxl_id)),
+            ("goal_position", goal_position_str),
             ("moving_speed", self.get_moving_speed(dxl_id)),
             ("torque_limit", self.get_torque_limit(dxl_id)),
             ("present_position", position_str),
@@ -434,7 +444,11 @@ class Connection(object):
 
 
     def get_cw_angle_limit(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the *clock wise angle limit* of the specified Dynamixel unit.
+
+        The goal position should be higher or equal than this value, otherwise
+        the *Angle Limit Error Bit* (the second error bit of Status Packets)
+        will be set to ``1``.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -444,7 +458,12 @@ class Connection(object):
 
 
     def get_ccw_angle_limit(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the *counter clock wise angle limit* of the specified
+        Dynamixel unit.
+
+        The goal position should be lower or equal than this value, otherwise
+        the *Angle Limit Error Bit* (the second error bit of Status Packets)
+        will be set to ``1``.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -458,8 +477,8 @@ class Connection(object):
         Dynamixel unit.
 
         If the internal temperature of the Dynamixel actuator gets higher than
-        this value, the *Over Heating Error Bit* (the third error bit of the
-        Status Packet) will be set to ``1``.
+        this value, the *Over Heating Error Bit* (the third error bit of
+        Status Packets) will be set to ``1``.
         The values are in degrees Celsius.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
@@ -474,8 +493,8 @@ class Connection(object):
         Dynamixel unit.
 
         If the present voltage of the Dynamixel actuator gets lower than
-        this value, the *Voltage Range Error Bit* (the first error bit of the
-        Status Packet) will be set to ``1``.
+        this value, the *Voltage Range Error Bit* (the first error bit of
+        Status Packets) will be set to ``1``.
         The values are in Volts.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
@@ -493,8 +512,8 @@ class Connection(object):
         Dynamixel unit.
 
         If the present voltage of the Dynamixel actuator gets higher than
-        this value, the *Voltage Range Error Bit* (the first error bit of the
-        Status Packet) will be set to ``1``.
+        this value, the *Voltage Range Error Bit* (the first error bit of
+        Status Packets) will be set to ``1``.
         The values are in Volts.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
@@ -508,7 +527,15 @@ class Connection(object):
 
 
     def get_max_torque(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the initial maximum torque output of the specified Dynamixel
+        unit.
+
+        This value, written in EEPROM, is copied to the *torque limit* bytes
+        (in RAM) when the power is turned ON. Thus, *max torque* is just an
+        initialization value for the actual *max torque*.
+
+        If this value is equal to ``0``, the Dynamixel unit is configured in
+        *free run mode*.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -636,7 +663,8 @@ class Connection(object):
 
 
     def get_goal_position(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the requested goal angular position of the specified
+        Dynamixel unit.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -681,7 +709,7 @@ class Connection(object):
         position = utils.little_endian_bytes_to_int(byte_seq)
 
         if degrees:
-            position = math.ceil(position / 1023. * 300.)
+            position = dxl_angle_to_degrees(position)
 
         return position
 
@@ -808,7 +836,7 @@ class Connection(object):
         # TODO: check ranges
 
         if degrees:
-            position = math.ceil(position / 300. * 1023.)
+            position = degrees_to_dxl_angle(position)
 
         params = utils.int_to_little_endian_bytes(position)
 
@@ -816,4 +844,17 @@ class Connection(object):
             params += utils.int_to_little_endian_bytes(speed)
 
         self.write_data(dynamixel_id, pk.GOAL_POSITION, params)
+
+####
+
+# TODO: move it to utils
+def dxl_angle_to_degrees(dxl_angle):
+    angle_degrees = round(dxl_angle / 1023. * 300., 1)
+    return angle_degrees
+
+
+# TODO: move it to utils
+def degrees_to_dxl_angle(angle_degrees):
+    dxl_angle = math.floor(angle_degrees / 300. * 1023.)
+    return dxl_angle
 
