@@ -49,7 +49,7 @@ Gnu/Linux
 You can install, upgrade, uninstall PyAX-12 with these commands (in a
 terminal)::
 
-    pip install pyax12
+    pip install --pre pyax12
     pip install --upgrade pyax12
     pip uninstall pyax12
 
@@ -73,7 +73,7 @@ Windows
 You can install, upgrade, uninstall PyAX-12 with these commands (in a
 `command prompt`_)::
 
-    py -m pip install pyax12
+    py -m pip install --pre pyax12
     py -m pip install --upgrade pyax12
     py -m pip uninstall pyax12
 
