@@ -286,6 +286,49 @@ class Connection(object):
         else:
             max_torque_str = max_torque
 
+        status_return_level = self.get_status_return_level(dxl_id)
+        if status_return_level == 0:
+            status_return_level_str = "0 (do not respond to any instructions)"
+        elif status_return_level == 1:
+            status_return_level_str = ("1 (respond only to READ_DATA"
+                                       " instructions)")
+        elif status_return_level == 2:
+            status_return_level_str = "2 (respond to all instructions)"
+        else:
+            status_return_level_str = "%i (unknown)" % status_return_level
+
+        voltage_alarm_led = self.has_input_voltage_alarm_led(dxl_id)
+        angle_limit_alarm_led = self.has_angle_limit_alarm_led(dxl_id)
+        overheating_alarm_led = self.has_overheating_alarm_led(dxl_id)
+        range_alarm_led = self.has_range_alarm_led(dxl_id)
+        checksum_alarm_led = self.has_checksum_alarm_led(dxl_id)
+        overload_alarm_led = self.has_overload_alarm_led(dxl_id)
+        instruction_alarm_led = self.has_instruction_alarm_led(dxl_id)
+
+        voltage_alarm_led_str = "on" if voltage_alarm_led else "off"
+        angle_limit_alarm_led_str = "on" if angle_limit_alarm_led else "off"
+        overheating_alarm_led_str = "on" if overheating_alarm_led else "off"
+        range_alarm_led_str = "on" if range_alarm_led else "off"
+        checksum_alarm_led_str = "on" if checksum_alarm_led else "off"
+        overload_alarm_led_str = "on" if overload_alarm_led else "off"
+        instruction_alarm_led_str = "on" if instruction_alarm_led else "off"
+
+        voltage_alarm_off = self.has_input_voltage_alarm_shutdown(dxl_id)
+        angle_limit_alarm_off = self.has_angle_limit_alarm_shutdown(dxl_id)
+        overheating_alarm_off = self.has_overheating_alarm_shutdown(dxl_id)
+        range_alarm_off = self.has_range_alarm_shutdown(dxl_id)
+        checksum_alarm_off = self.has_checksum_alarm_shutdown(dxl_id)
+        overload_alarm_off = self.has_overload_alarm_shutdown(dxl_id)
+        instruction_alarm_off = self.has_instruction_alarm_shutdown(dxl_id)
+
+        voltage_alarm_off_str = "on" if voltage_alarm_off else "off"
+        angle_limit_alarm_off_str = "on" if angle_limit_alarm_off else "off"
+        overheating_alarm_off_str = "on" if overheating_alarm_off else "off"
+        range_alarm_off_str = "on" if range_alarm_off else "off"
+        checksum_alarm_off_str = "on" if checksum_alarm_off else "off"
+        overload_alarm_off_str = "on" if overload_alarm_off else "off"
+        instruction_alarm_off_str = "on" if instruction_alarm_off else "off"
+
         torque_enable_str = "yes" if self.is_torque_enable(dxl_id) else "no"
         led_str = "on" if self.is_led_enabled(dxl_id) else "off"
 
@@ -318,9 +361,21 @@ class Connection(object):
             ("min_voltage", min_voltage_str),
             ("max_voltage", max_voltage_str),
             ("max_torque", max_torque_str),
-            ("status_return_level", self.get_status_return_level(dxl_id)),
-            ("alarm_led", self.get_alarm_led(dxl_id)),
-            ("alarm_shutdown", self.get_alarm_shutdown(dxl_id)),
+            ("status_return_level", status_return_level_str),
+            ("input_voltage_alarm_led", voltage_alarm_led_str),
+            ("angle_limit_alarm_led", angle_limit_alarm_led_str),
+            ("overheating_alarm_led", overheating_alarm_led_str),
+            ("range_alarm_led", range_alarm_led_str),
+            ("checksum_alarm_led", checksum_alarm_led_str),
+            ("overload_alarm_led", overload_alarm_led_str),
+            ("instruction_alarm_led", instruction_alarm_led_str),
+            ("input_voltage_alarm_shutdown", voltage_alarm_off_str),
+            ("angle_limit_alarm_shutdown", angle_limit_alarm_off_str),
+            ("overheating_alarm_shutdown", overheating_alarm_off_str),
+            ("range_alarm_shutdown", range_alarm_off_str),
+            ("checksum_alarm_shutdown", checksum_alarm_off_str),
+            ("overload_alarm_shutdown", overload_alarm_off_str),
+            ("instruction_alarm_shutdown", instruction_alarm_off_str),
             ("down_calibration", self.get_down_calibration(dxl_id)),
             ("up_calibration", self.get_up_calibration(dxl_id)),
             ("torque_enabled", torque_enable_str),
@@ -357,7 +412,7 @@ class Connection(object):
         ctrl_table_tuple = self.get_control_table_tuple(dynamixel_id)
 
         for key, value in ctrl_table_tuple:
-            print("{:.<24} {}".format(key, value))
+            print("{:.<29} {}".format(key, value))
 
 
     def scan(self, dynamixel_id_bytes=None):
@@ -551,7 +606,18 @@ class Connection(object):
 
 
     def get_status_return_level(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Say whether the specified Dynamixel unit is configured to return a
+        *Status Packet* after receiving an *Instruction Packet*.
+
+        +----------------+----------------------------------------+
+        | Returned value | Meaning                                |
+        +================+========================================+
+        | 0              | Do not respond to any instructions     |
+        +----------------+----------------------------------------+
+        | 1              | Respond only to READ_DATA instructions |
+        +----------------+----------------------------------------+
+        | 2              | Respond to all instructions            |
+        +----------------+----------------------------------------+
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -560,24 +626,186 @@ class Connection(object):
         return byte_seq[0]
 
 
-    def get_alarm_led(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+    def has_input_voltage_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Input Voltage Error* occurs.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
         """
         byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
-        return byte_seq[0]
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 0))
 
 
-    def get_alarm_shutdown(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+    def has_angle_limit_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Angle Limit Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 1))
+
+
+    def has_overheating_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Overheating Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 2))
+
+
+    def has_range_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Range Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 3))
+
+
+    def has_checksum_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Checksum Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 4))
+
+
+    def has_overload_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Overload Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 5))
+
+
+    def has_instruction_alarm_led(self, dynamixel_id):
+        """Return ``True`` if the LED of the specified Dynamixel unit is
+        configured to blink when an *Instruction Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_LED, 1)
+        alarm_led_byte = byte_seq[0]
+
+        return bool(alarm_led_byte & (1 << 6))
+
+
+    def has_input_voltage_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Input Voltage Error* occurs.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
         """
         byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
-        return byte_seq[0]
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 0))
+
+
+    def has_angle_limit_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Angle Limit Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 1))
+
+
+    def has_overheating_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Overheating Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 2))
+
+
+    def has_range_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Range Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 3))
+
+
+    def has_checksum_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Checksum Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 4))
+
+
+    def has_overload_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Overload Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 5))
+
+
+    def has_instruction_alarm_shutdown(self, dynamixel_id):
+        """Return ``True`` if the specified Dynamixel unit is configured to
+        turn off its torque when an *Instruction Error* occurs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        """
+        byte_seq = self.read_data(dynamixel_id, pk.ALARM_SHUTDOWN, 1)
+        alarm_shutdown_byte = byte_seq[0]
+
+        return bool(alarm_shutdown_byte & (1 << 6))
 
 
     def get_down_calibration(self, dynamixel_id):
