@@ -505,7 +505,7 @@ class Connection(object):
 
 
     def get_cw_angle_limit(self, dynamixel_id):
-        """Return the *clock wise angle limit* of the specified Dynamixel unit.
+        """Return the *clockwise angle limit* of the specified Dynamixel unit.
 
         The goal position should be higher or equal than this value, otherwise
         the *Angle Limit Error Bit* (the second error bit of Status Packets)
@@ -519,7 +519,7 @@ class Connection(object):
 
 
     def get_ccw_angle_limit(self, dynamixel_id):
-        """Return the *counter clock wise angle limit* of the specified
+        """Return the *counter clockwise angle limit* of the specified
         Dynamixel unit.
 
         The goal position should be lower or equal than this value, otherwise
@@ -857,7 +857,43 @@ class Connection(object):
 
 
     def get_cw_compliance_margin(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the clockwise compliance margin of the specified Dynamixel
+        unit.
+
+        The compliance feature can be utilized for absorbing shocks at the
+        output shaft.
+
+        ::
+
+                 CW
+                  ▲
+                  │━━━━━━━━━━     goal position
+                  │         :╲          : 
+                  │         : ╲         :
+                  │         :  ╲        :
+                  │         :   ╲       :
+                  │         :    ╲      :
+                  │         :     ┃     :
+                  │         :     ┃     ▽ 
+            CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
+                  │         :     :     :     ┃
+                  │         :     :     :     ┃
+                  │         :     :     :     :╲
+                  │         :     :     :     : ╲
+                  │         :     :     :     :  ╲
+                  │         :     :     :     :   ╲
+                  │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
+                  │         :     :     :     :     : 
+                 CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
+                               A     B     C     D
+          
+            x axis: position error
+            y axis: output torque
+          
+            A: CCW Compliance Slope
+            B: CCW Compliance Margin
+            C: CW Compliance Slope
+            D: CW Compliance Margin
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -867,7 +903,43 @@ class Connection(object):
 
 
     def get_ccw_compliance_margin(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the counter clockwise compliance margin of the specified
+        Dynamixel unit.
+
+        The compliance feature can be utilized for absorbing shocks at the
+        output shaft.
+
+        ::
+
+                 CW
+                  ▲
+                  │━━━━━━━━━━     goal position
+                  │         :╲          : 
+                  │         : ╲         :
+                  │         :  ╲        :
+                  │         :   ╲       :
+                  │         :    ╲      :
+                  │         :     ┃     :
+                  │         :     ┃     ▽ 
+            CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
+                  │         :     :     :     ┃
+                  │         :     :     :     ┃
+                  │         :     :     :     :╲
+                  │         :     :     :     : ╲
+                  │         :     :     :     :  ╲
+                  │         :     :     :     :   ╲
+                  │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
+                  │         :     :     :     :     : 
+                 CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
+                               A     B     C     D
+            
+            x axis: position error
+            y axis: output torque
+            
+            A: CCW Compliance Slope
+            B: CCW Compliance Margin
+            C: CW Compliance Slope
+            D: CW Compliance Margin
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -877,7 +949,43 @@ class Connection(object):
 
 
     def get_cw_compliance_slope(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the clockwise compliance scope of the specified Dynamixel
+        unit.
+
+        The compliance feature can be utilized for absorbing shocks at the
+        output shaft.
+
+        ::
+
+                 CW
+                  ▲
+                  │━━━━━━━━━━     goal position
+                  │         :╲          : 
+                  │         : ╲         :
+                  │         :  ╲        :
+                  │         :   ╲       :
+                  │         :    ╲      :
+                  │         :     ┃     :
+                  │         :     ┃     ▽ 
+            CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
+                  │         :     :     :     ┃
+                  │         :     :     :     ┃
+                  │         :     :     :     :╲
+                  │         :     :     :     : ╲
+                  │         :     :     :     :  ╲
+                  │         :     :     :     :   ╲
+                  │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
+                  │         :     :     :     :     : 
+                 CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
+                               A     B     C     D
+
+            x axis: position error
+            y axis: output torque
+
+            A: CCW Compliance Slope
+            B: CCW Compliance Margin
+            C: CW Compliance Slope
+            D: CW Compliance Margin
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -887,7 +995,43 @@ class Connection(object):
 
 
     def get_ccw_compliance_slope(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the counter clockwise compliance scope of the specified
+        Dynamixel unit.
+
+        The compliance feature can be utilized for absorbing shocks at the
+        output shaft.
+
+        ::
+
+                 CW
+                  ▲
+                  │━━━━━━━━━━     goal position
+                  │         :╲          : 
+                  │         : ╲         :
+                  │         :  ╲        :
+                  │         :   ╲       :
+                  │         :    ╲      :
+                  │         :     ┃     :
+                  │         :     ┃     ▽ 
+            CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
+                  │         :     :     :     ┃
+                  │         :     :     :     ┃
+                  │         :     :     :     :╲
+                  │         :     :     :     : ╲
+                  │         :     :     :     :  ╲
+                  │         :     :     :     :   ╲
+                  │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
+                  │         :     :     :     :     : 
+                 CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
+                               A     B     C     D
+          
+            x axis: position error
+            y axis: output torque
+          
+            A: CCW Compliance Slope
+            B: CCW Compliance Margin
+            C: CW Compliance Slope
+            D: CW Compliance Margin
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -908,7 +1052,15 @@ class Connection(object):
 
 
     def get_moving_speed(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the angular velocity of the specified Dynamixel unit.
+
+        This angular velocity is defined in range (0, 1023) i.e. (0, 0x3FF) in
+        hexadecimal notation. The maximum value (1023 or 0x3FF) corresponds to
+        114 RPM (provided that there is enough power supplide).
+
+        Zero is a special value meaning that the largest possible velocity is
+        supplied for the configured voltage, e.g. no velocity control is
+        applied.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -918,7 +1070,7 @@ class Connection(object):
 
 
     def get_torque_limit(self, dynamixel_id):
-        """Return the  of the specified Dynamixel unit.
+        """Return the maximum torque output of the specified Dynamixel unit.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -963,11 +1115,11 @@ class Connection(object):
         """Return the magnitude of the load applied to the specified Dynamixel
         unit.
 
-        If the returned value is negative, the load is applied to the clock
-        wise direction.
+        If the returned value is negative, the load is applied to the clockwise
+        direction.
 
         If the returned value is positive, the load is applied to the counter
-        clock wise direction.
+        clockwise direction.
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
@@ -1052,6 +1204,41 @@ class Connection(object):
         Dynamixel unit during operation.
 
         The initial value is set to 0x20 and its maximum value is 0x3FF.
+
+        ::
+
+                 CW
+                  ▲
+                  │━━━━━━━━━━     goal position
+                  │         :╲          : 
+                  │         : ╲         :
+                  │         :  ╲        :
+                  │         :   ╲       :
+                  │         :    ╲      :
+                  │         :     ┃     :        ▲
+                  │         :     ┃     :        │ E
+                  │         :     ┃     ▽        ▼
+            CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
+                  │         :     :     :     ┃  ▲
+                  │         :     :     :     ┃  │ E
+                  │         :     :     :     ┃  ▼
+                  │         :     :     :     :╲
+                  │         :     :     :     : ╲
+                  │         :     :     :     :  ╲
+                  │         :     :     :     :   ╲
+                  │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
+                  │         :     :     :     :     : 
+                 CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
+                               A     B     C     D
+          
+            x axis: position error
+            y axis: output torque
+          
+            A: CCW Compliance Slope
+            B: CCW Compliance Margin
+            C: CW Compliance Slope
+            D: CW Compliance Margin
+            E: Punch
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
