@@ -111,16 +111,16 @@ Example usage
 In the following examples, the ``dynamixel_id``, ``port`` and ``baudrate``
 values should be adapted depending on your configuration:
 
-- for Linux users the `port` value should be something like
+- for **Linux** users the `port` value should be something like
   
   - "/dev/ttyS0", "/dev/ttyS1", ... if you use an actual serial port
   - "/dev/ttyUSB0", "/dev/ttyUSB1", ... if you use an `USB to serial` adapter
     (like the USB2Dynamixel_ adapter)
 
-- for Windows users the `port` value should be something like "COM2", "COM3",
+- for **Windows** users the `port` value should be something like "COM2", "COM3",
   ...
 
-- for MacOSX users the `port` value should be something like
+- for **MacOSX** users the `port` value should be something like
   "/dev/tty.usbserial-XXX" if you use an `USB to serial` adapter like the
   USB2Dynamixel_ adapter
 
