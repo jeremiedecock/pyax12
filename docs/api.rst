@@ -6,39 +6,14 @@ PyAX-12 API
 
 The library provides classes which are usable by third party tools.
 
-.. contents::
-   :local:
+Modules:
 
+.. toctree::
+   :maxdepth: 2
 
-.. _modules:
-
-Connection module
------------------
-
-.. automodule:: pyax12.connection
-   :members:
-
-Packet module
--------------
-
-.. automodule:: pyax12.packet
-   :members:
-
-InstructionPacket module
-------------------------
-
-.. automodule:: pyax12.instruction_packet
-   :members:
-
-StatusPacket module
--------------------
-
-.. automodule:: pyax12.status_packet
-   :members:
-
-Utils module
-------------
-
-.. automodule:: pyax12.utils
-   :members:
+   pyax12.connection <api_connection>
+   pyax12.instruction_packet <api_instruction_packet>
+   pyax12.packet <api_packet>
+   pyax12.status_packet <api_status_packet>
+   pyax12.utils <api_utils>
 
