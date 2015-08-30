@@ -81,6 +81,27 @@ Or, if you have downloaded the PyAX-12 source code::
 
     py setup.py install
 
+MacOSX
+-------
+
+Note:
+
+    The following installation procedure has been tested to work with Python
+    3.4 under MacOSX 10.6 (*Snow Leopard*).
+    It should also work with recent MacOSX systems.
+
+You can install, upgrade, uninstall PyAX-12 with these commands (in a
+terminal)::
+
+    pip install --pre pyax12
+    pip install --upgrade pyax12
+    pip uninstall pyax12
+
+Or, if you have downloaded the PyAX-12 source code::
+
+    python3 setup.py install
+
+
 Example usage
 =============
 
@@ -99,8 +120,11 @@ values should be adapted depending on your configuration:
 - for Windows users the `port` value should be something like "COM2", "COM3",
   ...
 
-If you use the USB2Dynamixel_ device, make sure its switch is set on
-"TTL".
+- for MacOSX users the `port` value should be something like
+  "/dev/tty.usbserial-XXX" if you use an `USB to serial` adapter like the
+  USB2Dynamixel_ adapter
+
+If you use the USB2Dynamixel_ device, make sure its switch is set on "TTL".
 
 Some other examples are available in the examples_ directory.
 
