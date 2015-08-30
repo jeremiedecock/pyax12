@@ -143,8 +143,8 @@ values should be adapted depending on your configuration:
 
   - the ``port`` value should be something like "COM2", "COM3", ...
   - the ``baudrate`` value should be the same than the one configured in
-    Dynamixel units *and* in the system (check the *COM port* configuration in
-    the Windows `device manager`_)
+    the Dynamixel units *and* the Windows `device manager`_ (i.e. check the
+    *COM port* configuration in the Windows `device manager`_)
 
 - for **MacOSX** users:
   
