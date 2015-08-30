@@ -128,18 +128,30 @@ Example usage
 In the following examples, the ``dynamixel_id``, ``port`` and ``baudrate``
 values should be adapted depending on your configuration:
 
-- for **Linux** users the `port` value should be something like
+- for **Linux** users:
   
-  - "/dev/ttyS0", "/dev/ttyS1", ... if you use an actual serial port
-  - "/dev/ttyUSB0", "/dev/ttyUSB1", ... if you use an `USB to serial` adapter
-    (like the USB2Dynamixel_ adapter)
+  - the ``port`` value should be something like
+  
+      - "/dev/ttyS0", "/dev/ttyS1", ... if you use an actual serial port
+      - "/dev/ttyUSB0", "/dev/ttyUSB1", ... if you use an `USB to serial` adapter
+        (like the USB2Dynamixel_ adapter)
 
-- for **Windows** users the `port` value should be something like "COM2", "COM3",
-  ...
+  - the ``baudrate`` value should be the same than the one configured in
+    Dynamixel units
 
-- for **MacOSX** users the `port` value should be something like
-  "/dev/tty.usbserial-XXX" if you use an `USB to serial` adapter like the
-  USB2Dynamixel_ adapter
+- for **Windows** users:
+
+  - the ``port`` value should be something like "COM2", "COM3", ...
+  - the ``baudrate`` value should be the same than the one configured in
+    Dynamixel units *and* in the system (check the *COM port* configuration in
+    the `device manager`_)
+
+- for **MacOSX** users:
+  
+  - the ``port`` value should be something like "/dev/tty.usbserial-XXX" if you
+    use an `USB to serial` adapter like the USB2Dynamixel_ adapter
+  - the ``baudrate`` value should be the same than the one configured in
+    Dynamixel units
 
 If you use the USB2Dynamixel_ device, make sure its switch is set on "TTL".
 
@@ -275,6 +287,7 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 .. _USB2Dynamixel: http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm
 .. _Python-serial: http://pyserial.sourceforge.net
 .. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
+.. _device manager: http://windows.microsoft.com/en-us/windows/open-device-manager
 
 .. _PyPot: https://github.com/poppy-project/pypot
 .. _Pydyn: https://github.com/humm/pydyn
