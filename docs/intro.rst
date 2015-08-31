@@ -209,7 +209,7 @@ Move the first Dynamixel unit to various position angles
 --------------------------------------------------------
 
 This snippet will move the first Dynamixel unit to 0°, then -45°, -90°, -135°,
--150°(the maximum CW angle), +150° (the maximum CCW angle), +135°, +90°, +45°
+-150° (the maximum CW angle), +150° (the maximum CCW angle), +135°, +90°, +45°
 and finally go back to 0°.
 
 ::
