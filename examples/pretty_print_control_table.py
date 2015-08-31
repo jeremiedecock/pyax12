@@ -28,7 +28,8 @@
 """
 A PyAX-12 demo.
 
-Print the control table of the specified Dynamixel unit.
+This snippet prints the control table of the specified Dynamixel unit (i.e. the
+internal state information of the Dynamixel unit).
 """
 
 from pyax12.connection import Connection
@@ -44,7 +45,7 @@ def main():
     """
 
     # Parse options
-    parser = common_argument_parser(desc=main.__doc__)
+    parser = common_argument_parser(desc=main.__doc__, id_arg_mandatory=True)
     args = parser.parse_args()
 
     # Connect to the serial port

@@ -29,7 +29,8 @@
 A PyAX-12 demo.
 
 Ping the specified Dynamixel unit.
-Returns "True" if the specified unit is available, "False" otherwise.
+This snippet prints ``True`` if the specified Dynamixel unit is connected and
+available at the given `baudrate`; otherwise it prints ``False``.
 """
 
 from pyax12.connection import Connection

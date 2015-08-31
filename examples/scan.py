@@ -28,7 +28,8 @@
 """
 A PyAX-12 demo.
 
-Prints the ID list of available Dynamixel units.
+Prints the ID list of connected and available Dynamixel units (at the given
+`baudrate`).
 """
 
 from pyax12.connection import Connection
