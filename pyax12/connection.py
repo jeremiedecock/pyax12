@@ -451,6 +451,9 @@ class Connection(object):
         return available_ids
 
 
+    # HIGH LEVEL ACCESSORS ####################################################
+
+
     def get_model_number(self, dynamixel_id):
         """Return the model number of the specified Dynamixel unit.
 
@@ -1260,6 +1263,71 @@ class Connection(object):
         byte_seq = self.read_data(dynamixel_id, pk.PUNCH, 2)
         return utils.little_endian_bytes_to_int(byte_seq)
 
+
+    # HIGH LEVEL MUTATORS #####################################################
+
+
+    def set_cw_angle_limit(self, dynamixel_id, angle_limit, degrees=False):
+        """Set the *clockwise angle limit* of the specified Dynamixel unit to
+        the specified `angle_limit`.
+
+        The *goal position* should be higher or equal than this value, otherwise
+        the *Angle Limit Error Bit* (the second error bit of Status Packets)
+        will be set to ``1``.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        :param int angle_limit: the *clockwise angle limit* to be set for the
+            specified Dynamixel unit. If `degrees` is ``True``, this value is
+            defined in degrees and must be in range (-150, 150); otherwise, it
+            is an unit free angle and must be in range (0, 1023) i.e.  (0,
+            0x3FF) in hexadecimal notation.
+        :param bool degrees: defines the `angle_limit` unit. If `degrees` is
+            ``True``, `angle_limit` is defined *in degrees* and must be in
+            range (-150, 150). Otherwise, `angle_limit` is a unit free angular
+            limit, defined in range (0, 1023) i.e. (0, 0x3FF) in hexadecimal
+            notation.
+        """
+        # TODO: check ranges
+
+        if degrees:
+            angle_limit = utils.degrees_to_dxl_angle(angle_limit)
+
+        params = utils.int_to_little_endian_bytes(angle_limit)
+
+        self.write_data(dynamixel_id, pk.CW_ANGLE_LIMIT, params)
+
+
+    def set_ccw_angle_limit(self, dynamixel_id, angle_limit, degrees=False):
+        """Set the *counter clockwise angle limit* of the specified
+        Dynamixel unit to the specified `angle_limit`.
+
+        The goal position should be lower or equal than this value, otherwise
+        the *Angle Limit Error Bit* (the second error bit of Status Packets)
+        will be set to ``1``.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFD).
+        :param int angle_limit: the *counter clockwise angle limit* to be set
+            for the specified Dynamixel unit. If `degrees` is ``True``, this
+            value is defined in degrees and must be in range (-150, 150);
+            otherwise, it is an unit free angle and must be in range (0, 1023)
+            i.e.  (0, 0x3FF) in hexadecimal notation.
+        :param bool degrees: defines the `angle_limit` unit. If `degrees` is
+            ``True``, `angle_limit` is defined *in degrees* and must be in
+            range (-150, 150). Otherwise, `angle_limit` is a unit free angular
+            limit, defined in range (0, 1023) i.e. (0, 0x3FF) in hexadecimal
+            notation.
+        """
+        # TODO: check ranges
+
+        if degrees:
+            angle_limit = utils.degrees_to_dxl_angle(angle_limit)
+
+        params = utils.int_to_little_endian_bytes(angle_limit)
+
+        self.write_data(dynamixel_id, pk.CCW_ANGLE_LIMIT, params)
+
     ###
 
     def goto(self, dynamixel_id, position, speed=None, degrees=False):
@@ -1296,4 +1364,3 @@ class Connection(object):
 
         self.write_data(dynamixel_id, pk.GOAL_POSITION, params)
 
-####
