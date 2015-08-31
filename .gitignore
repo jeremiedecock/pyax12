@@ -1,5 +1,5 @@
 dist/
-doc/dynamixel/
+doc_dynamixel/
 __pycache__/
 build/
 dist/
