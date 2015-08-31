@@ -28,8 +28,11 @@
 
 __all__ = ['int_to_little_endian_bytes',
            'little_endian_bytes_to_int',
-           'pretty_hex_str']
+           'pretty_hex_str',
+           'dxl_angle_to_degrees',
+           'degrees_to_dxl_angle']
 
+import math
 
 def int_to_little_endian_bytes(integer):
     """Converts a two-bytes integer into a pair of one-byte integers using
@@ -119,3 +122,49 @@ def pretty_hex_str(byte_seq, separator=","):
         byte_seq = bytes(byte_seq)
 
     return separator.join(['%02x' % byte for byte in byte_seq])
+
+
+# TODO: improve the docstring
+def dxl_angle_to_degrees(dxl_angle):
+    """Normalize the given angle.
+
+    PxAX-12 uses the position angle (-150.0°, +150.0°) range instead of the
+    (0°, +300.0°) range defined in the Dynamixel official documentation because
+    the former is easier to use (especially to make remarkable angles like
+    right angles or 45° and 135° angles).
+
+    :param int dxl_angle: an angle defined according to the Dynamixel internal
+        notation, i.e. in the range (0, 1023) where:
+        - 0 is a 150° clockwise angle;
+        - 1023 is a 150° counter clockwise angle.
+    :return: an angle defined in degrees in the range (-150.0°, +150.0°) where:
+        - -150.0 is a 150° clockwise angle;
+        - +150.0 is a 150° counter clockwise angle.
+    :rtype: float.
+    """
+    angle_degrees = round(dxl_angle / 1023. * 300. - 150.0, 1)
+    return angle_degrees
+
+
+# TODO: improve the docstring
+def degrees_to_dxl_angle(angle_degrees):
+    """Normalize the given angle.
+
+    PxAX-12 uses the position angle (-150.0°, +150.0°) range instead of the
+    (0°, +300.0°) range defined in the Dynamixel official documentation because
+    the former is easier to use (especially to make remarkable angles like
+    right angles or 45° and 135° angles).
+
+    :param float angle_degrees: an angle defined in degrees the range
+        (-150.0°, +150.0°) where:
+        - -150.0 is a 150° clockwise angle;
+        - +150.0 is a 150° counter clockwise angle.
+    :return: an angle defined according to the Dynamixel internal notation,
+        i.e. in the range (0, 1023) where:
+        - 0 is a 150° clockwise angle;
+        - 1023 is a 150° counter clockwise angle.
+    :rtype: int.
+    """
+    dxl_angle = math.floor((angle_degrees + 150.0) / 300. * 1023.)
+    return dxl_angle
+

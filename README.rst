@@ -24,6 +24,10 @@ PyAX-12 is an open source lightweight Python library to control
 
 |Watch a demo on youtube|_
 
+Note:
+
+    This project is still in beta stage, so the API is not finalized yet.
+
 
 Dependencies
 ============
@@ -218,8 +222,11 @@ Print the control table of the third Dynamixel unit
     serial_connection.close()
 
 
-Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150°
--------------------------------------------------------------------------------
+Move the first Dynamixel unit to various position angles
+--------------------------------------------------------
+
+This snippet will move the first Dynamixel unit to 0°, then -45°, -90°, -135°,
+-150°, +150°, +135°, +90°, +45° and finally go back to 0°.
 
 ::
 
@@ -232,19 +239,43 @@ Move the first Dynamixel unit to 0° then go to 300° and finally go back to 150
     dynamixel_id = 1
 
     # Goto to 0°
-    serial_connection.goto(dynamixel_id, 0, degrees=True)
+    serial_connection.goto(dynamixel_id, 0, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
 
-    # Wait 2 seconds
-    time.sleep(2)
+    # Goto to -45° (45° CW)
+    serial_connection.goto(dynamixel_id, -45, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
 
-    # Go back to 300°
-    serial_connection.goto(dynamixel_id, 300, degrees=True)
+    # Goto to -90° (90° CW)
+    serial_connection.goto(dynamixel_id, -90, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
 
-    # Wait 2 seconds
-    time.sleep(2)
+    # Goto to -135° (135° CW)
+    serial_connection.goto(dynamixel_id, -135, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
 
-    # Go back to 150°
-    serial_connection.goto(dynamixel_id, 150, degrees=True)
+    # Goto to -150° (150° CW)
+    serial_connection.goto(dynamixel_id, -150, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
+
+    # Goto to +150° (150° CCW)
+    serial_connection.goto(dynamixel_id, 150, speed=512, degrees=True)
+    time.sleep(2)    # Wait 2 seconds
+
+    # Goto to +135° (135° CCW)
+    serial_connection.goto(dynamixel_id, 135, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
+
+    # Goto to +90° (90° CCW)
+    serial_connection.goto(dynamixel_id, 90, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
+
+    # Goto to +45° (45° CCW)
+    serial_connection.goto(dynamixel_id, 45, speed=512, degrees=True)
+    time.sleep(1)    # Wait 1 second
+
+    # Go back to 0°
+    serial_connection.goto(dynamixel_id, 0, speed=512, degrees=True)
 
     # Close the serial connection
     serial_connection.close()
@@ -274,6 +305,8 @@ actuators are referenced in the following (non comprehensive) list:
 - dynamixel_hr_ by Romain Reignier
 - python_dynamixels_ by Jesse Merritt
 - ax12_ by Thiago Hersan
+- `Dynamixel Monitor`_ by Christian Balkenius
+- DynamixelMonitor_ by Slavik
 
 
 License
@@ -298,6 +331,8 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 .. _dynamixel_hr : https://github.com/HumaRobotics/dynamixel_hr
 .. _python_dynamixels : https://github.com/jes1510/python_dynamixels
 .. _ax12 : https://github.com/thiagohersan/memememe/tree/master/Python/ax12
+.. _Dynamixel Monitor : http://robosavvy.com/forum/viewtopic.php?p=42991
+.. _DynamixelMonitor : https://github.com/slavikshen/DynamixelMonitor
 
 .. |Watch a demo on youtube| image:: http://download.tuxfamily.org/jdhp/image/pyax12_demo_youtube.jpeg
 .. _Watch a demo on youtube: https://youtu.be/sXrEGmjz-S4

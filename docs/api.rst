@@ -6,6 +6,10 @@ PyAX-12 API
 
 The library provides classes which are usable by third party tools.
 
+.. note::
+
+    PyAX-12 is still in *beta* stage, so the API is not finalized yet.
+
 Modules:
 
 .. toctree::

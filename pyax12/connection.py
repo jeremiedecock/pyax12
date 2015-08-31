@@ -30,7 +30,6 @@ This module contain the `Connection` class communicate with Dynamixel units.
 
 __all__ = ['Connection']
 
-import math
 import serial
 import time
 
@@ -180,7 +179,7 @@ class Connection(object):
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
-        :returns: ``True`` if the specified unit is available, ``False``
+        :return: ``True`` if the specified unit is available, ``False``
             otherwise.
         """
 
@@ -219,7 +218,7 @@ class Connection(object):
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFD).
-        :returns: the sequence of all bytes in currently the *control table*.
+        :return: the sequence of all bytes in currently the *control table*.
         """
 
         byte_seq = self.read_data(dynamixel_id, 0, 50)
@@ -256,7 +255,7 @@ class Connection(object):
         ####
 
         def angle_to_str(dxl_angle):
-            angle_degrees = dxl_angle_to_degrees(dxl_angle)
+            angle_degrees = utils.dxl_angle_to_degrees(dxl_angle)
             angle_str = "{} ({}°)".format(dxl_angle, angle_degrees)
             return angle_str
 
@@ -1087,15 +1086,15 @@ class Connection(object):
         :param bool degrees: defines the returned `position` unit. If `degrees`
             is ``True``, `position` corresponds to the goal rotation angle *in
             degrees* with respect to the original position and is defined in
-            range (0, 300). Otherwise, `position` is a unit free angular position
-            to the origin, defined in range (0, 1023) i.e. (0, 0x3FF) in
-            hexadecimal notation.
+            range (-150, 150). Otherwise, `position` is a unit free angular
+            position to the origin, defined in range (0, 1023) i.e. (0, 0x3FF)
+            in hexadecimal notation.
         """
         byte_seq = self.read_data(dynamixel_id, pk.PRESENT_POSITION, 2)
         position = utils.little_endian_bytes_to_int(byte_seq)
 
         if degrees:
-            position = dxl_angle_to_degrees(position)
+            position = utils.dxl_angle_to_degrees(position)
 
         return position
 
@@ -1256,7 +1255,7 @@ class Connection(object):
             in range (0, 0xFE).
         :param int position: the new goal position. If `degrees` is ``True``,
             `position` corresponds to the goal rotation angle *in degrees* with
-            respect to the original position and must be in range (0, 300).
+            respect to the original position and must be in range (-150, 150).
             Otherwise, `position` is a unit free rotation angle to the origin,
             defined in range (0, 1023) i.e. (0, 0x3FF) in hexadecimal notation.
         :param int speed: the new moving speed. It must be in range (0, 1023)
@@ -1267,13 +1266,13 @@ class Connection(object):
         :param bool degrees: defines the `position` unit. If `degrees` is
             ``True``, `position` corresponds to the goal rotation angle *in
             degrees* with respect to the original position and must be in range
-            (0, 300). Otherwise, `position` is a unit free angular position,
+            (-150, 150). Otherwise, `position` is a unit free angular position,
             defined in range (0, 1023) i.e. (0, 0x3FF) in hexadecimal notation.
         """
         # TODO: check ranges
 
         if degrees:
-            position = degrees_to_dxl_angle(position)
+            position = utils.degrees_to_dxl_angle(position)
 
         params = utils.int_to_little_endian_bytes(position)
 
@@ -1283,15 +1282,3 @@ class Connection(object):
         self.write_data(dynamixel_id, pk.GOAL_POSITION, params)
 
 ####
-
-# TODO: move it to utils
-def dxl_angle_to_degrees(dxl_angle):
-    angle_degrees = round(dxl_angle / 1023. * 300., 1)
-    return angle_degrees
-
-
-# TODO: move it to utils
-def degrees_to_dxl_angle(angle_degrees):
-    dxl_angle = math.floor(angle_degrees / 300. * 1023.)
-    return dxl_angle
-
