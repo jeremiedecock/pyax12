@@ -165,6 +165,9 @@ Some other examples are available in the examples_ directory.
 Ping a Dynamixel
 ----------------
 
+This snippet print ``True`` if the specified Dynamixel unit is connected and
+available at the given `baudrate`; otherwise it print ``False``.
+
 ::
 
     from pyax12.connection import Connection
