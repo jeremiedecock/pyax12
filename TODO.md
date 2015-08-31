@@ -52,6 +52,7 @@
   to the Connection class should be the same than the one in dynamixel units
   (and also the same than the one of the COM port used for Windows).
 - [ ] How to avoid the "--pre" option when installing on Linux with pip ?
+- [ ] Cite the *Vor12 project* in the documentation (in the examples section).
 - [ ] Update the CHANGES.rst file.
 
 ## Version 0.5
@@ -82,6 +83,12 @@
 
 ## Version 1.0
 
+- [ ] Update "Connection.get_control_table_tuple()" such that only one
+  Instruction Packet is send to the Dynamixel unit and only one (big) Status
+  Packet is returned by the Dynamixel Unit.
+- [ ] Add a "Connection.scan_multiple_baudrate()" function (or
+  "Connection.discover_devices()") (it probably won't work under Windows
+  because of the COM port configuration in the Device Manager)
 - [ ] Make Connection.send() method more robust? See:
     - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
     - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
@@ -166,6 +173,8 @@
 
 - [ ] Conform to google.github.io/styleguide/pyguide.html ?
 - [ ] Write a MSI installer for Windows.
+- [ ] Test "setup.py bdist_rpm ..." (create an RPM distribution)
+- [ ] Test "setup.py bdist_wininst ..." (create an executable installer for MS Windows)
 - [ ] Create a "pyax12gui" repository: a set of graphic tools (tkinter) on top
   of PyAX-12 to handle Dynamixels servos.
 
