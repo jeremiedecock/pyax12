@@ -47,26 +47,38 @@ PORT_HELP_STR = ("The serial device to connect with "
                  "or 'COM1' for Windows users)")
 
 
-def common_argument_parser(desc, id_arg=True):
+def common_argument_parser(desc, id_arg=True, id_arg_mandatory=False):
     """Return a preconfigured `argparse` parser instance.
 
     :param str desc: the global description of the program (printed with -h or
         --help).
-    :param bool id_arg: argparse ignores the `dynamixel_id` option if `id_arg`
-        is False (`dynamixel_id` is not relevant for some programs e.g.
-        examples/scan.py).
+    :param bool id_arg: `argparse` ignores the `dynamixel_id` option if
+        `id_arg` is ``False`` (`dynamixel_id` is not relevant for some programs
+        e.g. examples/scan.py).
+    :param bool id_arg_mandatory: the `dynamixel_id` option is mandatory if
+        this parameter is ``True``. This parameter is ignored if `id_arg` is
+        ``False``.
     """
 
     # Parse options
     parser = argparse.ArgumentParser(description=desc)
 
     if id_arg:
-        parser.add_argument("--dynamixel_id",
-                            "-i",
-                            help=ID_HELP_STR,
-                            metavar="INTEGER",
-                            type=int,
-                            default=pk.BROADCAST_ID)
+        if id_arg_mandatory:
+            parser.add_argument("--dynamixel_id",
+                                "-i",
+                                help=ID_HELP_STR,
+                                metavar="INTEGER",
+                                type=int,
+                                required=True,
+                                default=pk.BROADCAST_ID)
+        else:
+            parser.add_argument("--dynamixel_id",
+                                "-i",
+                                help=ID_HELP_STR,
+                                metavar="INTEGER",
+                                type=int,
+                                default=pk.BROADCAST_ID)
 
     parser.add_argument("--baudrate",
                         "-b",
