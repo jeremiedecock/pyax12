@@ -148,8 +148,8 @@ Some other examples are available in the examples_ directory.
 Ping a Dynamixel
 ----------------
 
-This snippet print ``True`` if the specified Dynamixel unit is connected and
-available at the given `baudrate`; otherwise it print ``False``.
+This snippet prints ``True`` if the specified Dynamixel unit is connected and
+available at the given `baudrate`; otherwise it prints ``False``.
 
 ::
 
@@ -172,6 +172,9 @@ available at the given `baudrate`; otherwise it print ``False``.
 Scan (search available Dynamixel units)
 ---------------------------------------
 
+This snippet prints the ID list of connected and available Dynamixel units (at
+the given `baudrate`).
+
 ::
 
     from pyax12.connection import Connection
@@ -189,8 +192,11 @@ Scan (search available Dynamixel units)
     serial_connection.close()
 
 
-Print the control table of the third Dynamixel unit
+Print the control table of the first Dynamixel unit
 ---------------------------------------------------
+
+This snippet prints the control table of the specified Dynamixel unit (i.e. the
+internal state information of the Dynamixel unit).
 
 ::
 
@@ -199,7 +205,7 @@ Print the control table of the third Dynamixel unit
     # Connect to the serial port
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
-    dynamixel_id = 3
+    dynamixel_id = 1
 
     # Print the control table of the specified Dynamixel unit
     serial_connection.pretty_print_control_table(dynamixel_id)
@@ -207,13 +213,61 @@ Print the control table of the third Dynamixel unit
     # Close the serial connection
     serial_connection.close()
 
+This snippet should print something like that::
+
+    model_number................. AX-12+
+    firmware_version............. 24
+    id........................... 1
+    baud_rate.................... 57142.9 bps
+    return_delay_time............ 500 µs
+    cw_angle_limit............... 0 (-150.0°)
+    ccw_angle_limit.............. 1023 (150.0°)
+    max_temperature.............. 70°C
+    min_voltage.................. 6.0V
+    max_voltage.................. 14.0V
+    max_torque................... 1023
+    status_return_level.......... 2 (respond to all instructions)
+    input_voltage_alarm_led...... off
+    angle_limit_alarm_led........ off
+    overheating_alarm_led........ on
+    range_alarm_led.............. off
+    checksum_alarm_led........... off
+    overload_alarm_led........... on
+    instruction_alarm_led........ off
+    input_voltage_alarm_shutdown. off
+    angle_limit_alarm_shutdown... off
+    overheating_alarm_shutdown... on
+    range_alarm_shutdown......... off
+    checksum_alarm_shutdown...... off
+    overload_alarm_shutdown...... on
+    instruction_alarm_shutdown... off
+    down_calibration............. 46
+    up_calibration............... 972
+    torque_enabled............... yes
+    led.......................... off
+    cw_compliance_margin......... 1
+    ccw_compliance_margin........ 1
+    cw_compliance_slope.......... 32
+    ccw_compliance_slope......... 32
+    goal_position................ 511 (-0.1°)
+    moving_speed................. 512
+    torque_limit................. 1023
+    present_position............. 511 (-0.1°)
+    present_speed................ 0
+    present_load................. 0
+    present_voltage.............. 12.1V
+    present_temperature.......... 43°C
+    registred_instruction........ no
+    moving....................... no
+    locked....................... no
+    punch........................ 32
 
 Move the first Dynamixel unit to various position angles
 --------------------------------------------------------
 
-This snippet will move the first Dynamixel unit to 0°, then -45°, -90°, -135°,
+This snippet moves the first Dynamixel unit to 0°, then -45°, -90°, -135°,
 -150° (the maximum CW angle), +150° (the maximum CCW angle), +135°, +90°, +45°
-and finally go back to 0°.
+and finally goes back to 0°.
 
 ::
 
