@@ -256,7 +256,12 @@ class Connection(object):
 
         def angle_to_str(dxl_angle):
             angle_degrees = utils.dxl_angle_to_degrees(dxl_angle)
-            angle_str = "{} ({}°)".format(dxl_angle, angle_degrees)
+            angle_str = "{}° ({})".format(angle_degrees, dxl_angle)
+            return angle_str
+
+        def abs_angle_to_str(dxl_angle):
+            angle_degrees = round(dxl_angle / 1023. * 300., 1)
+            angle_str = "{}° ({})".format(angle_degrees, dxl_angle)
             return angle_str
 
         ####
@@ -331,6 +336,16 @@ class Connection(object):
         torque_enable_str = "yes" if self.is_torque_enable(dxl_id) else "no"
         led_str = "on" if self.is_led_enabled(dxl_id) else "off"
 
+        cw_compliance_margin = self.get_cw_compliance_margin(dxl_id)
+        ccw_compliance_margin = self.get_ccw_compliance_margin(dxl_id)
+        cw_compliance_slope = self.get_cw_compliance_slope(dxl_id)
+        ccw_compliance_slope = self.get_ccw_compliance_slope(dxl_id)
+
+        cw_compliance_margin_str = abs_angle_to_str(cw_compliance_margin)
+        ccw_compliance_margin_str = abs_angle_to_str(ccw_compliance_margin)
+        cw_compliance_slope_str = abs_angle_to_str(cw_compliance_slope)
+        ccw_compliance_slope_str = abs_angle_to_str(ccw_compliance_slope)
+
         goal_position_str = angle_to_str(self.get_goal_position(dxl_id))
         position_str = angle_to_str(self.get_present_position(dxl_id))
 
@@ -379,10 +394,10 @@ class Connection(object):
             ("up_calibration", self.get_up_calibration(dxl_id)),
             ("torque_enabled", torque_enable_str),
             ("led", led_str),
-            ("cw_compliance_margin", self.get_cw_compliance_margin(dxl_id)),
-            ("ccw_compliance_margin", self.get_ccw_compliance_margin(dxl_id)),
-            ("cw_compliance_slope", self.get_cw_compliance_slope(dxl_id)),
-            ("ccw_compliance_slope", self.get_ccw_compliance_slope(dxl_id)),
+            ("cw_compliance_margin", cw_compliance_margin_str),
+            ("ccw_compliance_margin", ccw_compliance_margin_str),
+            ("cw_compliance_slope", cw_compliance_slope_str),
+            ("ccw_compliance_slope", ccw_compliance_slope_str),
             ("goal_position", goal_position_str),
             ("moving_speed", self.get_moving_speed(dxl_id)),
             ("torque_limit", self.get_torque_limit(dxl_id)),

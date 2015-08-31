@@ -237,8 +237,8 @@ This snippet should print something like that::
     id........................... 1
     baud_rate.................... 57142.9 bps
     return_delay_time............ 500 µs
-    cw_angle_limit............... 0 (-150.0°)
-    ccw_angle_limit.............. 1023 (150.0°)
+    cw_angle_limit............... -150.0° (0)
+    ccw_angle_limit.............. 150.0° (1023)
     max_temperature.............. 70°C
     min_voltage.................. 6.0V
     max_voltage.................. 14.0V
@@ -262,14 +262,14 @@ This snippet should print something like that::
     up_calibration............... 972
     torque_enabled............... yes
     led.......................... off
-    cw_compliance_margin......... 1
-    ccw_compliance_margin........ 1
-    cw_compliance_slope.......... 32
-    ccw_compliance_slope......... 32
-    goal_position................ 511 (-0.1°)
+    cw_compliance_margin......... 0.3° (1)
+    ccw_compliance_margin........ 0.3° (1)
+    cw_compliance_slope.......... 9.4° (32)
+    ccw_compliance_slope......... 9.4° (32)
+    goal_position................ -0.1° (511)
     moving_speed................. 512
     torque_limit................. 1023
-    present_position............. 511 (-0.1°)
+    present_position............. -0.1° (511)
     present_speed................ 0
     present_load................. 0
     present_voltage.............. 12.1V
