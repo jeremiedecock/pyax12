@@ -35,8 +35,6 @@ internal state information of the Dynamixel unit).
 from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 
-import time
-
 def main():
     """
     A PyAX-12 demo.

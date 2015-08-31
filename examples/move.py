@@ -34,8 +34,6 @@ This snippet moves the first Dynamixel unit to 0°, then -45°, -90°, -135°,
 and finally goes back to 0°.
 """
 
-import pyax12.packet as pk
-
 from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 

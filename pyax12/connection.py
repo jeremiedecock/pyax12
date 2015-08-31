@@ -268,7 +268,7 @@ class Connection(object):
 
         model_number = self.get_model_number(dxl_id)
         if model_number == 12:
-            model_number_str = "AX-12+" 
+            model_number_str = "AX-12+"
         elif model_number == 13:
             model_number_str = "AX-S1"
         else:
@@ -882,13 +882,13 @@ class Connection(object):
                  CW
                   ▲
                   │━━━━━━━━━━     goal position
-                  │         :╲          : 
+                  │         :╲          :
                   │         : ╲         :
                   │         :  ╲        :
                   │         :   ╲       :
                   │         :    ╲      :
                   │         :     ┃     :
-                  │         :     ┃     ▽ 
+                  │         :     ┃     ▽
             CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
                   │         :     :     :     ┃
                   │         :     :     :     ┃
@@ -897,13 +897,13 @@ class Connection(object):
                   │         :     :     :     :  ╲
                   │         :     :     :     :   ╲
                   │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
-                  │         :     :     :     :     : 
+                  │         :     :     :     :     :
                  CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
                                A     B     C     D
-          
+
             x axis: position error
             y axis: output torque
-          
+
             A: CCW Compliance Slope
             B: CCW Compliance Margin
             C: CW Compliance Slope
@@ -928,13 +928,13 @@ class Connection(object):
                  CW
                   ▲
                   │━━━━━━━━━━     goal position
-                  │         :╲          : 
+                  │         :╲          :
                   │         : ╲         :
                   │         :  ╲        :
                   │         :   ╲       :
                   │         :    ╲      :
                   │         :     ┃     :
-                  │         :     ┃     ▽ 
+                  │         :     ┃     ▽
             CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
                   │         :     :     :     ┃
                   │         :     :     :     ┃
@@ -943,13 +943,13 @@ class Connection(object):
                   │         :     :     :     :  ╲
                   │         :     :     :     :   ╲
                   │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
-                  │         :     :     :     :     : 
+                  │         :     :     :     :     :
                  CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
                                A     B     C     D
-            
+
             x axis: position error
             y axis: output torque
-            
+
             A: CCW Compliance Slope
             B: CCW Compliance Margin
             C: CW Compliance Slope
@@ -974,13 +974,13 @@ class Connection(object):
                  CW
                   ▲
                   │━━━━━━━━━━     goal position
-                  │         :╲          : 
+                  │         :╲          :
                   │         : ╲         :
                   │         :  ╲        :
                   │         :   ╲       :
                   │         :    ╲      :
                   │         :     ┃     :
-                  │         :     ┃     ▽ 
+                  │         :     ┃     ▽
             CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
                   │         :     :     :     ┃
                   │         :     :     :     ┃
@@ -989,7 +989,7 @@ class Connection(object):
                   │         :     :     :     :  ╲
                   │         :     :     :     :   ╲
                   │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
-                  │         :     :     :     :     : 
+                  │         :     :     :     :     :
                  CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
                                A     B     C     D
 
@@ -1020,13 +1020,13 @@ class Connection(object):
                  CW
                   ▲
                   │━━━━━━━━━━     goal position
-                  │         :╲          : 
+                  │         :╲          :
                   │         : ╲         :
                   │         :  ╲        :
                   │         :   ╲       :
                   │         :    ╲      :
                   │         :     ┃     :
-                  │         :     ┃     ▽ 
+                  │         :     ┃     ▽
             CCW ──┼───────────────┺━━━━━━━━━━━┱─────────────▶ CW
                   │         :     :     :     ┃
                   │         :     :     :     ┃
@@ -1035,13 +1035,13 @@ class Connection(object):
                   │         :     :     :     :  ╲
                   │         :     :     :     :   ╲
                   │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
-                  │         :     :     :     :     : 
+                  │         :     :     :     :     :
                  CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
                                A     B     C     D
-          
+
             x axis: position error
             y axis: output torque
-          
+
             A: CCW Compliance Slope
             B: CCW Compliance Margin
             C: CW Compliance Slope
@@ -1224,7 +1224,7 @@ class Connection(object):
                  CW
                   ▲
                   │━━━━━━━━━━     goal position
-                  │         :╲          : 
+                  │         :╲          :
                   │         : ╲         :
                   │         :  ╲        :
                   │         :   ╲       :
@@ -1241,13 +1241,13 @@ class Connection(object):
                   │         :     :     :     :  ╲
                   │         :     :     :     :   ╲
                   │         :     :     :     :    ╲▂▂▂▂▂▂▂▂
-                  │         :     :     :     :     : 
+                  │         :     :     :     :     :
                  CCW         ◀───▶ ◀───▶ ◀───▶ ◀───▶
                                A     B     C     D
-          
+
             x axis: position error
             y axis: output torque
-          
+
             A: CCW Compliance Slope
             B: CCW Compliance Margin
             C: CW Compliance Slope
