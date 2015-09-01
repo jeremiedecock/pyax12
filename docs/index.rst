@@ -21,7 +21,8 @@ Contents:
 
 * Web site: http://www.jdhp.org/projects_en.html#pyax12
 * Online documentation: http://pyax-12.readthedocs.org
-* Source code and issue tracker: https://github.com/jeremiedecock/pyax12/issues
+* Source code: https://github.com/jeremiedecock/pyax12
+* Issue tracker: https://github.com/jeremiedecock/pyax12/issues
 * PyAX-12 on PyPI: https://pypi.python.org/pypi/pyax12
 
 

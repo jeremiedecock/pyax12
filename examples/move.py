@@ -58,39 +58,39 @@ def main():
 
     dynamixel_id = 1
 
-    # Goto to 0°
+    # Go to 0°
     serial_connection.goto(dynamixel_id, 0, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to -45° (45° CW)
+    # Go to -45° (45° CW)
     serial_connection.goto(dynamixel_id, -45, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to -90° (90° CW)
+    # Go to -90° (90° CW)
     serial_connection.goto(dynamixel_id, -90, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to -135° (135° CW)
+    # Go to -135° (135° CW)
     serial_connection.goto(dynamixel_id, -135, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to -150° (150° CW)
+    # Go to -150° (150° CW)
     serial_connection.goto(dynamixel_id, -150, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to +150° (150° CCW)
+    # Go to +150° (150° CCW)
     serial_connection.goto(dynamixel_id, 150, speed=512, degrees=True)
     time.sleep(2)    # Wait 2 seconds
 
-    # Goto to +135° (135° CCW)
+    # Go to +135° (135° CCW)
     serial_connection.goto(dynamixel_id, 135, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to +90° (90° CCW)
+    # Go to +90° (90° CCW)
     serial_connection.goto(dynamixel_id, 90, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
-    # Goto to +45° (45° CCW)
+    # Go to +45° (45° CCW)
     serial_connection.goto(dynamixel_id, 45, speed=512, degrees=True)
     time.sleep(1)    # Wait 1 second
 
