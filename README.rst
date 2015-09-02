@@ -2,9 +2,9 @@
     :target: https://readthedocs.org/projects/pyax-12/?badge=latest
     :alt: Documentation Status
 
-=========================================================
-`PyAX-12 <http://www.jdhp.org/projects_en.html#pyax12>`__
-=========================================================
+==========
+`PyAX-12`_
+==========
 
 Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 
@@ -19,8 +19,8 @@ Copyright (c) 2010,2015 Jeremie DECOCK (http://www.jdhp.org)
 Description
 ===========
 
-PyAX-12 is an open source lightweight Python library to control
-`Dynamixel AX-12+ <http://www.robotis.com/xe/dynamixel_en>`__ actuators.
+`PyAX-12`_ is an open source lightweight Python library to control
+`Dynamixel AX-12+`_ actuators.
 
 |Watch a demo on youtube|_
 
@@ -352,9 +352,8 @@ To search for bugs or report them, please use the PyAX-12 Bug Tracker at:
 Related libraries
 =================
 
-Other libraries to control
-`Dynamixel AX-12+ <http://www.robotis.com/xe/dynamixel_en>`__
-actuators are referenced in the following (non comprehensive) list:
+Other libraries to control `Dynamixel AX-12+`_ actuators are referenced in the
+following (non comprehensive) list:
 
 - PyPot_ by Inria (FLOWERS team)
 - PyDynamixel_ by Richard Clark
@@ -371,10 +370,13 @@ License
 =======
 
 The ``PyAX-12`` library is provided under the terms and conditions of the
-`MIT License <http://opensource.org/licenses/MIT>`__.
+`MIT License`_.
 
 
-.. _Dynamixel AX-12+ actuators: http://www.robotis.com/xe/dynamixel_en
+.. _MIT License: http://opensource.org/licenses/MIT
+
+.. _PyAX-12: http://www.jdhp.org/projects_en.html#pyax12
+.. _Dynamixel AX-12+: http://www.robotis.com/xe/dynamixel_en
 .. _examples: https://github.com/jeremiedecock/pyax12/tree/master/examples
 .. _USB2Dynamixel: http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm
 .. _Python-serial: http://pyserial.sourceforge.net
