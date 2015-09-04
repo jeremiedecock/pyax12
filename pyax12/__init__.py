@@ -38,7 +38,7 @@
 # Dev branch marker is: 'X.Y.dev' or 'X.Y.devN' where N is an integer.
 # 'X.Y.dev0' is the canonical version of 'X.Y.dev'
 #
-__version__ = '0.4.dev5'
+__version__ = '0.4.dev6'
 
 __all__ = ['connection',
            'instruction_packet',

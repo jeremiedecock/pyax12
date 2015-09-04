@@ -362,4 +362,4 @@ actuators are referenced in the following (non comprehensive) list:
 .. _DynamixelMonitor : https://github.com/slavikshen/DynamixelMonitor
 
 .. |Watch a demo on youtube| image:: http://download.tuxfamily.org/jdhp/image/pyax12_demo_youtube.jpeg
-.. _Watch a demo on youtube: https://youtu.be/sXrEGmjz-S4
+.. _Watch a demo on youtube: http://youtu.be/5r0mNPhpf04

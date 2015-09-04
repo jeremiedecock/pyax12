@@ -25,6 +25,8 @@ Contents:
 * Issue tracker: https://github.com/jeremiedecock/pyax12/issues
 * PyAX-12 on PyPI: https://pypi.python.org/pypi/pyax12
 
+In collaboration with http://www.vorobotics.com
+
 
 Indices and tables
 ==================
