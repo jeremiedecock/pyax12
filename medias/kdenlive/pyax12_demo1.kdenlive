@@ -189,7 +189,7 @@
  </tractor>
  <kdenlivedoc profile="atsc_1080p_25" kdenliveversion="0.9.10" version="0,88" projectfolder="/home/jeremie/kdenlive">
   <customeffects/>
-  <documentproperties proxyimageminsize="2000" zonein="0" enableproxy="0" zoneout="100" generateproxy="0" zoom="5" verticalzoom="1" proxyextension="ts" position="0" documentid="1441382719613" generateimageproxy="0" proxyminsize="1000" proxyparams="-f mpegts -acodec libmp3lame -ac 2 -ab 128k -vcodec mpeg2video -g 5 -s 640x480 -qscale 7"/>
+  <documentproperties documentid="1441382719613" renderaudiobitrate="128" renderdestination="" renderrescalewidth="1280" proxyextension="ts" generateproxy="0" proxyimageminsize="2000" rendertctype="0" verticalzoom="1" renderprofile="H.264/AAC High Profile" renderrescaleheight="720" zonein="0" renderrescale="1" renderscanning="1" renderurl="/home/jeremie/kdenlive/pyax12_demo1.mp4" rendertwopass="0" renderplay="0" position="0" proxyminsize="1000" renderstartguide="-1" zoom="5" rendercategory="MP4" renderratio="1" zoneout="100" renderbitrate="20" renderzone="0" renderendguide="-1" renderexportaudio="0" proxyparams="-f mpegts -acodec libmp3lame -ac 2 -ab 128k -vcodec mpeg2video -g 5 -s 640x480 -qscale 7" enableproxy="0" generateimageproxy="0" renderguide="0" rendertcoverlay="0"/>
   <documentmetadata/>
   <documentnotes>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
