@@ -25,6 +25,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# Here is the procedure to submit updates to PyPI
+# ===============================================
+#
+# 1. Register to PyPI:
+#
+#    $ python3 setup.py register
+#
+# 2. Upload the source distribution:
+#
+#    $ python3 setup.py sdist upload
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
