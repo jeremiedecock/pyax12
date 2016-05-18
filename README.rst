@@ -76,11 +76,11 @@ Or, if you have downloaded the PyAX-12 source code::
 Windows
 -------
 
-Note:
-
-    The following installation procedure has been tested to work with Python
-    3.4 under Windows 7.
-    It should also work with recent Windows systems.
+.. Note:
+.. 
+..     The following installation procedure has been tested to work with Python
+..     3.4 under Windows 7.
+..     It should also work with recent Windows systems.
 
 You can install, upgrade, uninstall PyAX-12 with these commands (in a
 `command prompt`_)::
@@ -96,11 +96,11 @@ Or, if you have downloaded the PyAX-12 source code::
 MacOSX
 -------
 
-Note:
-
-    The following installation procedure has been tested to work with Python
-    3.4 under MacOSX 10.6 (*Snow Leopard*).
-    It should also work with recent MacOSX systems.
+.. Note:
+.. 
+..     The following installation procedure has been tested to work with Python
+..     3.5 under MacOSX 10.9 (*Mavericks*).
+..     It should also work with recent MacOSX systems.
 
 You can install, upgrade, uninstall PyAX-12 with these commands (in a
 terminal)::

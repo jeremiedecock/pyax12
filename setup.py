@@ -25,6 +25,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# Here is the procedure to submit updates to PyPI
+# ===============================================
+#
+# 1. Register to PyPI:
+#
+#    $ python3 setup.py register
+#
+# 2. Upload the source distribution:
+#
+#    $ python3 setup.py sdist upload
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
@@ -39,18 +50,11 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Natural Language :: English',
                'Operating System :: OS Independent',
                'Programming Language :: Python :: 3',
-               'Programming Language :: Python :: 3.0',
-               'Programming Language :: Python :: 3.1',
-               'Programming Language :: Python :: 3.2',
-               'Programming Language :: Python :: 3.3',
-               'Programming Language :: Python :: 3.4',
                'Topic :: Software Development :: Libraries',
                'Topic :: Software Development :: Libraries :: Python Modules',
                'Topic :: Software Development :: Libraries :: Application Frameworks']
 
-
 KEYWORDS = 'dynamixel ax12 ax-12 servo actuator library robotics'
-
 
 # You can either specify manually the list of packages to include in the
 # distribution or use "setuptools.find_packages()" to include them
