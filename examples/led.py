@@ -50,7 +50,10 @@ def main():
     args = parser.parse_args()
 
     # Connect to the serial port
-    serial_connection = Connection(args.port, args.baudrate, args.timeout)
+    serial_connection = Connection(port=args.port,
+                                   baudrate=args.baudrate,
+                                   timeout=args.timeout,
+                                   rpi_gpio=args.rpi)
 
     # Switch ON the LED
     serial_connection.write_data(args.dynamixel_id, pk.LED, 1)

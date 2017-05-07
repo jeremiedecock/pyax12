@@ -47,7 +47,10 @@ def main():
     args = parser.parse_args()
 
     # Connect to the serial port
-    serial_connection = Connection(args.port, args.baudrate, args.timeout)
+    serial_connection = Connection(port=args.port,
+                                   baudrate=args.baudrate,
+                                   timeout=args.timeout,
+                                   rpi_gpio=args.rpi)
 
     # Print the control table of the specified Dynamixel unit
     serial_connection.pretty_print_control_table(args.dynamixel_id)

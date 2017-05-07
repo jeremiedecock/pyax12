@@ -47,7 +47,10 @@ def main():
     args = parser.parse_args()
 
     # Connect to the serial port
-    serial_connection = Connection(args.port, args.baudrate, args.timeout)
+    serial_connection = Connection(port=args.port,
+                                   baudrate=args.baudrate,
+                                   timeout=args.timeout,
+                                   rpi_gpio=args.rpi)
 
     # Ping the dynamixel unit(s)
     ids_available = serial_connection.scan()

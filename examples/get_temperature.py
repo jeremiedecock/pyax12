@@ -52,7 +52,10 @@ def main():
     args = parser.parse_args()
 
     # Connect to the serial port
-    serial_connection = Connection(args.port, args.baudrate, args.timeout)
+    serial_connection = Connection(port=args.port,
+                                   baudrate=args.baudrate,
+                                   timeout=args.timeout,
+                                   rpi_gpio=args.rpi)
 
     # Print the present internal temperature
     print(serial_connection.get_present_temperature(args.dynamixel_id))
