@@ -31,11 +31,17 @@ This module contain the `Connection` class communicate with Dynamixel units.
 __all__ = ['Connection']
 
 import serial
+import sys
 import time
 
 import pyax12.packet as pk
 import pyax12.status_packet as sp
 import pyax12.instruction_packet as ip
+
+try:
+    import RPi.GPIO as gpio
+except:
+    pass
 
 from pyax12 import utils
 
@@ -51,13 +57,26 @@ class Connection(object):
     """
 
     def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1,
-                 waiting_time=0.02):
+                 waiting_time=0.02, rpi_gpio=False):
+
+        self.rpi_gpio = False
+
+        if rpi_gpio:
+            if "RPi" in sys.modules:
+                self.rpi_gpio = True
+            else:
+                raise Exception("RPi.GPIO cannot be imported")   # TODO: improve this ?
 
         self.waiting_time = waiting_time
 
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
+
+        if self.rpi_gpio:
+            gpio.setmode(gpio.BCM)
+            gpio.setup(18, gpio.OUT)
+
         self.serial_connection = serial.Serial(port=self.port,
                                                baudrate=self.baudrate,
                                                timeout=self.timeout,
@@ -84,15 +103,26 @@ class Connection(object):
 
         # Send the packet #################################
 
+        if self.rpi_gpio:
+            # Set the data direction to "send"
+            gpio.output(18, gpio.HIGH)
+
         self.serial_connection.write(instruction_packet_bytes)
 
+        # Sleep a little bit ##############################
+
+        time.sleep(self.waiting_time)
+
         # Receive the reply (status packet) ###############
+
+        if self.rpi_gpio:
+            # Set the data direction to "receive"
+            gpio.output(18, gpio.LOW)
 
         # WARNING:
         # If you use the USB2Dynamixel device, make sure its switch is set on
         # "TTL" (otherwise status packets won't be readable).
 
-        time.sleep(self.waiting_time)
         num_bytes_available = self.serial_connection.inWaiting()
 
         # TODO: not robust...
@@ -111,6 +141,11 @@ class Connection(object):
 
         # TODO: flush ?
         self.serial_connection.close()
+
+        if self.rpi_gpio:
+            pass     # TODO: put back gpio to its default setup ?
+            #gpio.setmode(gpio.BCM)
+            #gpio.setup(18, gpio.OUT)
 
 
     def flush(self):
