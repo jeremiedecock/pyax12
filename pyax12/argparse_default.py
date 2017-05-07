@@ -46,6 +46,8 @@ PORT_HELP_STR = ("The serial device to connect with "
                  "(e.g. '/dev/ttyUSB0' for Unix users "
                  "or 'COM1' for Windows users)")
 
+RPI_HELP_STR = "Use Raspberry Pi GPIO to connect Dynamixels"
+
 
 def common_argument_parser(desc, id_arg=True, id_arg_mandatory=False):
     """Return a preconfigured `argparse` parser instance.
@@ -99,6 +101,10 @@ def common_argument_parser(desc, id_arg=True, id_arg_mandatory=False):
                         help=PORT_HELP_STR,
                         metavar="STRING",
                         default="/dev/ttyUSB0")
+
+    parser.add_argument("--rpi",
+                        help=RPI_HELP_STR,
+                        action="store_true")
 
     return parser
 
