@@ -42,7 +42,7 @@ PyAX-12 is tested to work with Python 3.4 under Gnu/Linux (Debian 8), MacOSX
 Any Python 3.X version under recent Gnu/Linux, MaxOSX and Windows systems
 should suit too.
 
-PyAX-12 can also be run on Raspberry Pi through the GPIO connector.
+PyAX-12 can also be run on `Raspberry Pi`_ through the GPIO connector.
 
 `Python-serial`_ is the only dependency required to install PyAX-12.
 
@@ -386,6 +386,7 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 .. _Python-serial: https://github.com/pyserial/pyserial
 .. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
 .. _device manager: http://windows.microsoft.com/en-us/windows/open-device-manager
+.. _Raspberry Pi: https://www.raspberrypi.org/
 
 .. _PyPot: https://github.com/poppy-project/pypot
 .. _Pydyn: https://github.com/humm/pydyn
