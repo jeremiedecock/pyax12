@@ -231,6 +231,13 @@ values should be adapted depending on your configuration:
   - the ``baudrate`` value should be the same than the one configured in
     Dynamixel units
 
+- for **Raspberry Pi** users:
+
+  - if you want to control AX-12 actuators through GPIO connector, don't forget
+    to set ``rpi_gpio`` to ``True`` in the ``Connection`` constructor (check
+    the first following example)
+  - the ``port`` value should be "/dev/ttyAMA0"
+
 If you use the USB2Dynamixel_ device, make sure its switch is set on "TTL".
 
 Some other examples are available in the examples_ directory.
@@ -247,6 +254,25 @@ available at the given `baudrate`; otherwise it prints ``False``.
 
     # Connect to the serial port
     serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
+
+    dynamixel_id = 3
+
+    # Ping the third dynamixel unit
+    is_available = serial_connection.ping(dynamixel_id)
+
+    print(is_available)
+
+    # Close the serial connection
+    serial_connection.close()
+
+
+For Raspberry Pi users who connected AX-12 actuators to the GPIO connector, use
+the following code instead::
+
+    from pyax12.connection import Connection
+
+    # Connect to the serial port
+    serial_connection = Connection(port="/dev/ttyAMA0", rpi_gpio=True)
 
     dynamixel_id = 3
 
