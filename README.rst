@@ -39,12 +39,12 @@ Dependencies
 
 PyAX-12 is tested to work with Python 3.4 under Gnu/Linux (Debian 8), MacOSX
 (Mavericks 10.9) and Windows (7).
-It should also work with any Python 3.X version under recent Gnu/Linux,
-MaxOSX and Windows systems.
+Any Python 3.X version under recent Gnu/Linux, MaxOSX and Windows systems
+should suit too.
 
-PyAX-12 is also tested to work on Raspberry Pi through the GPIO connector.
+PyAX-12 can also be run on Raspberry Pi through the GPIO connector.
 
-`Python-serial`_ is required to install PyAX-12.
+`Python-serial`_ is the only dependency required to install PyAX-12.
 
 Note:
 
