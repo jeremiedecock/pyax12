@@ -266,8 +266,8 @@ available at the given `baudrate`; otherwise it prints ``False``.
     serial_connection.close()
 
 
-For Raspberry Pi users who connected AX-12 actuators to the GPIO connector, use
-the following code instead::
+Raspberry Pi users who connected AX-12 actuators to the GPIO connector should
+use the following code instead::
 
     from pyax12.connection import Connection
 
