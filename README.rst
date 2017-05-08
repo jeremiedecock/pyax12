@@ -388,7 +388,6 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 .. _PyPot: https://github.com/poppy-project/pypot
 .. _Pydyn: https://github.com/humm/pydyn
 .. _PyDynamixel: https://github.com/richard-clark/PyDynamixel
-.. _Python-serial: http://pyserial.sourceforge.net
 .. _Dynamixel : https://pypi.python.org/pypi/dynamixel/1.0.1
 .. _dynamixel_hr : https://github.com/HumaRobotics/dynamixel_hr
 .. _python_dynamixels : https://github.com/jes1510/python_dynamixels
