@@ -116,6 +116,75 @@ Or, if you have downloaded the PyAX-12 source code::
     python3 setup.py install
 
 
+Hardware setup
+==============
+
+`Official AX-12 documentation <https://web.archive.org/web/20101008170532/http://support.robotis.com/en/product/dynamixel/ax_series/dxl_ax_actuator.htm>`__ (archive).
+
+Connecting AX-12 actuators to a computer (including `Raspberry Pi`_ computers) through USB port
+-----------------------------------------------------------------------------------------------
+
+The USB2Dynamixel_ can be used to connect AX-12 actuators to your computer.
+Actually, any FTDI serial/USB converter device should do the job.
+
+For more information on USB2Dynamixel setup, check the `official documentation
+<http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm>__`.
+
+Connecting AX-12 actuators to a `Raspberry Pi`_ through GPIO port
+-----------------------------------------------------------------
+
+A small electronic circuit is needed to convert Raspberry Pi UART signals (on
+RX and TX pins) to the half-duplex ones required by Dynamixels (see
+`this archive<https://web.archive.org/web/20100414173935/support.robotis.com/en/product/dynamixel/dxl_ax_main.htm>`__).
+
+The chips that converts full-duplex into half-duplex are either 74HC126/74HC04
+or 74LS241.
+
+Control Dynamixel AX-12 with the 74LS241
+''''''''''''''''''''''''''''''''''''''''
+
+For the 74LS241, it's well explained on the following pages:
+
+- http://www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
+- http://memememememememe.me/post/the-dynamixel-ax-12a-servos/
+- http://robottini.altervista.org/dynamixel-ax-12a-and-arduino-how-to-use-the-serial-port
+- http://savageelectronics.blogspot.fr/2011/01/arduino-y-dynamixel-ax-12.html
+
+A PCB by Thiago Hersan is freely available here:
+
+- https://circuits.io/circuits/267189-ax-12-driver-for-raspberry-pi/#pcb
+
+For the schematics, check the following pages:
+
+- http://memememememememe.me/assets/posts/the-dynamixel-ax-12a-servos/uart_half-duplex_74LS241.jpg
+- https://circuits.io/circuits/267189-ax-12-driver-for-raspberry-pi/#schematic
+- http://robottini.altervista.org/wp-content/uploads/2011/12/Dynamixel-Arduino-electric-schema-1024x768.jpg (this one doesn't link pins 3 and 20 by a resistor)
+
+Control Dynamixel AX-12 with the 774HC126/74HC04
+''''''''''''''''''''''''''''''''''''''''''''''''
+
+For the 74HC126/74HC04, check the following page:
+
+- `Robotis support<https://web.archive.org/web/20100414173935/support.robotis.com/en/product/dynamixel/dxl_ax_main.htm>`__ (archive)
+
+UART configuration
+''''''''''''''''''
+
+Increasing the bandwidth up to 1Mbps may require a special setup (not tested
+yet):
+
+- http://www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
+- http://fw.hardijzer.nl/?p=138
+
+Otherwise, if you keep the bandwidth to 57600bps, there is nothing special to
+do (make sure you use the right Dynamixel ID and the Dynamixel bandwidth
+is properly setup to 56700bps).
+
+Additional information
+''''''''''''''''''''''
+
+See also: https://github.com/jeremiedecock/raspberry-pi-python-snippets/tree/master/dynamixel_ax12
+
 Documentation
 =============
 
