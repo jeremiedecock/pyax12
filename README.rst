@@ -378,10 +378,10 @@ The ``PyAX-12`` library is provided under the terms and conditions of the
 .. _MIT License: http://opensource.org/licenses/MIT
 
 .. _PyAX-12: http://www.jdhp.org/projects_en.html#pyax12
-.. _Dynamixel AX-12+: http://www.robotis.com/xe/dynamixel_en
+.. _Dynamixel AX-12+: http://en.robotis.com/index/product.php?cate_code=10101111&bbs_no=6#product_title
 .. _examples: https://github.com/jeremiedecock/pyax12/tree/master/examples
 .. _USB2Dynamixel: http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm
-.. _Python-serial: http://pyserial.sourceforge.net
+.. _Python-serial: https://github.com/pyserial/pyserial
 .. _command prompt: https://en.wikipedia.org/wiki/Cmd.exe
 .. _device manager: http://windows.microsoft.com/en-us/windows/open-device-manager
 
