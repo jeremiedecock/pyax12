@@ -176,8 +176,8 @@ yet):
 - http://www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
 - http://fw.hardijzer.nl/?p=138
 
-Otherwise, if you keep the bandwidth to 57600bps, there is nothing special to
-do (make sure you use the right Dynamixel ID and the Dynamixel bandwidth
+Otherwise keeping the bandwidth to 57600bps should work out of the box
+(make sure you use the right Dynamixel ID and the Dynamixel bandwidth
 is properly setup to 56700bps).
 
 Additional information
