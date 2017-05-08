@@ -128,14 +128,14 @@ The USB2Dynamixel_ can be used to connect AX-12 actuators to your computer.
 Actually, any FTDI serial/USB converter device should do the job.
 
 For more information on USB2Dynamixel setup, check the
-`official documentation <http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm>__`.
+`official documentation <http://support.robotis.com/en/product/auxdevice/interface/usb2dxl_manual.htm>`__.
 
 Connecting AX-12 actuators to a Raspberry Pi through GPIO port
 --------------------------------------------------------------
 
 A small electronic circuit is needed to convert Raspberry Pi UART signals (on
 RX and TX pins) to the half-duplex ones required by Dynamixels (see
-`this archive<https://web.archive.org/web/20100414173935/support.robotis.com/en/product/dynamixel/dxl_ax_main.htm>`__).
+`this archive <https://web.archive.org/web/20100414173935/support.robotis.com/en/product/dynamixel/dxl_ax_main.htm>`__).
 
 The chips that converts full-duplex into half-duplex are either 74HC126/74HC04
 or 74LS241.
