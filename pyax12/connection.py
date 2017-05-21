@@ -106,7 +106,7 @@ class Connection(object):
         if self.rpi_gpio:
             # Pin 18 = +3V (DATA status = send data to Dynamixel)
             gpio.output(18, gpio.HIGH)
-            time.sleep(0.001)          # TODO
+            time.sleep(0.01)          # TODO
 
         self.serial_connection.write(instruction_packet_bytes)
 
@@ -114,13 +114,13 @@ class Connection(object):
 
         if self.rpi_gpio:
             self.serial_connection.flushOutput()
-            time.sleep(0.0013)  # TODO: check instead if the output buffer is empty or make the previous flushOutput synchronous
+            time.sleep(0.00017 * len(instruction_packet_bytes))  # TODO: check instead if the output buffer is empty or make the previous flushOutput synchronous
 
             if self.rpi_gpio:
                 # Pin 18 = 0V (DATA status = receive data from Dynamixel)
                 gpio.output(18, gpio.LOW)
 
-            time.sleep(0.002)              # TODO: make a while loop with a timeout instead ?
+            time.sleep(0.004)              # TODO: make a while loop with a timeout instead ?
         else:
             time.sleep(self.waiting_time)  # TODO: make a while loop with a timeout instead ?
 
