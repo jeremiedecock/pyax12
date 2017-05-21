@@ -75,7 +75,7 @@ class Connection(object):
 
         if self.rpi_gpio:
             gpio.setmode(gpio.BCM)
-            gpio.setup(18, gpio.OUT)
+            gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
 
         self.serial_connection = serial.Serial(port=self.port,
                                                baudrate=self.baudrate,
@@ -99,25 +99,32 @@ class Connection(object):
             # instruction_packet is a Packet instance
             instruction_packet_bytes = instruction_packet.to_bytes()
 
-        self.flush()
+        self.flush()      # TODO: make a (synchronous) flush_in() and flush_out() instead
 
         # Send the packet #################################
 
         if self.rpi_gpio:
-            # Set the data direction to "send"
+            # Pin 18 = +3V (DATA status = send data to Dynamixel)
             gpio.output(18, gpio.HIGH)
+            time.sleep(0.001)          # TODO
 
         self.serial_connection.write(instruction_packet_bytes)
 
         # Sleep a little bit ##############################
 
-        time.sleep(self.waiting_time)
+        if self.rpi_gpio:
+            self.serial_connection.flushOutput()
+            time.sleep(0.0013)  # TODO: check instead if the output buffer is empty or make the previous flushOutput synchronous
+
+            if self.rpi_gpio:
+                # Pin 18 = 0V (DATA status = receive data from Dynamixel)
+                gpio.output(18, gpio.LOW)
+
+            time.sleep(0.002)              # TODO: make a while loop with a timeout instead ?
+        else:
+            time.sleep(self.waiting_time)  # TODO: make a while loop with a timeout instead ?
 
         # Receive the reply (status packet) ###############
-
-        if self.rpi_gpio:
-            # Set the data direction to "receive"
-            gpio.output(18, gpio.LOW)
 
         # WARNING:
         # If you use the USB2Dynamixel device, make sure its switch is set on
@@ -145,7 +152,7 @@ class Connection(object):
         if self.rpi_gpio:
             pass     # TODO: put back gpio to its default setup ?
             #gpio.setmode(gpio.BCM)
-            #gpio.setup(18, gpio.OUT)
+            #gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
 
 
     def flush(self):
