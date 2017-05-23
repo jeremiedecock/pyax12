@@ -7,6 +7,60 @@
 
 ## Version 0.4
 
+- [ ] Improve Connection.send() function:
+    - [ ] Step 1: waiting times should be multiples of 1/baudrate * (num bits per byte + num bits of parity) * num bytes sent
+    - [ ] Step 2: split the flush() function into flush_in() and flush_out() + make them synchronous
+    - [ ] Step 3: read status packets in a while loop with a timeout criteria
+    - [ ] Step 4: be sure the UART is free (i.e. no other process is using it), suppress interrupts on it and check with `fuser -v </dev/tty...>` and `lsof`
+    - [ ] Step 5: Add tools to
+        - [ ] scan at multiple baudrate ("Connection.scan_multiple_baudrate()" function or
+          "Connection.discover_devices()") (it probably won't work under Windows
+          because of the COM port configuration in the Device Manager)
+        - [ ] reset a dynamixel to default values (factory reset)
+        - [ ] reset any dynamixel whatever its baudrate and setup a new baudrate and a new ID
+        - [ ] change the baudrate and the ID
+        - ...
+    - [ ] Step 6: test for:
+        - [ ] GPIO on all Raspberry Pi: A, B, 2, 3, zero
+            - [ ] all baudrates
+        - [ ] USB2Dynamixel on main OS: Linux (PC and Raspberry Pi), MacOSX, Windows
+            - [ ] all baudrates
+    - [ ] Step 7: check official Dynamixel specs and recommendations
+    - [ ] Step 8: check how packets are send and receive on other libraries:
+        - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
+        - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
+        - PyPot: https://github.com/poppy-project/pypot/blob/master/pypot/dynamixel/io/abstract_io.py#L503
+        - ...
+    - [ ] Improve the reliability of "Connection.send()".
+- [ ] Sphinx documentation:
+    - [ ] Explain *low level*/*mid level*/*high level* APIs
+    - [ ] Explain system setup on Raspberry Pi (issues with UART on Raspberry Pi 3, ...)
+    - [ ] Explain the hardware setup in detail (breadboard schemas, ...) for USB2Dynamixel, GPIO, ...
+- [ ] Complete the sphinx documentation to contain all the "Dynamixel User
+  Manual" (the documentation should help users to connect dynamixels,
+  understand how it works, ...).
+- [ ] Improve the README file:
+    - [ ] Description;
+    - [ ] Installation procedure: see http://www.pylint.org/ (and add more
+      details in the Troubleshooting/FAQ sections)
+- [ ] Add a "Troubleshooting" section in the README.rst and sphinx docs (should
+  contain installation instructions relative to specific
+  platforms/configurations).
+- [ ] Add a "FAQ" section in the README.rst and sphinx docs.
+- [ ] Update the BUGS.md file
+- [ ] Write a tutorial to explain how to use PyAX-12 on a RaspberryPi using
+  GPIOs (i.e. without the usbdynamixel adapter) and without the CM-5 (i.e. using
+  a batteries, a LiPo or a DC lab power supply instead).
+  - See: www.instructables.com/id/How-to-drive-Dynamixel-AX-12A-servos-with-a-Raspbe/?ALLSTEPS
+  - See: www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
+- [ ] Add the following warning in the documentation: the baudrate value given
+  to the Connection class should be the same than the one in dynamixel units
+  (and also the same than the one of the COM port used for Windows).
+
+## Version 0.5
+
+- [ ] Packging: PIP, conda, macports, brew, Debian packet, RPM, ...
+- [ ] Add a "Features" section in the README.rst and sphinx docs.
 - [x] Check/fix the setup.py file.
 - [x] Publish PyAX-12 on PyPI.
 - [x] Check the PyAX-12 installation (with pip) and examples on Windows 7.
@@ -48,21 +102,14 @@
     - [x] packet.py
     - [x] status_packet.py
     - [x] utils.py
-- [ ] Add the following warning in the documentation: the baudrate value given
-  to the Connection class should be the same than the one in dynamixel units
-  (and also the same than the one of the COM port used for Windows).
 - [ ] How to avoid the "--pre" option when installing on Linux with pip ?
 - [ ] Cite the *Vor12 project* in the documentation (in the examples section).
 - [ ] Update the CHANGES.rst file.
 
-## Version 0.5
+## Version 0.6
 
 - [ ] Write a test suite to launch all unit tests.
 - [ ] Add some examples.
-- [ ] Improve the README file:
-    - [ ] Description;
-    - [ ] Installation procedure: see http://www.pylint.org/ (and add more
-      details in the Troubleshooting/FAQ sections)
 - [ ] Clean all modules with pep8.
     - [ ] argparse_default.py
     - [ ] connection.py
@@ -81,25 +128,27 @@
   the documentation), i.e. something like this:
   https://docs.python.org/3/library/itertools.html
 
+## Version 0.7
+
+- [ ] Check and document PID and torque capabilities of Dynamixels with an
+  experimental installation using weights and accelerometer at one end of an
+  arm and a Dynamixel at the other end
+- [ ] Advanced control
+    - External PID
+    - Impulse like control (give a "force" and simulate pysical models: spring, viscosity, ...)
+
 ## Version 1.0
 
+- [ ] GUI to control Dynamixels and get infos
 - [ ] Update "Connection.get_control_table_tuple()" such that only one
   Instruction Packet is send to the Dynamixel unit and only one (big) Status
   Packet is returned by the Dynamixel Unit.
-- [ ] Add a "Connection.scan_multiple_baudrate()" function (or
-  "Connection.discover_devices()") (it probably won't work under Windows
-  because of the COM port configuration in the Device Manager)
-- [ ] Make Connection.send() method more robust? See:
-    - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
-    - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
-    - PyPot: https://github.com/poppy-project/pypot/blob/master/pypot/dynamixel/io/abstract_io.py#L503
 - [ ] Check how famous open source Python projects write:
     - [ ] setup.py
     - [ ] MANIFEST.in
     - [ ] sphinx documentation
     - [ ] docstrings (e.g. Sphinx style, Google/Numpy "Napoleon" sytle, ...)
 - [ ] Fix remaining "TODO" tags.
-- [ ] Improve the reliability of "Connection.send()".
 - [ ] Fix missing data and tests:
     - [ ] Error table (Dynamixel User Manual p.11)
     - [ ] Access RD/WD (p.12)
@@ -129,14 +178,6 @@
           encouraged Gitorious users to make use of its import tools to migrate
           projects to Gitlab)"
     - [ ] http://savannah.nongnu.org/
-- [ ] Complete the sphinx documentation to contain all the "Dynamixel User
-  Manual" (the documentation should help users to connect dynamixels,
-  understand how it works, ...).
-- [ ] Add a "Features" section in the README.rst and sphinx docs.
-- [ ] Add a "Troubleshooting" section in the README.rst and sphinx docs (should
-  contain installation instructions relative to specific
-  platforms/configurations).
-- [ ] Add a "FAQ" section in the README.rst and sphinx docs.
 - [ ] Use Tox (http://tox.testrun.org/) to run tests ?
 - [ ] Implement `__str__` in Packet.
 - [ ] Implement `__iter__` and `next` in Packet to make it iterable.
@@ -162,11 +203,6 @@
 - [ ] Some unit tests "requires to be connected to the Dynamixel number 1 using
   port "/dev/ttyUSB0" (thus it works on Unix systems only) at 57600 baud." ->
   fix it... (especially in test_status_packet)
-- [ ] Write a tutorial to explain how to use PyAX-12 on a RaspberryPi using
-  GPIOs (i.e. without the usbdynamixel adapter) and without the CM-5 (i.e. using
-  a batteries, a LiPo or a DC lab power supply instead).
-  - See: www.instructables.com/id/How-to-drive-Dynamixel-AX-12A-servos-with-a-Raspbe/?ALLSTEPS
-  - See: www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
 - [ ] Annoucements: raspberrypi.org, linuxfr, ...
 
 ## Misc
