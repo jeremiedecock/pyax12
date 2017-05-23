@@ -19,19 +19,18 @@
         - [ ] reset a dynamixel to default values (factory reset)
         - [ ] reset any dynamixel whatever its baudrate and setup a new baudrate and a new ID
         - [ ] change the baudrate and the ID
-        - ...
+        - [ ] ...
     - [ ] Step 6: test for:
         - [ ] GPIO on all Raspberry Pi: A, B, 2, 3, zero
             - [ ] all baudrates
         - [ ] USB2Dynamixel on main OS: Linux (PC and Raspberry Pi), MacOSX, Windows
             - [ ] all baudrates
     - [ ] Step 7: check official Dynamixel specs and recommendations
-    - [ ] Step 8: check how packets are send and receive on other libraries:
+    - [ ] Step 8: check how packets are sent and received on other libraries:
         - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
         - PyDynamixel: https://github.com/richard-clark/PyDynamixel/blob/master/pydynamixel/dynamixel.py#L295
         - PyPot: https://github.com/poppy-project/pypot/blob/master/pypot/dynamixel/io/abstract_io.py#L503
         - ...
-    - [ ] Improve the reliability of "Connection.send()".
 - [ ] Sphinx documentation:
     - [ ] Explain *low level*/*mid level*/*high level* APIs
     - [ ] Explain system setup on Raspberry Pi (issues with UART on Raspberry Pi 3, ...)
