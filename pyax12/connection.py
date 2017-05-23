@@ -31,11 +31,17 @@ This module contain the `Connection` class communicate with Dynamixel units.
 __all__ = ['Connection']
 
 import serial
+import sys
 import time
 
 import pyax12.packet as pk
 import pyax12.status_packet as sp
 import pyax12.instruction_packet as ip
+
+try:
+    import RPi.GPIO as gpio
+except:
+    pass
 
 from pyax12 import utils
 
@@ -51,13 +57,26 @@ class Connection(object):
     """
 
     def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1,
-                 waiting_time=0.02):
+                 waiting_time=0.02, rpi_gpio=False):
+
+        self.rpi_gpio = False
+
+        if rpi_gpio:
+            if "RPi" in sys.modules:
+                self.rpi_gpio = True
+            else:
+                raise Exception("RPi.GPIO cannot be imported")   # TODO: improve this ?
 
         self.waiting_time = waiting_time
 
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
+
+        if self.rpi_gpio:
+            gpio.setmode(gpio.BCM)
+            gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
+
         self.serial_connection = serial.Serial(port=self.port,
                                                baudrate=self.baudrate,
                                                timeout=self.timeout,
@@ -80,11 +99,30 @@ class Connection(object):
             # instruction_packet is a Packet instance
             instruction_packet_bytes = instruction_packet.to_bytes()
 
-        self.flush()
+        self.flush()      # TODO: make a (synchronous) flush_in() and flush_out() instead
 
         # Send the packet #################################
 
+        if self.rpi_gpio:
+            # Pin 18 = +3V (DATA status = send data to Dynamixel)
+            gpio.output(18, gpio.HIGH)
+            time.sleep(0.01)          # TODO
+
         self.serial_connection.write(instruction_packet_bytes)
+
+        # Sleep a little bit ##############################
+
+        if self.rpi_gpio:
+            self.serial_connection.flushOutput()
+            time.sleep(0.00017 * len(instruction_packet_bytes))  # TODO: check instead if the output buffer is empty or make the previous flushOutput synchronous
+
+            if self.rpi_gpio:
+                # Pin 18 = 0V (DATA status = receive data from Dynamixel)
+                gpio.output(18, gpio.LOW)
+
+            time.sleep(0.004)              # TODO: make a while loop with a timeout instead ?
+        else:
+            time.sleep(self.waiting_time)  # TODO: make a while loop with a timeout instead ?
 
         # Receive the reply (status packet) ###############
 
@@ -92,7 +130,6 @@ class Connection(object):
         # If you use the USB2Dynamixel device, make sure its switch is set on
         # "TTL" (otherwise status packets won't be readable).
 
-        time.sleep(self.waiting_time)
         num_bytes_available = self.serial_connection.inWaiting()
 
         # TODO: not robust...
@@ -111,6 +148,11 @@ class Connection(object):
 
         # TODO: flush ?
         self.serial_connection.close()
+
+        if self.rpi_gpio:
+            pass     # TODO: put back gpio to its default setup ?
+            #gpio.setmode(gpio.BCM)
+            #gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
 
 
     def flush(self):
