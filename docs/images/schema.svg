@@ -29,7 +29,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -49,7 +49,7 @@
      id="namedview666"
      showgrid="false"
      inkscape:zoom="1.9502713"
-     inkscape:cx="262.46269"
+     inkscape:cx="263.48819"
      inkscape:cy="158.05168"
      inkscape:window-x="0"
      inkscape:window-y="31"
@@ -3050,28 +3050,6 @@
        y2="171.69"
        stroke-width="0.699998"
        id="line624" />
-  </g>
-  <g
-     partID="854132280"
-     id="partLabel">
-    <g
-       transform="translate(71.0953,268.212)"
-       id="g627">
-      <g
-         font-size="5"
-         font-style="normal"
-         font-weight="normal"
-         fill="#000000"
-         font-family="'DroidSans'"
-         id="schematicLabel"
-         fill-opacity="1"
-         stroke="none">
-        <text
-           x="0"
-           y="3.75"
-           id="text630">Raspberry Pi B rev1</text>
-      </g>
-    </g>
   </g>
   <g
      partID="854132310"
