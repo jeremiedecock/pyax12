@@ -59,7 +59,7 @@ def main():
 
     ###
 
-    dynamixel_id = 1
+    dynamixel_id = args.dynamixel_id
 
     # Go to 0°
     serial_connection.goto(dynamixel_id, 0, speed=512, degrees=True)
