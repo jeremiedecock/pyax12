@@ -1370,7 +1370,41 @@ class Connection(object):
 
         self.write_data(dynamixel_id, pk.CCW_ANGLE_LIMIT, params)
 
-    ###
+
+    def set_return_delay_time(self, dynamixel_id, return_delay_time):
+        """Set the *return delay time* for the specified Dynamixel unit
+        i.e. the time for the status packets to return after the instruction
+        packet is sent.
+
+        The actual delay time will be 2µs * `return_delay_time`.
+
+        E.g. for `return_delay_time` = 250 (0xFA), the actual waited time will
+        be 500µs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :param int  return_delay_time: the new return delay time. It must be in
+            range (0, 255) i.e. (0, 0xFF) in hexadecimal notation.
+        """
+        # TODO: check ranges
+
+        self.write_data(dynamixel_id, pk.RETURN_DELAY_TIME, return_delay_time)
+
+
+    def set_speed(self, dynamixel_id, speed):
+        """Set the *moving speed* for the specified Dynamixel unit.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :param int speed: the new moving speed. It must be in range (0, 1023)
+            i.e. (0, 0x3FF) in hexadecimal notation.
+        """
+        # TODO: check ranges
+
+        params = utils.int_to_little_endian_bytes(speed)
+
+        self.write_data(dynamixel_id, pk.MOVING_SPEED, params)
+
 
     def goto(self, dynamixel_id, position, speed=None, degrees=False):
         """Set the *goal position* and *moving speed* for the specified
