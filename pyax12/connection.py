@@ -1326,37 +1326,80 @@ class Connection(object):
         self.write_data(dynamixel_id, pk.ID, new_id)
 
 
-    def set_baud_rate(self, dynamixel_id, baudrate):
+    def set_baud_rate(self, dynamixel_id, baudrate, unit="kbps"):
         """Set the *baud rate* for the specified Dynamixel unit
         i.e. set the connection speed with the actuator.
 
-        actual speed (bps) = 2000000 / (`baudrate` + 1)
+        If `unit` is `"internal"` or `"raw"` then the actual speed `bps` (in
+        bauds per second) is:
+
+            bps = 2000000 / (`baudrate` + 1)
+
+        If `unit` is `"bps"` then the actual speed `bps` (in bauds per second)
+        is:
+
+            bps = `baudrate`
+
+        If `unit` is `"kbps"` then the actual speed `bps` (in bauds per second)
+        is:
+
+            bps = `baudrate` * 1000
+
+        E.g. the following arguments will give the same result (200kbps)::
+
+            set_baud_rate(1, baudrate=9, unit="internal")
+            set_baud_rate(1, baudrate=200000, unit="bps")
 
         :param int dynamixel_id: the current unique ID of the Dynamixel unit to
             update. It must be in range (0, 0xFE).
         :param int dynamixel_id: the new baud rate assigned to the selected
             Dynamixel unit. It must be in range (1, 0xFF).
+        :param bool  unit: define the units of the `baudrate`
+            argument.
         """
+
+        if unit == "bps":
+            baudrate = int(round(2000000. / baudrate)) - 1
+        elif unit == "kbps":
+            baudrate = int(round(2000. / baudrate)) - 1
+
         # TODO: check ranges
 
         self.write_data(dynamixel_id, pk.BAUD_RATE, baudrate)
 
 
-    def set_return_delay_time(self, dynamixel_id, return_delay_time):
+    def set_return_delay_time(self, dynamixel_id, return_delay_time, unit="us"):
         """Set the *return delay time* for the specified Dynamixel unit
         i.e. the time for the status packets to return after the instruction
         packet is sent.
 
-        The actual delay time will be 2µs * `return_delay_time`.
+        If `unit` is `"internal"` or `"raw"` then the actual return delay time
+        `rdt` (in µs) will be::
 
-        E.g. for `return_delay_time` = 250 (0xFA), the actual waited time will
-        be 500µs.
+            rdt = 2 * return_delay_time
+
+        If `unit` is `"us"`, `"usec"` or `"microseconds"` then the actual
+        return delay time `rdt` (in µs) will be::
+
+            rdt = return_delay_time
+
+        E.g. the following arguments will give the same result (return delay
+        time = 500µs)::
+
+            set_return_delay_time(1, return_delay_time=250, unit="internal")
+            set_return_delay_time(1, return_delay_time=500, unit="us")
 
         :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
             in range (0, 0xFE).
         :param int  return_delay_time: the new return delay time. It must be in
             range (0, 255) i.e. (0, 0xFF) in hexadecimal notation.
+        :param bool  unit: define the units of the `return_delay_time`
+            argument.
         """
+
+        if unit in ("us", "usec", "microseconds"):
+            return_delay_time = int(round(return_delay_time / 2.))
+
         # TODO: check ranges
 
         self.write_data(dynamixel_id, pk.RETURN_DELAY_TIME, return_delay_time)
