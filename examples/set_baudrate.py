@@ -43,7 +43,7 @@ def main():
     # Parse options
     parser = common_argument_parser(desc=main.__doc__)
 
-    parser.add_argument("--baud-rate",
+    parser.add_argument("--new-baud-rate",
                         "-n",
                         help="the new baud rate assigned to the selected "
                              "Dynamixel unit.",
@@ -59,7 +59,7 @@ def main():
                                    timeout=args.timeout,
                                    rpi_gpio=args.rpi)
 
-    serial_connection.set_baud_rate(args.dynamixel_id, args.baud_rate)
+    serial_connection.set_baud_rate(args.dynamixel_id, args.new_baud_rate)
 
     # Close the serial connection
     serial_connection.close()
