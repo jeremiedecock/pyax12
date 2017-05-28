@@ -1309,6 +1309,23 @@ class Connection(object):
     # HIGH LEVEL MUTATORS #####################################################
 
 
+    def set_id(self, dynamixel_id, new_id):
+        """Set the *ID* for the specified Dynamixel unit
+        i.e. the unique ID number assigned to actuators for identifying them.
+
+        Different IDs are required for each Dynamixel actuators that are on the
+        same network.
+
+        :param int dynamixel_id: the current unique ID of the Dynamixel unit to
+            update. It must be in range (0, 0xFE).
+        :param int dynamixel_id: the new unique ID assigned to the selected
+            Dynamixel unit. It must be in range (0, 0xFE).
+        """
+        # TODO: check ranges
+
+        self.write_data(dynamixel_id, pk.ID, new_id)
+
+
     def set_cw_angle_limit(self, dynamixel_id, angle_limit, degrees=False):
         """Set the *clockwise angle limit* of the specified Dynamixel unit to
         the specified `angle_limit`.
