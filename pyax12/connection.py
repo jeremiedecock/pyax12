@@ -78,7 +78,7 @@ class Connection(object):
             gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
 
         self.serial_connection = serial.Serial(port=self.port,
-                                               baud_rate=self.baud_rate,
+                                               baudrate=self.baud_rate,
                                                timeout=self.timeout,
                                                bytesize=serial.EIGHTBITS,
                                                parity=serial.PARITY_NONE,
