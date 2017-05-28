@@ -37,13 +37,13 @@ def main():
     """Set the *baud rate* for the specified Dynamixel unit
     i.e. set the connection speed with the actuator.
 
-    actual speed (bps) = 2000000 / (`baud_rate` + 1)
+    actual speed (bps) = 2000000 / (`baudrate` + 1)
     """
 
     # Parse options
     parser = common_argument_parser(desc=main.__doc__)
 
-    parser.add_argument("--new-baud-rate",
+    parser.add_argument("--new-baudrate",
                         "-n",
                         help="the new baud rate assigned to the selected "
                              "Dynamixel unit.",
@@ -55,11 +55,11 @@ def main():
 
     # Connect to the serial port
     serial_connection = Connection(port=args.port,
-                                   baud_rate=args.baud_rate,
+                                   baudrate=args.baudrate,
                                    timeout=args.timeout,
                                    rpi_gpio=args.rpi)
 
-    serial_connection.set_baud_rate(args.dynamixel_id, args.new_baud_rate)
+    serial_connection.set_baud_rate(args.dynamixel_id, args.new_baudrate)
 
     # Close the serial connection
     serial_connection.close()

@@ -48,7 +48,7 @@ def main():
     args = parser.parse_args()
 
     # Connect to the serial port
-    serial_connection = Connection(args.port, args.baud_rate, args.timeout)
+    serial_connection = Connection(args.port, args.baudrate, args.timeout)
 
     # Tkinter GUI
     root = tk.Tk()

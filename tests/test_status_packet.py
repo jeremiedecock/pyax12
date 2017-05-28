@@ -264,9 +264,9 @@ class TestStatusPacket(unittest.TestCase):
 
         # Connect to the serial port
         port = "/dev/ttyUSB0" # TODO
-        baud_rate = 57600     # TODO
+        baudrate = 57600      # TODO
         timeout = 0.1         # TODO
-        serial_connection = Connection(port, baud_rate, timeout)
+        serial_connection = Connection(port, baudrate, timeout)
 
         # Make a wrong instruction packet (based on the example 2 of the
         # Dynamixel user guide: "Reading the internal temperature of the
@@ -290,9 +290,9 @@ class TestStatusPacket(unittest.TestCase):
 
         # Connect to the serial port
         port = "/dev/ttyUSB0" # TODO
-        baud_rate = 57600     # TODO
+        baudrate = 57600      # TODO
         timeout = 0.1         # TODO
-        serial_connection = Connection(port, baud_rate, timeout)
+        serial_connection = Connection(port, baudrate, timeout)
 
         # Make a wrong instruction packet (based on the example 2 of the
         # Dynamixel user guide: "Reading the internal temperature of the
@@ -314,9 +314,9 @@ class TestStatusPacket(unittest.TestCase):
 
         # Connect to the serial port
         port = "/dev/ttyUSB0" # TODO
-        baud_rate = 57600     # TODO
+        baudrate = 57600      # TODO
         timeout = 0.1         # TODO
-        serial_connection = Connection(port, baud_rate, timeout)
+        serial_connection = Connection(port, baudrate, timeout)
 
         # Make a wrong instruction packet (set the LED byte in the control
         # table)
@@ -360,9 +360,9 @@ class TestStatusPacket(unittest.TestCase):
 
         # Connect to the serial port
         port = "/dev/ttyUSB0" # TODO
-        baud_rate = 57600     # TODO
+        baudrate = 57600      # TODO
         timeout = 0.1         # TODO
-        serial_connection = Connection(port, baud_rate, timeout)
+        serial_connection = Connection(port, baudrate, timeout)
 
         # Make the instruction packet (based on the example 2 of the
         # Dynamixel user guide: "Reading the internal temperature of the

@@ -50,13 +50,13 @@ class Connection(object):
 
     :param str port: the serial device to connect with (e.g. '/dev/ttyUSB0'
         for Unix users or 'COM1' for windows users).
-    :param int baud_rate: the baud rate speed (e.g. 57600).
+    :param int baudrate: the baud rate speed (e.g. 57600).
     :param float timeout: the timeout value for the connection.
     :param float waiting_time: the waiting time (in seconds) between sending
         the instruction packet and the receiving the status packet.
     """
 
-    def __init__(self, port='/dev/ttyUSB0', baud_rate=57600, timeout=0.1,
+    def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1,
                  waiting_time=0.02, rpi_gpio=False):
 
         self.rpi_gpio = False
@@ -70,7 +70,7 @@ class Connection(object):
         self.waiting_time = waiting_time
 
         self.port = port
-        self.baud_rate = baud_rate
+        self.baudrate = baudrate
         self.timeout = timeout
 
         if self.rpi_gpio:
@@ -78,7 +78,7 @@ class Connection(object):
             gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
 
         self.serial_connection = serial.Serial(port=self.port,
-                                               baudrate=self.baud_rate,
+                                               baudrate=self.baudrate,
                                                timeout=self.timeout,
                                                bytesize=serial.EIGHTBITS,
                                                parity=serial.PARITY_NONE,
@@ -1326,11 +1326,11 @@ class Connection(object):
         self.write_data(dynamixel_id, pk.ID, new_id)
 
 
-    def set_baud_rate(self, dynamixel_id, baud_rate):
+    def set_baud_rate(self, dynamixel_id, baudrate):
         """Set the *baud rate* for the specified Dynamixel unit
         i.e. set the connection speed with the actuator.
 
-        actual speed (bps) = 2000000 / (`baud_rate` + 1)
+        actual speed (bps) = 2000000 / (`baudrate` + 1)
 
         :param int dynamixel_id: the current unique ID of the Dynamixel unit to
             update. It must be in range (0, 0xFE).
@@ -1339,7 +1339,7 @@ class Connection(object):
         """
         # TODO: check ranges
 
-        self.write_data(dynamixel_id, pk.BAUD_RATE, baud_rate)
+        self.write_data(dynamixel_id, pk.BAUD_RATE, baudrate)
 
 
     def set_return_delay_time(self, dynamixel_id, return_delay_time):

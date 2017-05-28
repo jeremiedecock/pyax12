@@ -202,7 +202,7 @@ Example usage
 .. Please check whether the serial port, the baud rate and the
 .. Dynamixel IDs defined in the following examples fits with your hardware.
 
-In the following examples, the ``dynamixel_id``, ``port`` and ``baud_rate``
+In the following examples, the ``dynamixel_id``, ``port`` and ``baudrate``
 values should be adapted depending on your configuration:
 
 - for **Linux** users:
@@ -213,14 +213,14 @@ values should be adapted depending on your configuration:
     - "/dev/ttyUSB0", "/dev/ttyUSB1", ... if you use an `USB to serial` adapter
       (like the USB2Dynamixel_ adapter)
 
-  - the ``baud_rate`` value should be the same than the one configured in
+  - the ``baudrate`` value should be the same than the one configured in
     Dynamixel units
 
 - for **Windows** users:
 
   - the ``port`` value should be something like "COM2", "COM3", ... (see the
     *COM port* configuration in the Windows `device manager`_)
-  - the ``baud_rate`` value should be the same than the one configured in
+  - the ``baudrate`` value should be the same than the one configured in
     the Dynamixel units *and* the Windows `device manager`_ (i.e. check the
     *COM port* configuration in the Windows `device manager`_)
 
@@ -228,7 +228,7 @@ values should be adapted depending on your configuration:
   
   - the ``port`` value should be something like "/dev/tty.usbserial-XXX" if you
     use an `USB to serial` adapter like the USB2Dynamixel_ adapter
-  - the ``baud_rate`` value should be the same than the one configured in
+  - the ``baudrate`` value should be the same than the one configured in
     Dynamixel units
 
 - for **Raspberry Pi** users:
@@ -246,14 +246,14 @@ Ping a Dynamixel
 ----------------
 
 This snippet prints ``True`` if the specified Dynamixel unit is connected and
-available at the given `baud_rate`; otherwise it prints ``False``.
+available at the given `baudrate`; otherwise it prints ``False``.
 
 ::
 
     from pyax12.connection import Connection
 
     # Connect to the serial port
-    serial_connection = Connection(port="/dev/ttyUSB0", baud_rate=57600)
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
     dynamixel_id = 3
 
@@ -289,14 +289,14 @@ Scan (search available Dynamixel units)
 ---------------------------------------
 
 This snippet prints the ID list of connected and available Dynamixel units (at
-the given `baud_rate`).
+the given `baudrate`).
 
 ::
 
     from pyax12.connection import Connection
 
     # Connect to the serial port
-    serial_connection = Connection(port="/dev/ttyUSB0", baud_rate=57600)
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
     # Ping the dynamixel unit(s)
     ids_available = serial_connection.scan()
@@ -319,7 +319,7 @@ internal state information of the Dynamixel unit).
     from pyax12.connection import Connection
 
     # Connect to the serial port
-    serial_connection = Connection(port="/dev/ttyUSB0", baud_rate=57600)
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
     dynamixel_id = 1
 
@@ -391,7 +391,7 @@ and finally goes back to 0°.
     import time
 
     # Connect to the serial port
-    serial_connection = Connection(port="/dev/ttyUSB0", baud_rate=57600)
+    serial_connection = Connection(port="/dev/ttyUSB0", baudrate=57600)
 
     dynamixel_id = 1
 

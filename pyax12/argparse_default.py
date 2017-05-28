@@ -82,7 +82,7 @@ def common_argument_parser(desc, id_arg=True, id_arg_mandatory=False):
                                 type=int,
                                 default=pk.BROADCAST_ID)
 
-    parser.add_argument("--baud-rate",
+    parser.add_argument("--baudrate",
                         "-b",
                         help=BAUD_RATE_HELP_STR,
                         metavar="INTEGER",

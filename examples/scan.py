@@ -29,7 +29,7 @@
 A PyAX-12 demo.
 
 Prints the ID list of connected and available Dynamixel units (at the given
-`baud_rate`).
+`baudrate`).
 """
 
 from pyax12.connection import Connection
@@ -48,7 +48,7 @@ def main():
 
     # Connect to the serial port
     serial_connection = Connection(port=args.port,
-                                   baud_rate=args.baud_rate,
+                                   baudrate=args.baudrate,
                                    timeout=args.timeout,
                                    rpi_gpio=args.rpi)
 
