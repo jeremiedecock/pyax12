@@ -32,17 +32,31 @@ A PyAX-12 demo.
 from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 import pyax12.packet as pk
-from pyax12 import utils
-
-import time
 
 def main():
     """
-    A PyAX-12 demo.
+    Set the *return delay time* for the specified Dynamixel unit
+    i.e. the time for the status packets to return after the instruction
+    packet is sent.
+
+    The actual delay time will be 2µs * `return_delay_time`.
+
+    E.g. for `return_delay_time` = 250 (0xFA), the actual waited time will
+    be 500µs.
     """
 
     # Parse options
     parser = common_argument_parser(desc=main.__doc__)
+
+    parser.add_argument("--return-delay-time",
+                        "-r",
+                        help="The new return delay time assigned to the selected"
+                        " Dynamixel unit. It must be in range (0, 254). The default
+                        value is 250 (500 micro seconds).",
+                        type=int,
+                        metavar="INT",
+                        default=250)
+
     args = parser.parse_args()
 
     # Connect to the serial port
@@ -51,9 +65,7 @@ def main():
                                    timeout=args.timeout,
                                    rpi_gpio=args.rpi)
 
-    dynamixel_id = args.dynamixel_id
-
-    serial_connection.set_return_delay_time(dynamixel_id, 250)
+    serial_connection.set_return_delay_time(args.dynamixel_id, args.return_delay_time)
 
     # Close the serial connection
     serial_connection.close()
