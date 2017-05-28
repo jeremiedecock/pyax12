@@ -1326,6 +1326,42 @@ class Connection(object):
         self.write_data(dynamixel_id, pk.ID, new_id)
 
 
+    def set_baud_rate(self, dynamixel_id, baud_rate):
+        """Set the *baud rate* for the specified Dynamixel unit
+        i.e. set the connection speed with the actuator.
+
+        actual speed (bps) = 2000000 / (`baud_rate` + 1)
+
+        :param int dynamixel_id: the current unique ID of the Dynamixel unit to
+            update. It must be in range (0, 0xFE).
+        :param int dynamixel_id: the new baud rate assigned to the selected
+            Dynamixel unit. It must be in range (1, 0xFF).
+        """
+        # TODO: check ranges
+
+        self.write_data(dynamixel_id, pk.BAUD_RATE, baud_rate)
+
+
+    def set_return_delay_time(self, dynamixel_id, return_delay_time):
+        """Set the *return delay time* for the specified Dynamixel unit
+        i.e. the time for the status packets to return after the instruction
+        packet is sent.
+
+        The actual delay time will be 2µs * `return_delay_time`.
+
+        E.g. for `return_delay_time` = 250 (0xFA), the actual waited time will
+        be 500µs.
+
+        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
+            in range (0, 0xFE).
+        :param int  return_delay_time: the new return delay time. It must be in
+            range (0, 255) i.e. (0, 0xFF) in hexadecimal notation.
+        """
+        # TODO: check ranges
+
+        self.write_data(dynamixel_id, pk.RETURN_DELAY_TIME, return_delay_time)
+
+
     def set_cw_angle_limit(self, dynamixel_id, angle_limit, degrees=False):
         """Set the *clockwise angle limit* of the specified Dynamixel unit to
         the specified `angle_limit`.
@@ -1386,26 +1422,6 @@ class Connection(object):
         params = utils.int_to_little_endian_bytes(angle_limit)
 
         self.write_data(dynamixel_id, pk.CCW_ANGLE_LIMIT, params)
-
-
-    def set_return_delay_time(self, dynamixel_id, return_delay_time):
-        """Set the *return delay time* for the specified Dynamixel unit
-        i.e. the time for the status packets to return after the instruction
-        packet is sent.
-
-        The actual delay time will be 2µs * `return_delay_time`.
-
-        E.g. for `return_delay_time` = 250 (0xFA), the actual waited time will
-        be 500µs.
-
-        :param int dynamixel_id: the unique ID of a Dynamixel unit. It must be
-            in range (0, 0xFE).
-        :param int  return_delay_time: the new return delay time. It must be in
-            range (0, 255) i.e. (0, 0xFF) in hexadecimal notation.
-        """
-        # TODO: check ranges
-
-        self.write_data(dynamixel_id, pk.RETURN_DELAY_TIME, return_delay_time)
 
 
     def set_speed(self, dynamixel_id, speed):
