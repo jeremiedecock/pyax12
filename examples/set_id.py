@@ -49,6 +49,7 @@ def main():
                         "-n",
                         help="The new unique ID assigned to the selected"
                         " Dynamixel unit. It must be in range (0, 0xFE).",
+                        type=int,
                         metavar="INT",
                         default=1)
 
