@@ -50,9 +50,10 @@ def main():
 
     parser.add_argument("--return-delay-time",
                         "-r",
-                        help="The new return delay time assigned to the selected"
-                        " Dynamixel unit. It must be in range (0, 254). The default
-                        value is 250 (500 micro seconds).",
+                        help="The new return delay time assigned to the "
+                             "selected Dynamixel unit. It must be in range "
+                             "(0, 254). The default value is 250 (500 micro "
+                             "seconds).",
                         type=int,
                         metavar="INT",
                         default=250)
