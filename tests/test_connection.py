@@ -44,11 +44,11 @@ class TestConnection(unittest.TestCase):
         when the "port" argument's type is wrong."""
 
         port = False           # wrong type (expected: str)
-        baudrate = 57600
+        baud_rate = 57600
         timeout = 0.1
 
         with self.assertRaises(serial.serialutil.SerialException):
-            serial_connection = Connection(port, baudrate, timeout)
+            serial_connection = Connection(port, baud_rate, timeout)
             serial_connection.close()
 
     ###
@@ -58,49 +58,49 @@ class TestConnection(unittest.TestCase):
         when the "port" argument's value is wrong (/dev/null)."""
 
         port = '/dev/null'  # wrong value
-        baudrate = 57600
+        baud_rate = 57600
         timeout = 0.1
 
         with self.assertRaises(serial.serialutil.SerialException):
-            serial_connection = Connection(port, baudrate, timeout)
+            serial_connection = Connection(port, baud_rate, timeout)
             serial_connection.close()
 
     ###
 
-#    def test_init_wrong_baudrate_type(self):
+#    def test_init_wrong_baud_rate_type(self):
 #        """Check that the pyax12.connection.Connection initialization fails
-#        when the "baudrate" argument's type is wrong (float)."""
+#        when the "baud_rate" argument's type is wrong (float)."""
 #
 #        port = None
-#        baudrate = 0.1      # wrong type
+#        baud_rate = 0.1      # wrong type
 #        timeout = 0.1
 #
 #        with self.assertRaises(serial.serialutil.SerialException):
-#            serial_connection = Connection(port, baudrate, timeout)
+#            serial_connection = Connection(port, baud_rate, timeout)
 #            serial_connection.close()
 
     ###
 
-#    def test_init_wrong_baudrate_value(self):
+#    def test_init_wrong_baud_rate_value(self):
 #        """Check that the pyax12.connection.Connection initialization fails
-#        when the "baudrate" argument's value is wrong."""
+#        when the "baud_rate" argument's value is wrong."""
 #
 #        # negative
 #        port = None
-#        baudrate = -1       # wrong value
+#        baud_rate = -1       # wrong value
 #        timeout = 0.1
 #
 #        with self.assertRaises(serial.serialutil.SerialException):
-#            serial_connection = Connection(port, baudrate, timeout)
+#            serial_connection = Connection(port, baud_rate, timeout)
 #            serial_connection.close()
 #
 #        # zero
 #        port = None
-#        baudrate = 0        # wrong value
+#        baud_rate = 0        # wrong value
 #        timeout = 0.1
 #
 #        with self.assertRaises(serial.serialutil.SerialException):
-#            serial_connection = Connection(port, baudrate, timeout)
+#            serial_connection = Connection(port, baud_rate, timeout)
 #            serial_connection.close()
 
     ###
@@ -110,11 +110,11 @@ class TestConnection(unittest.TestCase):
         when the "timeout" argument's type is wrong (string)."""
 
         port = None
-        baudrate = 57600
+        baud_rate = 57600
         timeout = "0.1"     # wrong type
 
         with self.assertRaises(ValueError):
-            serial_connection = Connection(port, baudrate, timeout)
+            serial_connection = Connection(port, baud_rate, timeout)
             serial_connection.close()
 
     ###
@@ -125,20 +125,20 @@ class TestConnection(unittest.TestCase):
 #
 #        # negative
 #        port = None
-#        baudrate = -1
+#        baud_rate = -1
 #        timeout = 0.1       # wrong value
 #
 #        with self.assertRaises(serial.serialutil.SerialException):
-#            serial_connection = Connection(port, baudrate, timeout)
+#            serial_connection = Connection(port, baud_rate, timeout)
 #            serial_connection.close()
 #
 #        # zero
 #        port = None
-#        baudrate = 0
+#        baud_rate = 0
 #        timeout = 0.1       # wrong value
 #
 #        with self.assertRaises(serial.serialutil.SerialException):
-#            serial_connection = Connection(port, baudrate, timeout)
+#            serial_connection = Connection(port, baud_rate, timeout)
 #            serial_connection.close()
 
 

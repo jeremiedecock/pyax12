@@ -50,13 +50,13 @@ class Connection(object):
 
     :param str port: the serial device to connect with (e.g. '/dev/ttyUSB0'
         for Unix users or 'COM1' for windows users).
-    :param int baudrate: the baudrate speed (e.g. 57600).
+    :param int baud_rate: the baud rate speed (e.g. 57600).
     :param float timeout: the timeout value for the connection.
     :param float waiting_time: the waiting time (in seconds) between sending
         the instruction packet and the receiving the status packet.
     """
 
-    def __init__(self, port='/dev/ttyUSB0', baudrate=57600, timeout=0.1,
+    def __init__(self, port='/dev/ttyUSB0', baud_rate=57600, timeout=0.1,
                  waiting_time=0.02, rpi_gpio=False):
 
         self.rpi_gpio = False
@@ -70,7 +70,7 @@ class Connection(object):
         self.waiting_time = waiting_time
 
         self.port = port
-        self.baudrate = baudrate
+        self.baud_rate = baud_rate
         self.timeout = timeout
 
         if self.rpi_gpio:
@@ -78,7 +78,7 @@ class Connection(object):
             gpio.setup(18, gpio.OUT)  # Set the direction to output (send data)
 
         self.serial_connection = serial.Serial(port=self.port,
-                                               baudrate=self.baudrate,
+                                               baud_rate=self.baud_rate,
                                                timeout=self.timeout,
                                                bytesize=serial.EIGHTBITS,
                                                parity=serial.PARITY_NONE,
@@ -541,9 +541,9 @@ class Connection(object):
         byte_seq = self.read_data(dynamixel_id, pk.BAUD_RATE, 1)
         raw_value = byte_seq[0]
 
-        baudrate = 2000000 / (raw_value + 1)
+        baud_rate = 2000000 / (raw_value + 1)
 
-        return round(baudrate, 1)
+        return round(baud_rate, 1)
 
 
     def get_return_delay_time(self, dynamixel_id):

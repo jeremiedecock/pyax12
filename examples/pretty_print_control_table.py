@@ -48,7 +48,7 @@ def main():
 
     # Connect to the serial port
     serial_connection = Connection(port=args.port,
-                                   baudrate=args.baudrate,
+                                   baud_rate=args.baud_rate,
                                    timeout=args.timeout,
                                    rpi_gpio=args.rpi)
 

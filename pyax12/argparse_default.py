@@ -38,7 +38,7 @@ import pyax12.packet as pk
 ID_HELP_STR = ("The unique ID of a Dynamixel unit to work with "
                "(254 is a broadcasting ID)")
 
-BAUDRATE_HELP_STR = "The baudrate speed (e.g. 57600)"
+BAUD_RATE_HELP_STR = "The baud rate speed (e.g. 57600)"
 
 TIMEOUT_HELP_STR = "The timeout value for the connection"
 
@@ -82,9 +82,9 @@ def common_argument_parser(desc, id_arg=True, id_arg_mandatory=False):
                                 type=int,
                                 default=pk.BROADCAST_ID)
 
-    parser.add_argument("--baudrate",
+    parser.add_argument("--baud-rate",
                         "-b",
-                        help=BAUDRATE_HELP_STR,
+                        help=BAUD_RATE_HELP_STR,
                         metavar="INTEGER",
                         type=int,
                         default=57600)

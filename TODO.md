@@ -8,23 +8,23 @@
 ## Version 0.4
 
 - [ ] Improve Connection.send() function:
-    - [ ] Step 1: waiting times should be multiples of 1/baudrate * (num bits per byte + num bits of parity) * num bytes sent
+    - [ ] Step 1: waiting times should be multiples of 1/baud_rate * (num bits per byte + num bits of parity) * num bytes sent
     - [ ] Step 2: split the flush() function into flush_in() and flush_out() + make them synchronous
     - [ ] Step 3: read status packets in a while loop with a timeout criteria
     - [ ] Step 4: be sure the UART is free (i.e. no other process is using it), suppress interrupts on it and check with `fuser -v </dev/tty...>` and `lsof`
     - [ ] Step 5: Add tools to
-        - [ ] scan at multiple baudrate ("Connection.scan_multiple_baudrate()" function or
+        - [ ] scan at multiple baud rate ("Connection.scan_multiple_baud_rates()" function or
           "Connection.discover_devices()") (it probably won't work under Windows
           because of the COM port configuration in the Device Manager)
         - [ ] reset a dynamixel to default values (factory reset)
-        - [ ] reset any dynamixel whatever its baudrate and setup a new baudrate and a new ID
-        - [ ] change the baudrate and the ID
+        - [ ] reset any dynamixel whatever its baud rate and setup a new baud rate and a new ID
+        - [ ] change the baud rate and the ID
         - [ ] ...
     - [ ] Step 6: test for:
         - [ ] GPIO on all Raspberry Pi: A, B, 2, 3, zero
-            - [ ] all baudrates
+            - [ ] all baud rates
         - [ ] USB2Dynamixel on main OS: Linux (PC and Raspberry Pi), MacOSX, Windows
-            - [ ] all baudrates
+            - [ ] all baud rates
     - [ ] Step 7: check official Dynamixel specs and recommendations
     - [ ] Step 8: check how packets are sent and received on other libraries:
         - ROS: http://docs.ros.org/diamondback/api/dynamixel_driver/html/dynamixel__io_8py_source.html#l00085
@@ -52,7 +52,7 @@
   a batteries, a LiPo or a DC lab power supply instead).
   - See: www.instructables.com/id/How-to-drive-Dynamixel-AX-12A-servos-with-a-Raspbe/?ALLSTEPS
   - See: www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
-- [ ] Add the following warning in the documentation: the baudrate value given
+- [ ] Add the following warning in the documentation: the baud rate value given
   to the Connection class should be the same than the one in dynamixel units
   (and also the same than the one of the COM port used for Windows).
 
@@ -152,7 +152,7 @@
     - [ ] Error table (Dynamixel User Manual p.11)
     - [ ] Access RD/WD (p.12)
     - [ ] Addr/labels (p.12)
-    - [ ] Baudrates (p.13)
+    - [ ] Baud rates (p.13)
     - [ ] Status return level (p.14)
     - [ ] Alarm led (p.15)
     - [ ] Alarm shutdown (p.15)
@@ -198,7 +198,7 @@
     - [ ] with PySerial 2.5/2.4/...
 - [ ] Write functions "Packet.print_info()" and "Connection.print_info()" to
   print "human readable" informations (e.g. "position=...°\nspeed=..." ;
-  "baudrate=...\nport=...\n...") ?
+  "baud_rate=...\nport=...\n...") ?
 - [ ] Some unit tests "requires to be connected to the Dynamixel number 1 using
   port "/dev/ttyUSB0" (thus it works on Unix systems only) at 57600 baud." ->
   fix it... (especially in test_status_packet)

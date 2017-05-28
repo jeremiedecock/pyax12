@@ -30,7 +30,7 @@ A PyAX-12 demo.
 
 Ping the specified Dynamixel unit.
 This snippet prints ``True`` if the specified Dynamixel unit is connected and
-available at the given `baudrate`; otherwise it prints ``False``.
+available at the given `baud_rate`; otherwise it prints ``False``.
 """
 
 from pyax12.connection import Connection
@@ -50,7 +50,7 @@ def main():
 
     # Connect to the serial port
     serial_connection = Connection(port=args.port,
-                                   baudrate=args.baudrate,
+                                   baud_rate=args.baud_rate,
                                    timeout=args.timeout,
                                    rpi_gpio=args.rpi)
 
