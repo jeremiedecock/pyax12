@@ -33,11 +33,12 @@ from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 import pyax12.packet as pk
 
+DEFAULT_VALUE = 57.6
+
 def main():
     """Set the *baud rate* for the specified Dynamixel unit
-    i.e. set the connection speed with the actuator.
-
-    actual speed (bps) = 2000000 / (`baudrate` + 1)
+    i.e. set the connection speed with the actuator in kbps
+    (kilo bauds per second).
     """
 
     # Parse options
@@ -46,10 +47,11 @@ def main():
     parser.add_argument("--new-baudrate",
                         "-n",
                         help="the new baud rate assigned to the selected "
-                             "Dynamixel unit.",
-                        type=int,
-                        metavar="INT",
-                        default=0x22)
+                             "Dynamixel unit (in kbps)."
+                             "The default value is {default}kbps.".format(default=DEFAULT_VALUE),
+                        type=float,
+                        metavar="FLOAT",
+                        default=DEFAULT_VALUE)
 
     args = parser.parse_args()
 

@@ -33,16 +33,13 @@ from pyax12.connection import Connection
 from pyax12.argparse_default import common_argument_parser
 import pyax12.packet as pk
 
+DEFAULT_VALUE = 500
+
 def main():
     """
     Set the *return delay time* for the specified Dynamixel unit
-    i.e. the time for the status packets to return after the instruction
-    packet is sent.
-
-    The actual delay time will be 2µs * `return_delay_time`.
-
-    E.g. for `return_delay_time` = 250 (0xFA), the actual waited time will
-    be 500µs.
+    i.e. the time (in microsecond) for the status packets to return after the
+    instruction packet is sent.
     """
 
     # Parse options
@@ -52,11 +49,11 @@ def main():
                         "-r",
                         help="The new return delay time assigned to the "
                              "selected Dynamixel unit. It must be in range "
-                             "(0, 254). The default value is 250 (500 micro "
-                             "seconds).",
+                             "(0, 500). The default value is {default}µs "
+                             "({default} microseconds).".format(default=DEFAULT_VALUE),
                         type=int,
                         metavar="INT",
-                        default=250)
+                        default=DEFAULT_VALUE)
 
     args = parser.parse_args()
 
