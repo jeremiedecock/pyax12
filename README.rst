@@ -143,11 +143,18 @@ or 74LS241.
 Control Dynamixel AX-12 with the 74LS241
 ''''''''''''''''''''''''''''''''''''''''
 
+Here are the schematics of the electronic circuit required to control Dynamixel
+AX-12 with the 74LS241.
+
 .. image:: docs/images/breadboard.png
     :alt: 74LS241 breadboard
     :align: center
 
-For the 74LS241, it's well explained on the following pages:
+.. image:: docs/images/schema.png
+    :alt: 74LS241 schematic
+    :align: center
+
+Additional explanations can be found on the following pages:
 
 - http://www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
 - http://memememememememe.me/post/the-dynamixel-ax-12a-servos/
