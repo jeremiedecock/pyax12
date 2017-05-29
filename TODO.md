@@ -8,14 +8,23 @@
 ## Version 0.4
 
 - [ ] Improve Connection.send() function:
-    - [ ] Step 1: waiting times should be multiples of 1/baud_rate * (num bits per byte + num bits of parity) * num bytes sent
-    - [ ] Step 2: split the flush() function into flush_in() and flush_out() + make them synchronous
-    - [ ] Step 3: read status packets in a while loop with a timeout criteria
-    - [ ] Step 4: be sure the UART is free (i.e. no other process is using it), suppress interrupts on it and check with `fuser -v </dev/tty...>` and `lsof`
-    - [ ] Step 5: Add tools to
+    - [ ] Step 1: measurements on the Jupyter notebook
+        - [ ] return delay time @115.2kbps on GPIO and USB2Dynamixel
+        - [x] return delay time @57.6kbps on GPIO and USB2Dynamixel
+        - [ ] return delay time @19.2kbps on GPIO and USB2Dynamixel
+        - [ ] return delay time @9.6kbps on GPIO and USB2Dynamixel
+        - [x] time per bytes on Tx with respect to the baud rate (to check if the device respect the expected baud rate ?) on GPIO and USB2Dynamixel
+        - [ ] time.sleep() resolution (i.e. minimal value) using a LOW/HIGH/time.sleep()/LOW signal on GPIO 18 (also test a LOW/HIGH/LOW signal without sleep to check the GPIO resolution)
+        - [ ] sending time before the first sleep using a HIGH/LOW/HIGH/send()/LOW/HIGH signal on GPIO 18
+        - [ ] time between varions instruction in the send function using a HIGH/LOW/HIGH signal on GPIO 18
+    - [ ] Step 2: waiting times should be sending_time + return_delay_time/2 where sending_time is a multiple of 1/baud_rate * (num bits per byte + num bits of parity) * num bytes sent
+    - [ ] Step 3: split the flush() function into flush_in() and flush_out() + make them synchronous
+    - [ ] Step 4: read status packets in a while loop with a timeout criteria
+    - [ ] Step 5: be sure the UART is free (i.e. no other process is using it), suppress interrupts on it and check with `fuser -v </dev/tty...>` and `lsof`
+    - [ ] Step 6: Add tools to:
         - [ ] scan at multiple baud rate ("Connection.scan_multiple_baud_rates()" function or
-          "Connection.discover_devices()") (it probably won't work under Windows
-          because of the COM port configuration in the Device Manager)
+              "Connection.discover_devices()") (it probably won't work under Windows
+              because of the COM port configuration in the Device Manager)
         - [ ] reset a dynamixel to default values (factory reset)
         - [ ] reset any dynamixel whatever its baud rate and setup a new baud rate and a new ID
         - [ ] change the baud rate and the ID
