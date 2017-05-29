@@ -119,7 +119,10 @@ Or, if you have downloaded the PyAX-12 source code::
 Hardware setup
 ==============
 
-`Official AX-12 documentation <https://web.archive.org/web/20101008170532/http://support.robotis.com/en/product/dynamixel/ax_series/dxl_ax_actuator.htm>`__ (archive).
+There are several ways to link AX-12 actuators to a computer.
+Three different configurations are described here.
+
+For mor information, check the `official AX-12 documentation <https://web.archive.org/web/20101008170532/http://support.robotis.com/en/product/dynamixel/ax_series/dxl_ax_actuator.htm>`__ (archive).
 
 Connecting AX-12 actuators to a computer (including Raspberry Pi computers) through USB port
 --------------------------------------------------------------------------------------------
