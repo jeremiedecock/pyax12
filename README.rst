@@ -146,11 +146,11 @@ Control Dynamixel AX-12 with the 74LS241
 Here are the schematics of the electronic circuit required to control Dynamixel
 AX-12 with the 74LS241.
 
-.. image:: docs/images/breadboard.png
+.. image:: https://github.com/jeremiedecock/pyax12/raw/master/docs/images/breadboard.png
     :alt: 74LS241 breadboard
     :align: center
 
-.. image:: docs/images/schema.png
+.. image:: https://github.com/jeremiedecock/pyax12/raw/master/docs/images/schema.png
     :alt: 74LS241 schematic
     :align: center
 
