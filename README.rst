@@ -165,7 +165,7 @@ A PCB by Thiago Hersan is freely available here:
 
 - https://circuits.io/circuits/267189-ax-12-driver-for-raspberry-pi/#pcb
 
-For the schematics, check the following pages:
+For other schematics, check the following pages:
 
 - http://memememememememe.me/assets/posts/the-dynamixel-ax-12a-servos/uart_half-duplex_74LS241.jpg
 - https://circuits.io/circuits/267189-ax-12-driver-for-raspberry-pi/#schematic
