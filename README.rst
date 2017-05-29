@@ -154,7 +154,7 @@ AX-12 with the 74LS241.
     :alt: 74LS241 schematic
     :align: center
 
-Additional explanations can be found on the following pages:
+Additional explanation can be found on the following pages:
 
 - http://www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
 - http://memememememememe.me/post/the-dynamixel-ax-12a-servos/
