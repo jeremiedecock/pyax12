@@ -143,6 +143,10 @@ or 74LS241.
 Control Dynamixel AX-12 with the 74LS241
 ''''''''''''''''''''''''''''''''''''''''
 
+.. image:: docs/images/breadboard.png
+    :alt: 74LS241 breadboard
+    :align: center
+
 For the 74LS241, it's well explained on the following pages:
 
 - http://www.oppedijk.com/robotics/control-dynamixel-with-raspberrypi
